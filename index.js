@@ -13,7 +13,7 @@ const port = process.env.PORT || 3000;
 
 // Connecting to the DB
 mongoose.connect('mongodb://avnish1306:Mummy12345@ds121163.mlab.com:21163/passport');
-//mongoose.connect('mongodb://localhost/edge');
+//mongoose.connect({ useNewUrlParser: true },'mongodb://localhost/edge');
 
 mongoose.connection.on('open', () => {
     console.log("Connected to the DB");
