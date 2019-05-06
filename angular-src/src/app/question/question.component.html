@@ -1,0 +1,110 @@
+
+<div *ngIf="!isEligible"><h2 style="color: black">You are not eligible.<br>Talk to Coordinators</h2></div>
+<div *ngIf="isAttempt&&isEligible"><h2 style="color: black">You have already attempted this.<br>Talk to Coordinators</h2></div>
+<div *ngIf="!isAttempt&&isEligible">
+    <div class="row">
+        <div class="col-md-9" ></div>
+            <div class="col-md-3 text-center" *ngIf="timeFlag==0" style="float: right; color: black">
+                <div class="col-md-12" style="color: white; background: green; font-size: 20px;">Time Left: {{countTimer}}</div>
+            </div>
+            <div class="col-md-3 text-center" *ngIf="timeFlag==1" style="float: right;">
+                <div class="col-md-12" style="color: white; background: orange; font-size: 20px;">Time Left: {{countTimer}}</div>
+                </div>
+            <div class="col-md-3 text-center" *ngIf="timeFlag==2" style="float: right;">
+                <div class="col-md-12" style="color: white; background: red; font-size: 20px;">Time Left: {{countTimer}}</div>
+                </div>
+        </div>
+<div class="row" >
+  <!-- <div class="col-md-3">
+      <ul class="list-group" style="background-color: white;padding-left: 0%;padding-right: 0;padding-top: 0%;padding-top: 0%">
+          <li class="list-group-item text-center rounded-0" routerLink="/ques/add" *ngIf="isAdmin()"><i class="fa fa-plus-circle"></i></li>
+
+          <li class="list-group-item d-flex justify-content-between align-items-center rounded-0" *ngFor="let que of ques; let i = index" (click)="displayQue(i)" [ngClass]="{'saved':saved[i] , 'active': i==index}">
+              {{i+1}}
+          </li>
+      </ul>
+  </div> -->
+  <div class="col-md-3">
+        <li class="list-group-item text-center rounded-0" routerLink="/ques/add" *ngIf="isAdmin()"><i class="fa fa-plus-circle"></i></li>
+<h5 class="text-center">Question Pallete</h5>
+      <div class="row">
+      <div class="col-sm-2 text-center border border-secondary" style="cursor: pointer; border-radius: 20px; padding:10px; margin: 2px; height: 75px;" *ngFor="let que of ques; let i = index" (click)="displayQue(i)" [ngClass]="{'savedd':saved[i] , 'activee': i==index}">
+        <h5 style="vertical-align: middle;">{{i+1}}<br><span *ngIf="marked[i]"><i class="fas fa-check-circle" style="color: blue"></i></span></h5></div>
+    </div>
+    
+    <button class="btn btn-primary float-right" style="margin-right: 30px;" (click)="confirmSubmission()"><i class="fa fa-check"></i> Submit</button>
+  </div>
+  <div class="col-md-9">
+      <div class="card rounded-0" style="font-size:20px;">
+          <div class="card-header" *ngIf="selected" data-toggle="modal" data-target="#solvedModal">
+              <div style="float:left" >Question <span [innerText]="index+1" id="id"></span>:<span *ngIf="type===1"> Single Correct Option Type</span><span *ngIf="type===2"> Multiple Correct Option Type</span> -<small *ngIf="!isAdmin()" [innerText]="author"></small></div>
+              <div id="problem-points" style="float:right">{{points}}</div>
+              
+              <div style="clear:both"></div>
+          </div>
+          <div class="card-body" *ngIf="selected">
+              <!-- <div id="problem-desc" [innerHtml]="desc"></div> -->
+              <p [innerHtml]="temp[0]"></p>
+              <textarea *ngIf="temp.length > 1" style="border: 0px; width: 100%; resize: none; background: transparent; font-family: 'Courier New', Courier, monospace" disabled [rows]="temp[1].split('\n').length">{{temp[1]}}</textarea>
+              <p *ngIf="temp.length > 2" >{{temp[2]}}</p>
+              <!--textarea id="problem-desc" [value]="desc"></textarea-->
+          </div>
+          <div class="card-body" *ngIf="!selected">
+              <p>Click on any Question to begin with.</p>
+          </div>
+          <form [formGroup]="optForm" (ngSubmit)="saveSol(ques[index])">
+              <div class="card-footer form-group" id="problem-flag" *ngIf="selected ">
+                <label  class="col-sm-12" *ngFor="let optC of opt; let i=index">
+                  <input *ngIf="type===1" type="radio" name="opt" value={{optC}} ng-model="opt" [checked]="submitted[i]"  (click)="bindSolR(i)" formControlName="opt"  style="margin-right: 20px">
+                  <input *ngIf="type===2" type="checkbox" name="opt" value={{optC}} ng-model="opt" [checked]="submitted[i]" (click)="bindSol(i)" formControlName="opt"  style="margin-right: 20px">{{optC}}
+                  <br>
+                </label>
+                  <div class="input-group-append">
+                      <button type="submit" [disabled]="!(selectedOpt[0]||selectedOpt[1]||selectedOpt[2]||selectedOpt[3])" class="btn btn-primary input-group-append rounded-0" style="background-color:rgb(7, 139, 3) " >Save</button>
+                      <a *ngIf="saved[index]" class="btn btn-danger input-group-append rounded-0" style="margin-left: 10px;background-color: cadetblue;color: white" (click)="clearSol(ques[index])">Clear</a> 
+                  </div>
+              </div>
+          </form>
+          <!-- <div class="card-footer" *ngIf="selected && isAdmin()">
+              <code></code>
+          </div> -->
+          <div class="card-footer" *ngIf="selected">
+              <div class="float-right">
+                  <button *ngIf="isAdmin()" class="btn btn-warning"><i class="fa fa-pencil-alt"></i> Edit</button>
+                  <button *ngIf="isAdmin()" class="btn btn-danger" (click)="deleteQue()"><i class="fa fa-trash"></i> Delete</button>
+                  <button type="button" class="btn btn-warning" (click)="markQuestion(index)" >
+                      <span *ngIf="!marked[index]"><i class="fas fa-check-circle" style="color: green"></i>Mark</span>
+                      <span *ngIf="marked[index]">Unmark</span>
+                    </button>
+                  <button class="btn btn-info" *ngIf="index>0" (click)="displayQue(index-1)"><i class="fas fa-arrow-alt-circle-left"></i> Previous</button>
+                  <button class="btn btn-info" *ngIf="index<ques.length-1" (click)="displayQue(index+1)">Next <i class="fas fa-arrow-alt-circle-right"></i></button>
+
+              </div>
+          </div>
+      </div>
+      <br>
+  </div>
+</div>
+<div class="row">
+        
+</div>
+<!--div class="modal fade" id="solvedModal" tabindex="-1" role="dialog" aria-labelledby="solvedModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"><span [innerText]="users.length"></span> Solves</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+          <ul>
+              <li *ngFor="let user of users">{{user}}</li>
+          </ul>
+      </div>
+      </div>
+  </div>
+</div-->
+</div>
+
+

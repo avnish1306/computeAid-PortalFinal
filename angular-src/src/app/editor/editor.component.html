@@ -1,0 +1,43 @@
+<h2 style="color: orange">Submit a solution for {{qCode}}:</h2>
+
+<form [formGroup]="codeForm" (ngSubmit)="submit()">
+  <div class="card">
+  <div class="card-header input-group">
+    <div class="input-group-prepend"><span class="input-group-text" id="modeSelect">Language: </span></div>
+      <select class="form-control rounded-0" style="max-width: 100px;" placeholder="Code" formControlName="qLang" aria-describedby="modeSelect" (change)="setMode()">
+      <option value="c" [selected]="true">C</option>
+      <option value="cpp">CPP</option>
+      <option value="java">JAVA</option>
+      <option value="python">PYTHON</option>
+      </select>
+    <div class="input-group-prepend"><span class="input-group-text" id="themeSelect">Theme: </span></div>
+      <select  class="form-control rounded-0" style="max-width: 150px;" formControlName="theme" aria-describedby="themeSelect" (change)="setTheme()">
+      <option value="eclipse" [selected]="true">Eclipse</option>
+      <option value="dracula">Dracula</option>
+      <option value="twilight">Twilight</option>
+      </select>
+      <span class="input-group-text headOfEditor float-right">Paste your code here</span>
+</div>
+  <div class="card-body" style="padding: 0px;">
+    <div class="aceEditor" (input)="usedBefore=true" ace-editor [(text)]="code" [mode]="editMode" [theme]="editTheme" [readOnly]="false"></div>
+  </div>
+  <div class="card-footer">
+      <div class="alert alert-{{bootstrapclass}} alert-dismissible fade {{showit}}" role="alert" style="width: 250px;">
+          <strong>{{resultMsg}}</strong>
+          <button type="button" class="close" (click)="showit = ''">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="spinner-border text-success" role="status" *ngIf="submitted">
+          <span class="sr-only">Loading...</span>
+        </div><div *ngIf="submitted">Judging your code...</div> 
+  <button type="submit" class="btn btn-success float-right" data-toggle="alert" data-target="#exampleModalCenter2" [disabled]="submitted">Submit</button><br><Br>
+  <div *ngIf="compileError != ''" class="alert alert-dismissible fade {{showitt}}" role="alert">
+    <textarea rows="10" class="form-control rounded-0" style="background: transparent; font-family: 'Courier New', Courier, monospace">{{compileError}}</textarea>
+    <button type="button" class="close" (click)="showitt = false; compileError = ''">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</div>
+  </div>
+</form>

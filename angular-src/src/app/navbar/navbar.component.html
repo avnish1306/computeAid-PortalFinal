@@ -1,0 +1,94 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Compute@id</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        
+      </ul>
+      <ul class="navbar-nav ml-auto">
+
+        <ng-template [ngIf]="!isLoggedIn()">
+            <li class="nav-item">
+                <a class="nav-link" ><i class="fas fa-sign-in-alt"></i> Compute@id</a>
+              </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login" routerLinkActive="active"><i class="fas fa-sign-in-alt"></i> Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/register" routerLinkActive="active"><i class="fas fa-user-plus"></i> Register</a>
+          </li>
+        </ng-template>
+        <ng-template [ngIf]="isLoggedIn()">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/chals" *ngIf="isAdmin()" routerLinkActive="active"><i class="fas fa-list-ol"></i> CryptoQuest</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" *ngIf="!flagBughunt && resume" routerLink="/ques" routerLinkActive="active"><i class="fas fa-list-ol"></i> BugHunt</a>
+              <a class="nav-link" *ngIf="!flagBughunt && !resume" routerLink="/ques" routerLinkActive="active" data-toggle="modal" data-target="#bughuntModel"><i class="fas fa-list-ol"></i> BugHunt</a>
+              <a class="nav-link" *ngIf="flagBughunt" routerLink="/ques" routerLinkActive="active" ><i class="fas fa-list-ol"></i>BugHunt</a>
+          </li>
+
+
+          <li class="nav-item">
+              <a class="nav-link" routerLinkActive="active"><i class="fas fa-list-ol"></i> Flawless</a>
+            </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/rules" routerLinkActive="active"><i class="fas fa-info-circle"></i> Rules</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" routerLink="/ranking" routerLinkActive="active" ngDisabled="!isAdmin()"><i class="fas fa-signal"></i> Ranking</a>
+            </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+              {{user}}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right text-center">
+              <a class="dropdown-item" routerLink="/profile" routerLinkActive="active"><i class="fas fa-user"></i> Profile</a>
+              <a class="dropdown-item" href="#" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+          </li>
+        </ng-template>
+      </ul>
+    </div>
+  </nav>
+  <div class="modal fade" id="bughuntModel" tabindex="-1" role="dialog" aria-labelledby="bughuntModel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content modal-lg">
+          <div class="modal-header">
+              <h5 class="modal-title"  id="exampleModalLabel"><span >Rules for Bughunt <strong>(Please go through all of the rules carefully)</strong></span></h5>
+          </div>
+          <div class="modal-body" >
+              <ol>
+                <li>The Contest duration is 45 minutes.</li>
+                <li>Once you start the test, a timer will start running. On completion of time, the contest will end automatically. However, a submit button is provided for manual submission.</li>
+                <li>Each Question has two buttons i.e. <strong>Save</strong> and <strong>Clear</strong>. <strong>Save</strong> button will save your answers. <strong>Clear</strong> button will clear up your selections.</li>
+                <li><i>Only those questions will be judged whose selections are saved. So, for skipping any question, make sure the selections are cleared (Use Clear button).</i></li>
+                <li>Please save your selection before moving to the next question.</li>
+                <li>Marking Scheme for <strong>Single Correct Option Type</strong></li>
+                  <ul class="a">
+                    <li>Every correct answer fetches the full marks as stated in the question.</li>
+                    <li>Every incorrect answer bears negative marks of 1/4th of the full marks as stated in the question.</li>
+                  </ul>
+                <li>Marking Scheme for <strong>Multiple Correct Option Type</strong>
+                  <ul class="a">
+                    <li>There is no negative marking for this type.</li>
+                    <li>Positive marks is calculated using the formula:<br>Obtained Marks = (Number of correct options opted / Total number of options) * Total Marks of the question.</li>
+                    <li>However, if the correct option(s) which are opted accompanies any incorrect option(s), Marks obtained will be 0.</li>
+                  </ul>
+                </li>              
+              </ol>
+          </div>
+          <div class="modal-footer">
+              <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button class="btn btn-info" routerLink="/ques" data-dismiss="modal" (click)="setFlagBughunt()">Start the Test</button>
+          </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- <div>
+      routerLink="/ques"
+  </div> -->
