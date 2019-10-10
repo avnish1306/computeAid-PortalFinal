@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { ParticlesModule } from 'angular-particle';
 import { SimpleNotificationsModule } from 'angular2-notifications';
@@ -33,12 +33,15 @@ import { FlawService } from './services/flaw.service';
 
 import { AuthGuard } from './guards/auth.guard';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
+import { AddContestComponent } from './add-contest/add-contest.component';
+import { ContestsComponent } from './contests/contests.component';
+import { ContestService } from './services/contest.service';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'chals', component: ChalsComponent, canActivate: [AuthGuard] },
-  { path: 'ques', component: QuestionComponent, canActivate: [AuthGuard] },
+  { path: 'ques/bughunt', component: QuestionComponent, canActivate: [AuthGuard] },
   { path: 'flaw', component: FlawComponent, canActivate: [AuthGuard] },
   { path: 'rules', component: RulesComponent, canActivate: [AuthGuard] },
   { path: 'ranking', component: RankingComponent, canActivate: [AdminAuthGuard] },
@@ -47,8 +50,9 @@ const appRoutes: Routes = [
   { path: 'ques/add', component: AddQueComponent, canActivate: [AuthGuard, AdminAuthGuard] },
   { path: 'flaws/add', component: AddFlawComponent, canActivate: [AuthGuard, AdminAuthGuard] },
   { path: 'welcome', component: WelcomepageComponent, canActivate: [AuthGuard] },
-  { path: 'editor/:qCode', component: EditorComponent, canActivate: [AuthGuard] }
-  //{ path: '', component: AppComponent }
+  { path: 'editor/:qCode', component: EditorComponent, canActivate: [AuthGuard] },
+  { path: 'contests/add', component: AddContestComponent, canActivate: [AuthGuard, AdminAuthGuard] },
+  { path: 'contests', component: ContestsComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({
@@ -67,11 +71,14 @@ const appRoutes: Routes = [
     AddFlawComponent,
     FlawComponent,
     EditorComponent,
-    WelcomepageComponent
+    WelcomepageComponent,
+    AddContestComponent,
+    ContestsComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    FormsModule,
     ReactiveFormsModule,
     HttpModule,
     ParticlesModule,
@@ -86,6 +93,7 @@ const appRoutes: Routes = [
     DataService,
     QuesService,
     FlawService,
+    ContestService,
     AuthGuard,
     AdminAuthGuard
   ],

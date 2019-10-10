@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NotificationsService } from 'angular2-notifications';
 import { faPlusCircle, faTrash, faPencilAlt, faEye } from '@fortawesome/fontawesome-free-solid'
 import fontawesome from '@fortawesome/fontawesome';
@@ -21,7 +21,8 @@ export class QuestionComponent implements OnInit {
   constructor(private router: Router,
   private authService: AuthService,
   private quesService: QuesService,
-  private notificationsService: NotificationsService) { }
+  private notificationsService: NotificationsService,
+  private route: ActivatedRoute) { }
 
   ques;
   i;
@@ -53,11 +54,14 @@ export class QuestionComponent implements OnInit {
   interval;
   timeLeft;
   countTimer="";
-  timeFlag=0;
+  timeFlag=0; cid;
 
   
   ngOnInit() {
-    
+    // this.cid = this.route.snapshot.paramMap.get('cid');
+    // if(this.cid != "bughunt")
+    //   return;
+
     this.quesService.getAllQues().subscribe(
       data => {
         this.startTime=new Date(data.startTime);

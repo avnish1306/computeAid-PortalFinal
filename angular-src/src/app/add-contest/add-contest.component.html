@@ -1,0 +1,62 @@
+<div class="card">
+  <div class="card-header"><h4>Add Contest</h4></div>
+  <div class="card-body">
+    <form [formGroup]="addContestForm">
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <input type="text" class="form-control rounded-0 form-control-lg" placeholder="Contest Name" formControlName="contestName">
+            <div *ngIf="!addContestForm.get('contestName').valid && addContestForm.get('contestName').touched" class="invalid-feedback">
+              Contest Name is required.
+            </div>
+            <small>This name will be visible in the contests page.</small>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control rounded-0 form-control-lg" placeholder="Secret Key" formControlName="secretKey">
+            <div *ngIf="!addContestForm.get('secretKey').valid && addContestForm.get('secretKey').touched" class="invalid-feedback">
+              Secret Key is required.
+            </div>
+            <small>Participant will be asked for this code. Without this code, no participant can start the contest.</small>
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" style="width: 1.25em; height: 1.25em; cursor: pointer;" formControlName="scoreDisplay" id="scoreD">
+            &nbsp;&nbsp;
+            <label class="form-check-label" for="scoreD" style="cursor: pointer;">Show Contest Score to Participant after the Contest Ends</label>
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" style="width: 1.25em; height: 1.25em; cursor: pointer;" formControlName="hasScoreBoard" id="scoreB">
+            &nbsp;&nbsp;
+            <label class="form-check-label" for="scoreB" style="cursor: pointer;">Show Contest Score Board to Participants during Contest</label>
+          </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <input type="datetime-local" class="form-control rounded-0 form-control-lg" placeholder="Start Time" formControlName="startTime">
+                <div *ngIf="!addContestForm.get('startTime').valid && addContestForm.get('startTime').touched" class="invalid-feedback">
+                  Start Time is required.
+                </div>
+                <small>Participant can start the test from this time. Participant will get full duration.</small>
+              </div>
+              <div class="form-group">
+                <input type="datetime-local" class="form-control rounded-0 form-control-lg" placeholder="End Time" formControlName="endTime">
+                <div *ngIf="!addContestForm.get('endTime').valid && addContestForm.get('endTime').touched" class="invalid-feedback">
+                  End Time is required.
+                </div>
+                <small>Participant can start the test before this time. Participant will get full duration.</small>
+              </div>
+              <div class="form-group">
+                <input type="number" class="form-control rounded-0 form-control-lg" placeholder="Duration (Minutes)" formControlName="duration">
+                <div *ngIf="!addContestForm.get('duration').valid && addContestForm.get('duration').touched" class="invalid-feedback">
+                  Duration is required.
+                </div>
+                <small>Full duration of the contest.</small>
+              </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer text-right">
+    <button class="btn btn-primary" (click)="addContest(true)" [disabled]="!addContestForm.valid">Add Contest & Go Back</button>
+    <!-- <button class="btn btn-primary" (click)="addContest(false)" [disabled]="!addContestForm.valid">Add contest & Add More</button> -->
+  </div>
+</div>
