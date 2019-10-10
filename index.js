@@ -27,6 +27,7 @@ const user = require("./routes/user");
 const chals = require("./routes/chals");
 const que = require("./routes/que");
 const flaw=require("./routes/flaw");
+const quiz=require("./routes/quiz");
 
 // Middleware Setup
 app.use(morgan('dev'));
@@ -43,6 +44,7 @@ app.use("/user", user);
 app.use("/chals", chals);
 app.use("/ques", que);
 app.use("/flaws",flaw);
+app.use("/quiz",quiz);
 console.log(__dirname);
 // Setting Up Error Messages and Status
 app.use((req, res, next) => {
