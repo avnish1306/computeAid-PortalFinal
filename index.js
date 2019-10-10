@@ -12,7 +12,7 @@ console.log(process.env.SECRET);
 const port = process.env.PORT || 3000;
 
 // Connecting to the DB
-mongoose.connect('mongodb://avnish1306:Mummy12345@ds121163.mlab.com:21163/passport');
+mongoose.connect('mongodb://avnish1306:Mummy12345@ds121163.mlab.com:21163/passport',{ useNewUrlParser: true });
 //mongoose.connect({ useNewUrlParser: true },'mongodb://localhost/edge');
 
 mongoose.connection.on('open', () => {
