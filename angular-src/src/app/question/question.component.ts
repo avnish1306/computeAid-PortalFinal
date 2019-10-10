@@ -58,9 +58,10 @@ export class QuestionComponent implements OnInit {
 
   
   ngOnInit() {
-    // this.cid = this.route.snapshot.paramMap.get('cid');
-    // if(this.cid != "bughunt")
-    //   return;
+    this.cid = this.route.snapshot.paramMap.get('cid');
+    alert(this.cid);
+    //if(this.cid != "bughunt")
+      return;
 
     this.quesService.getAllQues().subscribe(
       data => {

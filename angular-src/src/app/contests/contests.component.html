@@ -1,73 +1,22 @@
 <h3>Available Contests</h3>
 
-    <div class="col-2 card">
+    <div class="col-2 card" *ngFor="let contest of contests; let i=index">
       <div class="card-body">
-        <h5 class="card-title">Bughunt</h5>
-        <p class="card-text">45 minutes</p>
-        <button class="btn btn-success" data-toggle="modal" data-target="#bughuntModel">Start The Contest</button>
-      </div>
+        <h5 class="card-title">{{contest.name}}</h5>
+        <p class="card-text"> Duration: {{contest.duration}} minutes <br>
+             Enables At: {{contest.startTime | date:"dd/MM/yyyy hh:mm a"}} <br>
+             Disables At: {{contest.endTime | date:"dd/MM/yyyy hh:mm a"}} </p>
+        <h5 *ngIf="!live[i].enabled"><i>{{ live[i].buttonText }}</i></h5>
+        <div *ngIf="live[i].enabled">
+        <p>
+        <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#bughuntModel"> Rules and Info </button>
+      </p><button class="btn btn-sm btn-primary" (click)="goToContest(i)"> {{ live[i].buttonText }} </button>
     </div>
-    <div class="col-2 card">
-      <div class="card-body">
-        <h5 class="card-title">Contest Name</h5>
-        <p class="card-text">Duration</p>
-        <button class="btn btn-primary">Start The Contest</button>
-      </div>
+  </div>
     </div>
-    <div class="col-2 card">
+    <div class="col-2 card" routerLink="/contests/add">
       <div class="card-body">
-        <h5 class="card-title">Contest Name</h5>
-        <p class="card-text">Duration</p>
-        <button class="btn btn-primary">Start The Contest</button>
-      </div>
-    </div>
-    <div class="col-2 card">
-      <div class="card-body">
-        <h5 class="card-title">Contest Name</h5>
-        <p class="card-text">Duration</p>
-        <button class="btn btn-primary">Start The Contest</button>
-      </div>
-    </div>
-    <div class="col-2 card">
-      <div class="card-body">
-        <h5 class="card-title">Contest Name</h5>
-        <p class="card-text">Duration</p>
-        <button class="btn btn-primary">Start The Contest</button>
-      </div>
-    </div>
-    <div class="col-2 card">
-      <div class="card-body">
-        <h5 class="card-title">Contest Name</h5>
-        <p class="card-text">Duration</p>
-        <button class="btn btn-primary">Start The Contest</button>
-      </div>
-    </div>
-    <div class="col-2 card">
-      <div class="card-body">
-        <h5 class="card-title">Contest Name</h5>
-        <p class="card-text">Duration</p>
-        <button class="btn btn-primary">Start The Contest</button>
-      </div>
-    </div>
-    <div class="col-2 card">
-      <div class="card-body">
-        <h5 class="card-title">Contest Name</h5>
-        <p class="card-text">Duration</p>
-        <button class="btn btn-primary">Start The Contest</button>
-      </div>
-    </div>
-    <div class="col-2 card">
-      <div class="card-body">
-        <h5 class="card-title">Contest Name</h5>
-        <p class="card-text">Duration</p>
-        <button class="btn btn-primary">Start The Contest</button>
-      </div>
-    </div>
-    <div class="col-2 card">
-      <div class="card-body">
-        <h5 class="card-title">Contest Name</h5>
-        <p class="card-text">Duration</p>
-        <button class="btn btn-primary">Start The Contest</button>
+        <h5 class="card-title">Add New</h5>
       </div>
     </div>
 
@@ -100,8 +49,8 @@
               </ol>
           </div>
           <div class="modal-footer">
-              <button class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button class="btn btn-info" routerLink="/ques/bughunt" data-dismiss="modal" (click)="setFlagBughunt()">Start the Test</button>
+              <button class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+              <button class="btn btn-sm btn-info" (click)="goToContest()" data-dismiss="modal">Start the Test</button>
           </div>
           </div>
       </div>
