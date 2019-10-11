@@ -60,7 +60,11 @@ export class ContestsComponent implements OnInit {
 
   editContest(i: number) {
     localStorage.setItem('temp',JSON.stringify(this.contests[i]));
-    this.router.navigate(['/ques/contests/'+this.contests[i].name]);
+    this.router.navigate(['/contests/add']);
+  }
+
+  addQuestion(i: number) {
+    this.router.navigate(['/ques/add/'+this.contests[i].name]);
   }
 
   deleteContest(i: string) {

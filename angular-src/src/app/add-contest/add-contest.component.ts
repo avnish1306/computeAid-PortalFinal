@@ -15,16 +15,25 @@ export class AddContestComponent implements OnInit {
     private router: Router,
     private notificationsService: NotificationsService) { }
     addContestForm: FormGroup;
+    data = {
+      editing: false,
+      content: null
+    }
 
   ngOnInit() {
+    if(localStorage.getItem('temp')) {
+      this.data.content = JSON.parse(localStorage.getItem('temp'));
+      this.data.editing = true;
+      localStorage.removeItem('temp');
+    }
     this.addContestForm = new FormGroup({
-      'contestName': new FormControl(null, [Validators.required]),
-      'startTime': new FormControl(null, [Validators.required]),
-      'duration': new FormControl(null, [Validators.required]),
-      'endTime': new FormControl(null, [Validators.required]),
-      'secretKey': new FormControl(null, [Validators.required]),
-      'scoreDisplay': new FormControl(false),
-      'hasScoreBoard': new FormControl(false)
+      'contestName': new FormControl(this.data.editing ? this.data.content.name : null, [Validators.required]),
+      'startTime': new FormControl(this.data.editing ? new Date(this.data.content.startTime) : null, [Validators.required]),
+      'duration': new FormControl(this.data.editing ? this.data.content.duration : null, [Validators.required]),
+      'endTime': new FormControl(this.data.editing ? new Date(this.data.content.endTime) : null, [Validators.required]),
+      'secretKey': new FormControl(this.data.editing ? this.data.content.secretKey : null, [Validators.required]),
+      'scoreDisplay': new FormControl(this.data.editing ? this.data.content.scoreDisplay : false),
+      'hasScoreBoard': new FormControl(this.data.editing ? this.data.content.hasScoreBoard : false)
     });
   }
 

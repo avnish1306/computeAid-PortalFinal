@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { QuesService } from '../services/ques.service';
 import { NotificationsService } from 'angular2-notifications';
 @Component({
@@ -11,14 +11,18 @@ import { NotificationsService } from 'angular2-notifications';
 export class AddQueComponent implements OnInit {
   constructor(private queService: QuesService,
     private router: Router,
+    private route: ActivatedRoute,
     private notificationsService: NotificationsService) { }
 
   addQueForm: FormGroup;
   sol=[false,false,false,false];
   type=1;
   opt=[];
+  cid;
 
   ngOnInit() {
+    this.cid = this.route.snapshot.paramMap.get('cid');
+    alert(this.cid);
     this.addQueForm = new FormGroup({
       'lang': new FormControl(null, [Validators.required]),
       'desc': new FormControl(null, [Validators.required]),
