@@ -12,22 +12,16 @@
             <small>This name will be visible in the contests page.</small>
           </div>
           <div class="form-group">
-            <input type="password" class="form-control rounded-0 form-control-lg" placeholder="Secret Key" formControlName="secretKey">
-            <div *ngIf="!addContestForm.get('secretKey').valid && addContestForm.get('secretKey').touched" class="invalid-feedback">
-              Secret Key is required.
-            </div>
-            <small>Participant will be asked for this code. Without this code, no participant can start the contest.</small>
+            <textarea class="form-control rounded-0 form-control-lg" rows="6" placeholder="Rules" formControlName="rules"></textarea>
+            <div *ngIf="!addContestForm.get('rules').valid && addContestForm.get('rules').touched" class="invalid-feedback">
+              Rules is required.
           </div>
-          <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" style="width: 1.25em; height: 1.25em; cursor: pointer;" formControlName="scoreDisplay" id="scoreD">
-            &nbsp;&nbsp;
-            <label class="form-check-label" for="scoreD" style="cursor: pointer;">Show Contest Score to Participant after the Contest Ends</label>
+          <small>These rules will be available in the contest dashboard and can be viewed before the contest starts.</small>
           </div>
-          <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" style="width: 1.25em; height: 1.25em; cursor: pointer;" formControlName="hasScoreBoard" id="scoreB">
-            &nbsp;&nbsp;
-            <label class="form-check-label" for="scoreB" style="cursor: pointer;">Show Contest Score Board to Participants during Contest</label>
+          <div class="form-group">
+            <textarea class="form-control rounded-0 form-control-lg" rows="4" placeholder="Details (Optional)" formControlName="details"></textarea>
           </div>
+          <small>These details will be available in the contest dashboard and can be viewed anytime.</small>
         </div>
         <div class="col-6">
             <div class="form-group">
@@ -51,6 +45,25 @@
                   Duration is required.
                 </div>
                 <small>Full duration of the contest.</small>
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control rounded-0 form-control-lg" placeholder="Secret Key" formControlName="secretKey">
+                <div *ngIf="!addContestForm.get('secretKey').valid && addContestForm.get('secretKey').touched" class="invalid-feedback">
+                  Secret Key is required.
+                </div>
+                <small>Participant will be asked for this code. Without this code, no participant can start the contest.</small>
+              </div>
+              <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" style="width: 1.25em; height: 1.25em; cursor: pointer;" formControlName="scoreDisplay" id="scoreD">
+                &nbsp;&nbsp;
+                <label class="form-check-label" for="scoreD" style="cursor: pointer;">Show Contest Score to Participant after the Contest Ends</label><br>
+                <small>If checked, the score will be displayed to the participant immediately after the contest ends.</small>              
+              </div>
+              <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" style="width: 1.25em; height: 1.25em; cursor: pointer;" formControlName="hasScoreBoard" id="scoreB">
+                &nbsp;&nbsp;
+                <label class="form-check-label" for="scoreB" style="cursor: pointer;">Show Contest Score Board to Participants during Contest</label><br>
+                <small>If checked, the score board can be viewed by the participants during the contest.</small>              
               </div>
         </div>
       </div>

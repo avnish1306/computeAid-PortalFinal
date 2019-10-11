@@ -24,11 +24,10 @@
                 <div class="col-2 card" *ngIf="live[i].enabled">
                 <div class="card-body">
                   <h5 class="card-title">{{contest.name}}</h5>
-                  <p class="card-text"> Duration: {{contest.duration / 60}} hours {{ contest.duration % 60 }} minutes <br>
-                       Enables At: {{contest.startTime | date:"dd/MM/yyyy hh:mm a"}} <br>
-                       Disables At: {{contest.endTime | date:"dd/MM/yyyy hh:mm a"}} </p>
+                  <p class="card-text"> Duration: {{contest.duration / 60}} hours {{ contest.duration % 60 }} minutes </p>
                   <p>
-                  <button class="btn btn-sm btn-outline-warning" data-toggle="modal" data-target="#bughuntModel"> Rules and Info </button>
+                  <button class="btn btn-sm btn-outline-warning" (click)="stageInfo(i)" data-toggle="modal" data-target="#infoModel"> Info </button>
+                  <button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#bughuntModel"> Rules </button>
                 </p><p><button class="btn btn-sm btn-success" (click)="goToContest(i)"> Start The Test </button>
                 </p><p><button class="btn btn-sm btn-warning" (click)="editContest(i)"> Edit Settings </button>
                 </p><p><button class="btn btn-sm btn-primary" (click)="addQuestion(i)"> Add Question </button>
@@ -70,6 +69,25 @@
             </ng-container>
         </div>
       </div>
+
+<!-- info modal -->
+<div class="modal fade" id="infoModel" tabindex="-1" role="dialog" aria-labelledby="infoModel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content modal-md">
+      <div class="modal-header">
+          <h5 class="modal-title"  id="exampleModalLabel2"><span>{{info.cname}}: Information</span></h5>
+      </div>
+      <div class="modal-body">
+        Enables At: {{info.startTime | date:"dd/MM/yyyy hh:mm a"}} <br>
+        Disables At: {{info.endTime | date:"dd/MM/yyyy hh:mm a"}}
+        More: {{info.details}}
+      </div>
+      <div class="modal-footer">
+          <button class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+      </div>
+  </div>
+</div>
 
 <!-- rules modal -->
   <div class="modal fade" id="bughuntModel" tabindex="-1" role="dialog" aria-labelledby="bughuntModel" aria-hidden="true" data-backdrop="static">

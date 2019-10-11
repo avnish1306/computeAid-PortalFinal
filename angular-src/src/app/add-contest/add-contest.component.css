@@ -21,3 +21,7 @@ textarea.ng-valid.ng-touched{
 .invalid-feedback{
     display: block;
 }
+
+textarea {
+    resize: none;
+}

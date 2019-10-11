@@ -19,6 +19,12 @@ export class ContestsComponent implements OnInit {
     contests;
     live = [];
     id;
+    info = {
+      cname: "",
+      details: "",
+      startTime: "",
+      endTime: ""
+    }
     loading: boolean = true;
 
   ngOnInit() {
@@ -65,6 +71,13 @@ export class ContestsComponent implements OnInit {
 
   addQuestion(i: number) {
     this.router.navigate(['/ques/add/'+this.contests[i].name]);
+  }
+
+  stageInfo(i: number) {
+    this.info.cname = this.contests[i].name;
+    this.info.details = this.contests[i].details;
+    this.info.startTime = this.contests[i].startTime;
+    this.info.endTime = this.contests[i].endTime;
   }
 
   deleteContest(i: string) {

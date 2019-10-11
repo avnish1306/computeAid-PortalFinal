@@ -28,13 +28,15 @@ export class AddQueComponent implements OnInit {
       'desc': new FormControl(null, [Validators.required]),
       'type': new FormControl(null, [Validators.required]),
       'points': new FormControl(null, [Validators.required]),
+      'negMarks': new FormControl(null),
       'author': new FormControl(null, [Validators.required]),
       'opt1':new FormControl(null),
       'opt2':new FormControl(null),
-      'opt3':new FormControl(null, []),
-      'opt4':new FormControl(null, [])
+      'opt3':new FormControl(null),
+      'opt4':new FormControl(null)
     });
   }
+
   bindSol(k: number){
     this.sol[k]=!this.sol[k];
     if(this.type==1)
@@ -44,15 +46,18 @@ export class AddQueComponent implements OnInit {
       this.sol[i]=false;}
     console.log(this.sol);
   }
+
   bindOpt(e: any,i:number){
       this.opt[i]=e.target.value;
   }
+
   addQue(navigate: boolean){
     const que = {
       lang: this.addQueForm.value.lang,
       desc: this.addQueForm.value.desc,
       type: this.addQueForm.value.type,
       points: this.addQueForm.value.points,
+      negMarks: this.addQueForm.value.negMarks ? this.addQueForm.value.negMarks : 0,
       author: this.addQueForm.value.author,
       opt:[],
       sol:[]

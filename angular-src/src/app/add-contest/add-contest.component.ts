@@ -32,6 +32,8 @@ export class AddContestComponent implements OnInit {
       'duration': new FormControl(this.data.editing ? this.data.content.duration : null, [Validators.required]),
       'endTime': new FormControl(this.data.editing ? new Date(this.data.content.endTime) : null, [Validators.required]),
       'secretKey': new FormControl(this.data.editing ? this.data.content.secretKey : null, [Validators.required]),
+      'details': new FormControl(this.data.editing ? this.data.content.details : ""),
+      'rules': new FormControl(this.data.editing ? this.data.content.rules : null, [Validators.required]),
       'scoreDisplay': new FormControl(this.data.editing ? this.data.content.scoreDisplay : false),
       'hasScoreBoard': new FormControl(this.data.editing ? this.data.content.hasScoreBoard : false)
     });
@@ -44,6 +46,8 @@ export class AddContestComponent implements OnInit {
       duration: this.addContestForm.value.duration,
       endTime: this.addContestForm.value.endTime,
       secretKey: this.addContestForm.value.secretKey,
+      details: this.addContestForm.value.details,
+      rules: this.addContestForm.value.rules,
       scoreDisplay: this.addContestForm.value.scoreDisplay,
       hasScoreBoard: this.addContestForm.value.hasScoreBoard
     }
