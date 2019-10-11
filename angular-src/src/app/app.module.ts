@@ -8,6 +8,9 @@ import { ParticlesModule } from 'angular-particle';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { AceEditorModule } from 'ng2-ace-editor';
 import { CountdownTimerModule } from 'ngx-countdown-timer';
+import { StorageServiceModule } from 'ngx-webstorage-service';
+
+import { CookieService } from 'ngx-cookie-service';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -30,13 +33,15 @@ import { ChalService } from './services/chal.service';
 import { DataService } from './services/data.service';
 import { QuesService } from './services/ques.service';
 import { FlawService } from './services/flaw.service';
+import { CookieActionsService } from './services/cookieActions.service';
+import { LocalStorageService } from './services/localStorage.service';
+
 
 import { AuthGuard } from './guards/auth.guard';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { AddContestComponent } from './add-contest/add-contest.component';
 import { ContestsComponent } from './contests/contests.component';
 import { ContestService } from './services/contest.service';
-
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
@@ -83,6 +88,7 @@ const appRoutes: Routes = [
     HttpModule,
     ParticlesModule,
     AceEditorModule,
+    StorageServiceModule,
     SimpleNotificationsModule.forRoot(),
     CountdownTimerModule.forRoot(),
     RouterModule.forRoot(appRoutes, {useHash: true})
@@ -95,7 +101,10 @@ const appRoutes: Routes = [
     FlawService,
     ContestService,
     AuthGuard,
-    AdminAuthGuard
+    AdminAuthGuard,
+    CookieService,
+    CookieActionsService,
+    LocalStorageService
   ],
   
   bootstrap: [AppComponent]
