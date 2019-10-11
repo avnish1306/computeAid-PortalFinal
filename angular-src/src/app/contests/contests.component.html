@@ -28,10 +28,11 @@
                        Enables At: {{contest.startTime | date:"dd/MM/yyyy hh:mm a"}} <br>
                        Disables At: {{contest.endTime | date:"dd/MM/yyyy hh:mm a"}} </p>
                   <p>
-                  <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#bughuntModel"> Rules and Info </button>
-                </p><p><button class="btn btn-sm btn-primary" (click)="goToContest(i)"> Start The Test </button>
-                </p><p><button class="btn btn-sm btn-warning" (click)="goToContest(i)"> Edit </button>
-              </p><button class="btn btn-sm btn-danger" (click)="deleteContest(contest._id)"> Delete </button>
+                  <button class="btn btn-sm btn-outline-warning" data-toggle="modal" data-target="#bughuntModel"> Rules and Info </button>
+                </p><p><button class="btn btn-sm btn-success" (click)="goToContest(i)"> Start The Test </button>
+                </p><p><button class="btn btn-sm btn-warning" (click)="editContest(i)"> Edit Settings </button>
+                </p><p><button class="btn btn-sm btn-primary" (click)="addQuestion(i)"> Add Question </button>
+              </p><button class="btn btn-sm btn-danger" (click)="deleteContest(contest._id)"> Delete Contest </button>
             </div>
               </div>
             </ng-container>
@@ -45,8 +46,9 @@
                        Enables At: {{contest.startTime | date:"dd/MM/yyyy hh:mm a"}} <br>
                        Disables At: {{contest.endTime | date:"dd/MM/yyyy hh:mm a"}} </p>
                   <h5><i>Yet To Start</i></h5>
-                  <p><button class="btn btn-sm btn-warning" (click)="goToContest(i)"> Edit </button>
-              </p><button class="btn btn-sm btn-danger" (click)="deleteContest(contest._id)"> Delete </button>
+                <p><button class="btn btn-sm btn-warning" (click)="editContest(i)"> Edit Settings </button>
+                </p><p><button class="btn btn-sm btn-primary" (click)="addQuestion(i)"> Add Question </button>
+              </p><button class="btn btn-sm btn-danger" (click)="deleteContest(contest._id)"> Delete Contest </button>
             </div>
               </div>
             </ng-container>
@@ -59,8 +61,10 @@
                   <p class="card-text"> Duration: {{contest.duration / 60}} hours {{ contest.duration % 60 }} minutes <br>
                        Enables At: {{contest.startTime | date:"dd/MM/yyyy hh:mm a"}} <br>
                        Disables At: {{contest.endTime | date:"dd/MM/yyyy hh:mm a"}} </p>
-                  <h5 *ngIf="!live[i].enabled"><i>Ended</i></h5><p><button class="btn btn-sm btn-warning" (click)="goToContest(i)"> Edit </button>
-              </p><button class="btn btn-sm btn-danger" (click)="deleteContest(contest._id)"> Delete </button>
+                  <h5 *ngIf="!live[i].enabled"><i>Ended</i></h5>
+                    <p><button class="btn btn-sm btn-warning" (click)="editContest(i)"> Edit Settings </button>
+                    </p><p><button class="btn btn-sm btn-primary" (click)="addQuestion(i)"> Add Question </button>
+                  </p><button class="btn btn-sm btn-danger" (click)="deleteContest(contest._id)"> Delete Contest </button>
             </div>
               </div>
             </ng-container>

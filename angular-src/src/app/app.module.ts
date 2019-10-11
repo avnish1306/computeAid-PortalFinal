@@ -47,7 +47,7 @@ const appRoutes: Routes = [
   { path: 'ranking', component: RankingComponent, canActivate: [AdminAuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'chals/add', component: AddChalComponent, canActivate: [AuthGuard, AdminAuthGuard] },
-  { path: 'ques/add', component: AddQueComponent, canActivate: [AuthGuard, AdminAuthGuard] },
+  { path: 'ques/add/:cid', component: AddQueComponent, canActivate: [AuthGuard, AdminAuthGuard] },
   { path: 'flaws/add', component: AddFlawComponent, canActivate: [AuthGuard, AdminAuthGuard] },
   { path: 'welcome', component: WelcomepageComponent, canActivate: [AuthGuard] },
   { path: 'editor/:qCode', component: EditorComponent, canActivate: [AuthGuard] },

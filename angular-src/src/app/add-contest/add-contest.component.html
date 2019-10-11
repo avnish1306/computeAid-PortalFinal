@@ -31,6 +31,7 @@
         </div>
         <div class="col-6">
             <div class="form-group">
+              {{startTime}}
                 <input type="datetime-local" class="form-control rounded-0 form-control-lg" placeholder="Start Time" formControlName="startTime">
                 <div *ngIf="!addContestForm.get('startTime').valid && addContestForm.get('startTime').touched" class="invalid-feedback">
                   Start Time is required.
