@@ -1,6 +1,11 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Quiz = require('./quiz');
 
 const queSchema = mongoose.Schema({
+    quizId:{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'
+
+    },
     lang: {
         type: String,
         required: true

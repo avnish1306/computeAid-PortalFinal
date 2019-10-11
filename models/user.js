@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Que=require('./que');
 const Flaw=require('./flaw');
+const Quiz = require('./quiz');
 
 const userSchema = mongoose.Schema({
     name: {
@@ -38,7 +39,30 @@ const userSchema = mongoose.Schema({
         type:String,
         default:"webd"
     },
+    quizs:[{
+        quizId:{
+            type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'
+        },
+        status:{
+            type:Boolean,
+            default:false
+        },
+        score:{
+            type:Number,
+            default:0
+        },
+        startTime:{
+            type:Date,
+            default:null
+        },
+        endTime:{
+            type:Date,
+            default:null
+        }
+
+    }],
     contests:{
+
         cryptoquest:{
             isEligible:{
                 type:Boolean,

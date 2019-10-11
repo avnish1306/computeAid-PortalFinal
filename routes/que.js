@@ -6,6 +6,7 @@ const Que=require('../models/que');
 const Answer = require('../models/answer');
 const Auth = require('../middlewares/auth');
 const User=require('../models/user');
+const Quiz = require('../models/quiz');
 //Auth.authenticateAll, 
 router.post('/add',Auth.authenticateAll,  (req, res, next) => {
     req.checkBody('lang', 'Language is required').notEmpty();
@@ -15,6 +16,7 @@ router.post('/add',Auth.authenticateAll,  (req, res, next) => {
     req.checkBody('sol', 'Solution is required').notEmpty();
     req.checkBody('opt', 'Option is required').notEmpty();
     req.checkBody('type','Question Type is required').notEmpty();
+    req.checkBody('quizId','Quiz Id is required').notEmpty();
 
     const errors = req.validationErrors();
 
@@ -26,7 +28,8 @@ router.post('/add',Auth.authenticateAll,  (req, res, next) => {
             points: req.body.points,
             sol: req.body.sol,
             opt: req.body.opt,
-            type: req.body.type
+            type: req.body.type,
+            quizId: req.body.quizId
         });
         que.save()
         .then(result => {
@@ -88,66 +91,77 @@ router.post('/saveAns',Auth.authenticateAll,(req,res,next)=>{
     })
 })
 //Auth.authenticateAll,
-router.get('/', Auth.authenticateAll,  (req, res, next) => {
+router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
+    let quizId = req.params.queId;
     User.findOne({name:req.user.name},(err,user)=>{
         if(err){
-            res.status(500).json({
+           return res.status(500).json({
                 status: 0,
                 error: "Internal server error"
             });
         }
         //console.log(user);
         if(user){
-        if(user.contests.bughunt.startTime==null&&user.access!=1){
-            user.contests.bughunt.startTime=new Date();
-        }
-        user.save().then(newuser=>{
-            Que.find({'lang':req.user.lang}, 'desc opt points author type').then(ques => {
-                User.findOne({'name':req.user.name},(err,user)=>{
-                    if(err){
-                        res.status(500).json({
-                            status: 0,
-                            error: "Internal server error"
-                        });
-                    }
-                    /*var temp=false;
-                    var temp2=false;
-                    if(req.user.lang=='webd'){
-                        temp=user.contests.webd.isEligible;
-                        temp2=user.contests.webd.status;
-                    }
-                    else{
-                        temp= user.contests.bughunt.isEligible;
-                        temp2=user.contests.bughunt.status;
-
-                    }*/
-                    
-                    //console.log(newuser.contests.bughunt.startTime)
+        Quiz.findById(quizId,(err,quiz)=>{
+            if(err){
+                return res.status(500).json({
+                    status: 0,
+                    msg:"Fail to to fetch",
+                    error: "Internal server error"
+                });
+            }
+            let currDate = new Date();
+            if(currDate>quiz.startTime){
+                return res.status(200).json({
+                    status: 0,
+                    msg:"Quiz has been finished"
+                });
+            }
+            let newQuiz = user.quizs.find(x=>{
+                x.queId == quizId
+            });
+            let filteredQuiz = user.quizs.filter(x=>{
+                return x.queId!=quizId;
+            });
+            if(newQuiz){
+                if(newQuiz.startTime==null&&user.access!=1){
+                    newQuiz.startTime=new Date();
+                }
+            }else{
+                newQuiz = {'quesId':queId,'startTime':null,'endTime':null,'score':0,'status':false};
+            }
+            filteredQuiz.push(newQuiz);
+            user.quizs=filteredQuiz;
+            user.save().then(newuser=>{
+                Que.find({'quizId':quizId}, 'desc opt points author type').then(ques => {
                     res.status(200).json({
                         status: 1,
                         ques: ques,
-                        startTime:newuser.contests.bughunt.startTime,
-                        submission: user.submission,
-                        isEligible:user.contests.bughunt.isEligible,
-                        isAttempt:user.contests.bughunt.status
+                        quiz: newQuiz,
+                        startTime:newQuiz.startTime,
+                        submission: user.submission
                     });
+                    
                 })
-                
-            })
-            .catch(err => {
+                .catch(err => {
+                    //console.log(err);
+                    res.status(500).json({
+                        status: 0,
+                        error: "Internal server error"
+                    });
+                });
+            }).catch(err => {
                 //console.log(err);
                 res.status(500).json({
                     status: 0,
                     error: "Internal server error"
                 });
             });
-        }).catch(err => {
-            //console.log(err);
-            res.status(500).json({
-                status: 0,
-                error: "Internal server error"
-            });
+
+
+
         });
+        
     }else{
         res.status(500).json({
             status: 0,
