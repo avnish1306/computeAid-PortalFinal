@@ -33,7 +33,7 @@ router.post('/create',Auth.authenticateUser,(req,res,next)=>{
                 err:err
             })
         }
-        if(Quiz){
+        if(Quiz&&req.body.quizId==null){
             return res.status(200).json({
                 status: 0,
                 msg:'Quiz Already Exist'
@@ -45,7 +45,9 @@ router.post('/create',Auth.authenticateUser,(req,res,next)=>{
                 'endTime':new Date(req.body.endTime),
                 'duration':req.body.duration,
                 'scoreDisplay':req.body.scoreDisplay,
-                'hasScoreBoard': req.body.hasScoreBoard
+                'hasScoreBoard': req.body.hasScoreBoard,
+                'details':req.body.details,
+                'rules':req.body.rules
                 });
                 if(req.body.quizId!=null){
                     quiz['_id']= req.body.quizId;

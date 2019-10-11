@@ -30,6 +30,14 @@ const quizSchema = mongoose.Schema({
     hasScoreBoard:{
         type:Boolean,
         default:true
+    },
+    details: {
+        type:String,
+        default:""
+    },
+    rules:{
+        type:String,
+        default:""
     }
     
 });

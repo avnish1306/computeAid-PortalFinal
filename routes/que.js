@@ -13,6 +13,7 @@ router.post('/add',Auth.authenticateAll,  (req, res, next) => {
     req.checkBody('desc', 'Description is required').notEmpty();
     req.checkBody('author', 'Author is required').notEmpty();
     req.checkBody('points', 'Points is required').notEmpty();
+    req.checkBody('negPoints', 'Negative Points is required').notEmpty();
     req.checkBody('sol', 'Solution is required').notEmpty();
     req.checkBody('opt', 'Option is required').notEmpty();
     req.checkBody('type','Question Type is required').notEmpty();
@@ -26,6 +27,7 @@ router.post('/add',Auth.authenticateAll,  (req, res, next) => {
             desc: req.body.desc,
             author: req.body.author,
             points: req.body.points,
+            negPoint: req.body.negPoint,
             sol: req.body.sol,
             opt: req.body.opt,
             type: req.body.type,

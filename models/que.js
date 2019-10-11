@@ -22,6 +22,10 @@ const queSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    negPoint: {
+        type: Number,
+        required: true
+    },
     sol:[ {
         type: String,
         required: true
