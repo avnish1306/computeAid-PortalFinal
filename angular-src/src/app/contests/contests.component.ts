@@ -69,8 +69,10 @@ export class ContestsComponent implements OnInit {
     var dt = new Date().getTime();
     let st = new Date(this.contests[i].startTime).getTime() <= dt;
     let end = new Date(this.contests[i].endTime).getTime() <= dt;
-    if(st && !end)
+    if(st && !end) {
+      localStorage.setItem('temp3',JSON.stringify(this.contests[i]));
       this.router.navigate(['/ques/contests/'+this.contests[i]._id]);
+    }
     else {
       alert('This contest has now ended. Talk to the coordinators.');
       this.ngOnInit();
@@ -79,10 +81,11 @@ export class ContestsComponent implements OnInit {
 
   editContest(i: number) {
     localStorage.setItem('temp',JSON.stringify(this.contests[i]));
-    this.router.navigate(['/contests/add']);
+    this.router.navigate(['/contests/add/'+this.contests[i]._id]);
   }
 
   addQuestion(i: number) {
+    localStorage.setItem('temp3',JSON.stringify(this.contests[i]));
     this.router.navigate(['/ques/add/'+this.contests[i]._id]);
   }
   rankings(i: number) {

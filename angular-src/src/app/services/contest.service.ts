@@ -29,4 +29,11 @@ export class ContestService {
       return this.http.delete(environment.apiUrl+'quiz/'+id, {headers: headers}).map(res => res.json());
   }
 
+  getContest(id){
+      const headers = new Headers({
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+      });
+      return this.http.get(environment.apiUrl+'quiz/'+id, {headers: headers}).map(res => res.json());
+  }
+
 }
