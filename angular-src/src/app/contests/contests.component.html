@@ -27,7 +27,8 @@
           <p>
             <button class="btn btn-sm btn-outline-warning" (click)="stageInfo(i)" data-toggle="modal"
               data-target="#infoModel"> Info </button>
-            <button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#rulesModel" (click)="openRules(i)"> Start Now </button>
+            <button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#rulesModel" (click)="openRules(i)" *ngIf="contest.registered && !contest.attempted"> START NOW </button>
+            <button class="btn btn-sm btn-outline-primary" (click)="register(i)" *ngIf="!contest.registered"> REGISTER </button>
           </p>
           <p><button class="btn btn-sm btn-success" (click)="rankings(i)" *ngIf="contest.hasScoreBoard || isAdmin()"> Rank List </button>
           </p>
@@ -49,6 +50,7 @@
           <h5><i>Yet To Start</i></h5>
           <button class="btn btn-sm btn-outline-warning" (click)="stageInfo(i)" data-toggle="modal"
             data-target="#infoModel"> Info </button>
+            <button class="btn btn-sm btn-outline-primary" (click)="register(i)" *ngIf="!contest.registered"> REGISTER </button>
           <p><button class="btn btn-sm btn-warning" (click)="editContest(i)"> <i class="fas fa-edit"></i> </button>
           </p>
           <p><button class="btn btn-sm btn-primary" (click)="addQuestion(i)"> Add Question </button>
