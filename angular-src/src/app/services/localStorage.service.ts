@@ -1,62 +1,65 @@
 import { Inject,Injectable } from '@angular/core';
 import 'rxjs/add/operator/map'
-import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { environment } from '../../environments/environment';
 
 
 @Injectable()
 export class LocalStorageService {
 
-  constructor(@Inject(LOCAL_STORAGE) private storage: StorageService){
+  constructor(){
   }
 
   saveLogin(token) {
     const userData = token.split('.')[1];
     const userString = atob(userData);
     let user = JSON.parse(userString);
-      if(this.storage.has(user.id)){
-        let data = this.storage.get(user.id);
+      if(localStorage.hasOwnProperty(user.id)){
+        let data = JSON.parse(localStorage.getItem(user.id));
         data.token = token;
-        this.storage.set( user.id, data );
+        localStorage.setItem( user.id,JSON.stringify(data));
          
       }else{
         let data = {'token':token};
-        this.storage.set( user.id, data );
+        localStorage.setItem( user.id,JSON.stringify(data));
       }
   }
   startQuiz(userId,quizId){
-    if(this.storage.has(userId)){
-        let data = this.storage.get(userId);
+      console.log("startQuiz",userId,quizId);
+    if(localStorage.hasOwnProperty(userId)){
+        let data = JSON.parse(localStorage.getItem(userId));
+        console.log(data);
         if(!data.hasOwnProperty(quizId)){
+            console.log("has");
             data[quizId] = [];
-            this.storage.set( userId, data );
+            localStorage.setItem( userId,JSON.stringify(data));
         }
         
     }
   }
   endQuiz(userId,quizId){
-    if(this.storage.has(userId)){
-        let data = this.storage.get(userId);
+    if(localStorage.hasOwnProperty(userId)){
+        let data = JSON.parse(localStorage.getItem(userId));
         if(data.hasOwnProperty(quizId)){
             delete data.quizId;
-            this.storage.set( userId, data );
+            localStorage.setItem( userId,JSON.stringify(data));
         }
 
         
     }
   }
   saveAns(userId,quizId,queId,sol){
-    if(this.storage.has(userId)){
-        let data = this.storage.get(userId);
+    if(localStorage.hasOwnProperty(userId)){
+        let data = JSON.parse(localStorage.getItem(userId));
         if(data.hasOwnProperty(quizId)){
-            let newSubmission = data.quizId.filter(x=>{
+            let newSubmission = data[quizId].filter(x=>{
                 return x.queId!=queId;
             });
             newSubmission.push({
                 'queId':queId,
-                'sol':sol
+                'ans':sol
             })
-            data.quizId = newSubmission;
+            data[quizId] = newSubmission;
+            localStorage.setItem( userId,JSON.stringify(data));
             return {
                 'status':1,
                 'msg':"Saved"
@@ -75,13 +78,14 @@ export class LocalStorageService {
     }
   }
   clearAns(userId,quizId,queId) {
-    if(this.storage.has(userId)){
-        let data = this.storage.get(userId);
+    if(localStorage.hasOwnProperty(userId)){
+        let data = JSON.parse(localStorage.getItem(userId));
         if(data.hasOwnProperty(quizId)){
-            let newSubmission = data.quizId.filter(x=>{
+            let newSubmission = data[quizId].filter(x=>{
                 return x.queId!=queId;
             });
-            data.quizId = newSubmission;
+            data[quizId] = newSubmission;
+            localStorage.setItem( userId,JSON.stringify(data));
             return {
                 'status':1,
                 'msg':"Cleared"
@@ -98,6 +102,15 @@ export class LocalStorageService {
             'msg':"Browser Error"
         }
     }
+  }
+  getSubmissions(userId,quizId){
+    if(localStorage.hasOwnProperty(userId)){
+        let data = JSON.parse(localStorage.getItem(userId));
+        if(data.hasOwnProperty(quizId)){
+            return data[quizId];
+        }
+    }
+    return [];
   }
 
 }

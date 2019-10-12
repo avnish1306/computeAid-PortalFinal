@@ -22,7 +22,7 @@ export class QuestionComponent implements OnInit {
   constructor(private router: Router,
   private authService: AuthService,
   private quesService: QuesService,
-  private localService: LocalStorageService,
+  private localStorageService: LocalStorageService,
   private notificationsService: NotificationsService,
   private route: ActivatedRoute) { }
 
@@ -64,7 +64,8 @@ export class QuestionComponent implements OnInit {
   
   ngOnInit() {
     this.cid = this.route.snapshot.paramMap.get('cid');
-    this.userid = JSON.parse(localStorage.getItem('user'))._id;
+    this.userid = JSON.parse(localStorage.getItem('user')).id;
+    this.localStorageService.startQuiz(this.userid,this.cid);
     this.quesService.getAllQues(this.cid).subscribe(
       data => {
         this.startTime=new Date(data.startTime);
@@ -84,7 +85,7 @@ export class QuestionComponent implements OnInit {
         //console.log(diff);
         // this.startTimer();
         this.ques = data.ques;
-        this.submission=data.submission;
+        this.submission=this.localStorageService.getSubmissions(this.userid,this.cid)||[];
         this.isEligible=data.isEligible;
         this.isAttempt=data.isAttempt;
         this.saved = new Array(this.ques.length);
@@ -194,17 +195,17 @@ export class QuestionComponent implements OnInit {
 
   bindSol(i,que){
     this.selectedOpt[i]=!this.selectedOpt[i];
-    this.saveSol(que)
+    this.saveSol(que,null)
   }
 
-  bindSolR(i,que){
+  bindSolR(i,que,val){
     this.selectedOpt[i]=!this.selectedOpt[i];
     for(var j=0;j<4;j++){
       if(i!=j&&this.selectedOpt[j]==true){
         this.selectedOpt[j]=false;
       }
     }
-    this.saveSol(que);
+    this.saveSol(que,val);
   }
 
   displayQue(index){
@@ -256,11 +257,11 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-  saveSol(que){
+  saveSol(que,val){
    // console.log(" saveSol   ",this.optForm.value.opt);
     var sol=[];
     if(que.type==1)
-      sol.push(this.optForm.value.opt);
+      sol.push(val);
     else if(que.type==2){
       for(var i=0;i<4;i++){
         var tempArray=[];
@@ -269,11 +270,11 @@ export class QuestionComponent implements OnInit {
         }
       }
     }
-    let result = this.localService.saveAns(); 
-    this.quesService.saveSol(this.id, sol).subscribe(
-      data => {
-        if(data.saved){
-          this.notificationsService.success("", data.msg, {timeOut: 2000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
+    let result = this.localStorageService.saveAns(this.userid,this.cid,que._id,sol); 
+    //this.quesService.saveSol(this.id, sol).subscribe(
+     if(result){
+        if(result.status==1){
+          this.notificationsService.success("", result.msg, {timeOut: 2000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
           if(que.type==1)
             this.sol[this.index] = this.optForm.value.opt;
           else{
@@ -303,22 +304,21 @@ export class QuestionComponent implements OnInit {
           this.isSaved = true;
         }
         else
-          this.notificationsService.error("", data.msg, {timeOut: 2000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
-      },
-      error => {
-        this.notificationsService.error("Oops!!", JSON.parse(error._body).error, {timeOut: 5000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
+          this.notificationsService.error("", result.msg, {timeOut: 2000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
+      }else{
+        this.notificationsService.error("Oops!! This is a browser error", {timeOut: 5000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
       }
-    );
   }
 
   clearSol(que){
     //console.log(" saveSol   ",this.optForm.value.opt);
     var sol=[];
     
-    this.quesService.clearSol(this.id).subscribe(
-      data => {
-        if(data.status){
-          this.notificationsService.success("", data.msg, {timeOut: 2000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
+    //this.quesService.clearSol(this.id).subscribe(
+      let result = this.localStorageService.clearAns(this.userid,this.cid,que._id);
+      if(result) {
+        if(result.status==1){
+          this.notificationsService.success("", result.msg, {timeOut: 2000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
           this.sol[this.index] = [];
           this.saved[this.index]=false;
           this.isSaved = false;
@@ -334,12 +334,10 @@ export class QuestionComponent implements OnInit {
 
         }
         else
-          this.notificationsService.error("", data.msg, {timeOut: 2000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
-      },
-      error => {
-        this.notificationsService.error("Oops!!", JSON.parse(error._body).error, {timeOut: 5000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
+          this.notificationsService.error("", result.msg, {timeOut: 2000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
+      }else{
+        this.notificationsService.error("Oops!! Browser error" , {timeOut: 5000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
       }
-    );
   }
 
   addQue(){

@@ -9,6 +9,7 @@
   "author": "Suyash Mittal <suyash8514@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "angular-local-storage": "^0.7.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
     "compile-run": "^2.3.0",

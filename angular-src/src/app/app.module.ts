@@ -8,7 +8,6 @@ import { ParticlesModule } from 'angular-particle';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { AceEditorModule } from 'ng2-ace-editor';
 import { CountdownTimerModule } from 'ngx-countdown-timer';
-import { StorageServiceModule } from 'ngx-webstorage-service';
 
 import { CookieService } from 'ngx-cookie-service';
 
@@ -93,7 +92,6 @@ const appRoutes: Routes = [
     HttpModule,
     ParticlesModule,
     AceEditorModule,
-    StorageServiceModule,
     SimpleNotificationsModule.forRoot(),
     CountdownTimerModule.forRoot(),
     RouterModule.forRoot(appRoutes, {useHash: true})

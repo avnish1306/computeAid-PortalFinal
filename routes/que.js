@@ -133,7 +133,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                 error: "Internal server error"
             });
         });
-    }
+    }else{
     
     User.findOne({name:req.user.name},(err,user)=>{
         if(err){
@@ -214,7 +214,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                         });
                     }).catch(err => {
                         console.log("ERROR >> CANNOT SAVE USER");
-                        return res.status(500).json({
+                        res.status(500).json({
                             status: 0,
                             error: "Internal server error"
                         });
@@ -223,7 +223,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                 })
                 .catch(err => {
                     console.log("ERROR >> NO QUESTION");
-                    return res.status(500).json({
+                    res.status(500).json({
                         status: 0,
                         error: "Internal server error"
                     });
@@ -239,6 +239,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
         });
     }
     })
+}
     
 });
 
