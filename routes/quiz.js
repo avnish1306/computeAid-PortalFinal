@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 const router = express.Router();
-
+const User=require('../models/user');
 const Quiz = require('../models/quiz');
 const Auth = require('../middlewares/auth');
 
@@ -80,7 +80,112 @@ router.post('/create',Auth.authenticateUser,(req,res,next)=>{
         }
     })
 });
-
+router.get('/register/:id',Auth.authenticateAll,(req,res)=>{
+    Quiz.findOne({'_id':req.params.id},(err,quiz)=>{
+        if(err){
+            return res.status(500).json({
+                status: 0,
+                error: "Internal server error"
+            });
+        }else{
+            let users = quiz.users.filter(x=>{
+                return x!=req.user.id;
+            });
+            quiz.users = users;
+            quiz.save().then(newQuiz=>{
+                return res.status(200).json({
+                    status:1,
+                    msg:"User registered successfully"
+                })
+            })
+            .catch(err=>{
+                return res.status(500).json({
+                    status: 0,
+                    msg: "Failed to register",
+                    error:err
+                });
+            })
+        }
+    })
+})
+router.get('/confirm/:id',Auth.authenticateAll,(req,res)=>{
+    Quiz.findOne({'_id':req.params.id},(err,quiz)=>{
+        if(err){
+            return res.status(500).json({
+                status: 0,
+                error: "Internal server error"
+            });
+        }else{
+            var userId = quiz.users.find(x=>{
+                return x==req.user.id;
+            });
+            if(userId){
+                User.findOne({'_id':userId},(err,user)=>{
+                    if(err){
+                        return res.status(500).json({
+                            status: 0,
+                            error: "Internal server error"
+                        });
+                    }else{
+                        let fquiz = user.quizs.find(x=>{
+                            return x.quizId==req.params.id;
+                        });
+                        if(fquiz&&fquiz.status==true){
+                            return res.status(200).json({
+                                status:0,
+                                access:true,
+                                isRegistered:true
+                            })
+                        }else{
+                            return res.status(200).json({
+                                status:1,
+                                access:false,
+                                isRegistered:true
+                            })
+                        }
+                    }
+                })
+            }else{
+                return res.status(200).json({
+                    status:0,
+                    access:false,
+                    isRegistered:false
+                })
+            }
+        }
+    })
+})
+router.get('/access/:id',Auth.authenticateAll,(req,res)=>{
+    User.findOne({'name':req.user.name},(err,user)=>{
+        if(err){
+            return res.status(500).json({
+                status: 0,
+                error: "Internal server error"
+            });
+        }
+        if(user){
+            let quiz = user.quizs.find(x=>{
+                return x.quizId == req.params.id;
+            })
+            if(quiz&&quiz.status==true){
+                return res.status(200).json({
+                    status:0,
+                    msg:'HOLA! Quiz already taken'
+                })
+            }else{
+                return res.status(200).json({
+                    status: 1,
+                    msg:"Quiz Started"
+                });
+            }
+        }else{
+            res.status(200).json({
+                status: 0,
+                msg:"User not found"
+            });
+        }
+    });
+})
 router.get('/',Auth.authenticateAll, (req, res) => {
     Quiz.find({},(err, quizzes) => {
         if(err){

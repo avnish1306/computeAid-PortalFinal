@@ -26,7 +26,7 @@ export class QuestionComponent implements OnInit {
   private localStorageService: LocalStorageService,
   private contestService: ContestService,
   private notificationsService: NotificationsService,
-  private route: ActivatedRoute) { }
+  private route: ActivatedRoute,) { }
 
   ques;
   i;
@@ -63,26 +63,41 @@ export class QuestionComponent implements OnInit {
   loading: boolean = true;
   userid;
   quizData;
+  syncInterval;
 
   
   ngOnInit() {
     this.cid = this.route.snapshot.paramMap.get('cid');
+    this.contestService.getContestAccess(this.cid).subscribe(
+      data=>{
+        if(data.status==0){
+          if(!this.authService.isLoggedIn()){
+            return this.router.navigate(['/login']);
+
+          }else{
+            return this.router.navigate(['/contests']);
+          }
+          
+        }
+      },error=>{
+        return this.router.navigate(['/contests']);
+      }
+    )
     this.userid = JSON.parse(localStorage.getItem('user')).id;
     this.localStorageService.startQuiz(this.userid,this.cid);
     this.quizData = JSON.parse(localStorage.getItem('temp3'));
     localStorage.removeItem('temp3');
-    this.userid = JSON.parse(localStorage.getItem('user'))._id;
     // this.quizData = JSON.parse(localStorage.getItem('temp3'));
     // localStorage.removeItem('temp3');
-    this.contestService.getContest(this.cid).subscribe(result => {
-      this.quizData = result.data;
     this.quesService.getAllQues(this.cid).subscribe(
       data => {
+        this.quizData = data.quiz;
         this.startTime=new Date(data.startTime);
-        this.currentTime=new Date();
+        this.currentTime=new Date(data.currTime);
         var diff=Math.round((this.currentTime-this.startTime)/1000);
-        this.duration=environment.bughuntDuration*60;
+        this.duration=data.quiz.duration*60;
         this.timeLeft=this.duration-diff;
+        
         
 
         //this.endTime=new Date(this.startTime.getTime() + environment.bughuntDuration*60000);
@@ -93,7 +108,7 @@ export class QuestionComponent implements OnInit {
         //console.log(this.startTime);
          // console.log(this.currentTime);
         //console.log(diff);
-        // this.startTimer();
+        this.startTimer();
         this.ques = data.ques;
         this.submission=this.localStorageService.getSubmissions(this.userid,this.cid)||[];
         this.isEligible=data.isEligible;
@@ -138,9 +153,7 @@ export class QuestionComponent implements OnInit {
         this.notificationsService.create("", JSON.parse(error._body).error);
       }
     );
-  }, error => {
-    this.notificationsService.create("", JSON.parse(error._body).error);
-  });
+    this.syncInterval = setInterval(this.syncDate,10000);
     // this.addQueForm = new FormGroup({
     //   'lang': new FormControl(null, [Validators.required]),
     //   'desc': new FormControl(null, [Validators.required, Validators.minLength(10)]),
@@ -149,6 +162,19 @@ export class QuestionComponent implements OnInit {
     //   'author': new FormControl(null, [Validators.required]),
 
     // });
+  }
+  ngOnDestroy(){
+    clearInterval(this.syncInterval);
+    clearInterval(this.interval);
+  }
+  syncDate = ()=>{
+    this.quesService.getCurrDate().subscribe(
+      data =>{
+        this.currentTime = data.currTime;
+      },error=>{
+        this.notificationsService.create("Sync Issue");
+      }
+    );
   }
 
   markQuestion(i: number) {
@@ -202,6 +228,7 @@ export class QuestionComponent implements OnInit {
             this.submitSol();
       } else {
         clearInterval(this.interval);
+        clearInterval(this.syncInterval);
       }
     },1000)
   }
@@ -416,6 +443,7 @@ export class QuestionComponent implements OnInit {
     this.quesService.submitSol().subscribe(
       data => {
         clearInterval(this.interval);
+        clearInterval(this.syncInterval);
         this.notificationsService.success("Success", data.msg, {timeOut: 5000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
         this.ngOnInit();
         this.router.navigate(['/welcome']);

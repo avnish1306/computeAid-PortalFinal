@@ -56,7 +56,12 @@ router.post('/add',Auth.authenticateAll,  (req, res, next) => {
         });
     }
 });
-
+router.get('/syncDate',Auth.authenticateAll,(req,res)=>{
+    res.status(200).json({
+        'status':1,
+        'currTime': new Date()
+    })
+})
 router.post('/saveAns',Auth.authenticateAll,(req,res,next)=>{
     User.findOne({'name':req.user.name},(err,user)=>{
         if(err){
@@ -95,7 +100,7 @@ router.post('/saveAns',Auth.authenticateAll,(req,res,next)=>{
 //Auth.authenticateAll,
 router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
     let quizId = req.params.quizId;
-    if(req.user.access==3){ // if admin
+    if(req.user.access==1){ // if admin
         Que.find({'quizId':quizId}, 'desc opt points author type negPoint')
         .then(ques => {
             Quiz.findById(quizId,(err,quiz)=>{
@@ -119,8 +124,9 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                         status: 1,
                         ques: ques,
                         quiz: quiz,
-                        startTime:quiz.startTime,
-                        submission: []
+                        startTime:new Date(),
+                        submission: [],
+                        currTime:new Date()
                     });
                 }
             });
@@ -170,18 +176,21 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                 });
             }
             let newQuiz = user.quizs.find(x=>{
-                x.queId == quizId
+                return x.quizId == quizId
             });
             let filteredQuiz = user.quizs.filter(x=>{
-                return x.queId!=quizId;
+                return x.quizId!=quizId;
             });
+           // console.log(user.quizs,newQuiz);
             if(newQuiz){
+                
                 return res.status(200).json({
                     status: 1,
-                    ques: user.quizs.ques,
-                    quiz: newQuiz,
+                    ques: newQuiz.ques,
+                    quiz: quiz,
                     startTime:newQuiz.startTime,
-                    submission: user.submission
+                    submission: user.submission,
+                    currTime:new Date()
                 });
             }else{
                 Que.find({'quizId':quizId}, 'desc opt points author type negPoint').then(ques => {
@@ -200,17 +209,19 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                         quesList = singleChoiceQues.concat(multipleChoiceQues);
                         
                     }
+                    //console.log("abc");
                     quesList = quesList.sort(()=>0.5-Math.random())
-                    newQuiz = {'quesId':quizId,'startTime':currDate,'endTime':null,'score':0,'status':false,'ques':quesList};
+                    newQuiz = {'quizId':quizId,'startTime':currDate,'endTime':null,'score':0,'status':false,'ques':quesList};
                     filteredQuiz.push(newQuiz);
                     user.quizs=filteredQuiz;
                     user.save().then(newuser=>{
                         return res.status(200).json({
                             status: 1,
                             ques: ques,
-                            quiz: newQuiz,
-                            startTime:newQuiz.startTime,
-                            submission: user.submission
+                            quiz: quiz,
+                            startTime:currDate,
+                            submission: user.submission,
+                            currTime:new Date()
                         });
                     }).catch(err => {
                         console.log("ERROR >> CANNOT SAVE USER");
@@ -409,6 +420,8 @@ router.post('/clearAns',Auth.authenticateAll,(req,res,next)=>{
         })
     })
 })
+
+
 
 router.get('/bughuntRankList',Auth.authenticateAdmin,(req,res,next)=>{
     User.find({}).sort({'contests.bughunt.score':-1}).exec((err,users)=>{

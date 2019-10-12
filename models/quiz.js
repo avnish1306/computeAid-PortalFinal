@@ -36,6 +36,8 @@ const quizSchema = mongoose.Schema({
         type:String,
         default:""
     },
+    users:[
+    ],
     random:{
         isRandom: {
             type:Boolean,
@@ -72,5 +74,6 @@ const quizSchema = mongoose.Schema({
     }
     
 });
+
 
 module.exports = mongoose.model('Quiz', quizSchema);
