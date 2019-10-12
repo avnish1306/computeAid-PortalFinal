@@ -6,6 +6,7 @@ import fontawesome from '@fortawesome/fontawesome';
 
 import { AuthService } from '../services/auth.service';
 import { QuesService } from '../services/ques.service';
+import { LocalStorageService } from '../services/localStorage.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { environment } from '../../environments/environment';
 
@@ -21,6 +22,7 @@ export class QuestionComponent implements OnInit {
   constructor(private router: Router,
   private authService: AuthService,
   private quesService: QuesService,
+  private localService: LocalStorageService,
   private notificationsService: NotificationsService,
   private route: ActivatedRoute) { }
 
@@ -265,6 +267,7 @@ export class QuestionComponent implements OnInit {
         }
       }
     }
+    let result = this.localService.saveAns(); 
     this.quesService.saveSol(this.id, sol).subscribe(
       data => {
         if(data.saved){
