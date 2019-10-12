@@ -59,10 +59,12 @@ export class QuestionComponent implements OnInit {
   countTimer="";
   timeFlag=0; cid;
   loading: boolean = true;
+  userid;
 
   
   ngOnInit() {
     this.cid = this.route.snapshot.paramMap.get('cid');
+    this.userid = JSON.parse(localStorage.getItem('user'))._id;
     this.quesService.getAllQues(this.cid).subscribe(
       data => {
         this.startTime=new Date(data.startTime);
