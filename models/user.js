@@ -58,7 +58,9 @@ const userSchema = mongoose.Schema({
         endTime:{
             type:Date,
             default:null
-        }
+        },
+        ques:[
+        ]
 
     }],
     contests:{

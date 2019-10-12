@@ -16,10 +16,6 @@ const quizSchema = mongoose.Schema({
         type: Date,
         default: new Date()
     },
-    secretKey: {
-        type: String,
-        required: true
-    },
     scoreDisplay: {
         type:Boolean,
         default:false
@@ -39,6 +35,40 @@ const quizSchema = mongoose.Schema({
     rules:{
         type:String,
         default:""
+    },
+    random:{
+        isRandom: {
+            type:Boolean,
+            default:false
+        },
+        singleChoice:{
+            count:{
+                type:Number,
+                default:0
+            },
+            points:{
+                type:Number,
+                default:0
+            },
+            negPoints: {
+                type:Number,
+                default:0
+            }
+        },
+        multipleChoice:{
+            count:{
+                type:Number,
+                default:0
+            },
+            points:{
+                type:Number,
+                default:0
+            },
+            negPoints: {
+                type:Number,
+                default:0
+            }
+        }
     }
     
 });

@@ -37,7 +37,7 @@ const queSchema = mongoose.Schema({
     type:{
         type: Number,
         required:true,
-        default:0
+        default:1  //1 for sigle correct and 2 for multicorrect
     }
 });
 

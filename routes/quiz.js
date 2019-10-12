@@ -13,6 +13,7 @@ router.post('/create',Auth.authenticateUser,(req,res,next)=>{
     req.checkBody('endTime', ' End Time is required').notEmpty();
     req.checkBody('secretKey', 'Secret is required').notEmpty();
     req.checkBody('duration', 'Quiz Duration is required').notEmpty();
+    req.checkBody('random','Random is required').notEmpty();
     const errors = req.validationErrors();
     if(errors){
         var messages = [];
@@ -40,16 +41,24 @@ router.post('/create',Auth.authenticateUser,(req,res,next)=>{
                 msg:'Quiz Already Exist'
             })
         }else{
+            let random = {
+                'isRandom':false
+            };
+            if(req.body.random==true){
+                random.isRandom = true,
+                random['singleChoice'] = req.body.singleChoice;
+                random['multipleChoice'] = req.body.multipleChoice;
+            }
             let quiz = new Quiz({
                 'name':req.body.name,
                 'startTime': new Date(req.body.startTime),
                 'endTime':new Date(req.body.endTime),
                 'duration':req.body.duration,
-                'secretKey':req.body.secretKey,
                 'scoreDisplay':req.body.scoreDisplay,
                 'hasScoreBoard': req.body.hasScoreBoard,
                 'details':req.body.details,
-                'rules':req.body.rules
+                'rules':req.body.rules,
+                'random':random
                 });
                 if(req.body.quizId!=null){
                     quiz['_id']= req.body.quizId;

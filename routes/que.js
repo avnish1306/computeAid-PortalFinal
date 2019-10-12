@@ -95,6 +95,45 @@ router.post('/saveAns',Auth.authenticateAll,(req,res,next)=>{
 //Auth.authenticateAll,
 router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
     let quizId = req.params.quizId;
+    if(res.user.access==3){ // if admin
+        Que.find({'quizId':quizId}, 'desc opt points author type negPoint')
+        .then(ques => {
+            Quiz.findById(quizId,(err,quiz)=>{
+                if(err){
+                    console.log("ERROR >> QUIZ");
+                    return res.status(500).json({
+                        status: 0,
+                        msg:"Fail to fetch",
+                        error: "Internal server error"
+                    });
+                }
+                else if(!quiz) {
+                    console.log("ERROR >> NO QUIZ FOUND");
+                    return res.status(500).json({
+                        status: 0,
+                        msg:"No such quiz found",
+                        error: "Internal server error"
+                    });
+                }else{
+                    res.status(200).json({
+                        status: 1,
+                        ques: ques,
+                        quiz: quiz,
+                        startTime:quiz.startTime
+                    });
+                }
+            });
+            
+        })
+        .catch(err => {
+            console.log("ERROR >> NO QUESTION");
+            res.status(500).json({
+                status: 0,
+                error: "Internal server error"
+            });
+        });
+    }
+    
     User.findOne({name:req.user.name},(err,user)=>{
         if(err){
             console.log("ERROR >> USER");
@@ -136,22 +175,48 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                 return x.queId!=quizId;
             });
             if(newQuiz){
-                if(newQuiz.startTime==null&&user.access!=1){
-                    newQuiz.startTime=new Date();
-                }
+                res.status(200).json({
+                    status: 1,
+                    ques: user.quizs.ques,
+                    quiz: newQuiz,
+                    startTime:newQuiz.startTime,
+                    submission: user.submission
+                });
             }else{
-                newQuiz = {'quesId':quizId,'startTime':null,'endTime':null,'score':0,'status':false};
-            }
-            filteredQuiz.push(newQuiz);
-            user.quizs=filteredQuiz;
-            user.save().then(newuser=>{
                 Que.find({'quizId':quizId}, 'desc opt points author type negPoint').then(ques => {
-                    res.status(200).json({
-                        status: 1,
-                        ques: ques,
-                        quiz: newQuiz,
-                        startTime:newQuiz.startTime,
-                        submission: user.submission
+                    let quesList = ques;
+                    if(quiz.random.isRandom==true){
+                        let singleChoiceQues = ques.filter(x=>{
+                            return x.type===1;
+                        })
+                        let multipleChoiceQues = ques.filter(x=>{
+                            return x.type===2;
+                        })
+                        let singleChoiceCount = quiz.random.singleChoice.count<ques.length ? quiz.random.singleChoice.count: ques.length;
+                        let multipleChoiceCount = quiz.random.multipleChoice.count<ques.length ? quiz.random.multipleChoice.count: ques.length;
+                        singleChoiceQues = singleChoiceQues.sort(()=>0.5-Math.random()).slice(0,singleChoiceCount);
+                        multipleChoiceQues = multipleChoiceQues.sort(()=>0.5-Math.random()).slice(0,multipleChoiceCount);
+                        quesList = singleChoiceQues.concat(multipleChoiceQues);
+                        
+                    }
+                    quesList = quesList.sort(()=>0.5-Math.random())
+                    newQuiz = {'quesId':quizId,'startTime':currDate,'endTime':null,'score':0,'status':false,'ques':quesList};
+                    filteredQuiz.push(newQuiz);
+                    user.quizs=filteredQuiz;
+                    user.save().then(newuser=>{
+                        res.status(200).json({
+                            status: 1,
+                            ques: ques,
+                            quiz: newQuiz,
+                            startTime:newQuiz.startTime,
+                            submission: user.submission
+                        });
+                    }).catch(err => {
+                        console.log("ERROR >> CANNOT SAVE USER");
+                        res.status(500).json({
+                            status: 0,
+                            error: "Internal server error"
+                        });
                     });
                     
                 })
@@ -162,16 +227,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                         error: "Internal server error"
                     });
                 });
-            }).catch(err => {
-                console.log("ERROR >> CANNOT SAVE USER");
-                res.status(500).json({
-                    status: 0,
-                    error: "Internal server error"
-                });
-            });
-
-
-
+               }
         });
         
     }else{
