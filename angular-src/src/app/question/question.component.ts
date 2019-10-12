@@ -30,6 +30,7 @@ export class QuestionComponent implements OnInit {
   type: number;
   points: number;
   desc: string = "<h2>Welcome</h2><h3>to</h3><h1>Bughunt</h1><br><br><p>Click on any question to begin</p>";
+  negPoint: number;
   author: string;
   users = [];
   id: string;
@@ -55,13 +56,12 @@ export class QuestionComponent implements OnInit {
   timeLeft;
   countTimer="";
   timeFlag=0; cid;
+  loading: boolean = true;
 
   
   ngOnInit() {
     this.cid = this.route.snapshot.paramMap.get('cid');
-    alert(this.cid);
-
-    this.quesService.getAllQues().subscribe(
+    this.quesService.getAllQues(this.cid).subscribe(
       data => {
         this.startTime=new Date(data.startTime);
         this.currentTime=new Date();
@@ -78,7 +78,7 @@ export class QuestionComponent implements OnInit {
         //console.log(this.startTime);
          // console.log(this.currentTime);
         //console.log(diff);
-        this.startTimer();
+        // this.startTimer();
         this.ques = data.ques;
         this.submission=data.submission;
         this.isEligible=data.isEligible;
@@ -114,6 +114,7 @@ export class QuestionComponent implements OnInit {
 
         }
         //console.log(this.submission);
+        this.loading = false;
       },
       error => {
         this.notificationsService.create("", JSON.parse(error._body).error);
@@ -181,43 +182,38 @@ export class QuestionComponent implements OnInit {
         }
         if(!this.isAdmin()&&hr==0&&min==0&&scnd==1)
             this.submitSol();
-        
       } else {
         clearInterval(this.interval);
-        
-        
       }
     },1000)
   }
+
   bindSol(i){
     this.selectedOpt[i]=!this.selectedOpt[i];
   }
+
   bindSolR(i){
     this.selectedOpt[i]=!this.selectedOpt[i];
     for(var j=0;j<4;j++){
       if(i!=j&&this.selectedOpt[j]==true){
         this.selectedOpt[j]=false;
       }
-      
     }
-    
   }
+
   displayQue(index){
-    
     this.i=0;
     this.submitted=[false,false,false,false];
     this.index = index;
     this.selected = true;
-
     //console.log(this.submission);
-
     this.points = this.ques[index].points;
+    this.negPoint = this.ques[index].negPoint;
     this.author = this.ques[index].author;
     this.desc = this.ques[index].desc;
     this.temp = this.desc.split("<embedded>");
     if(this.temp.length >= 2)
       this.temp[1] = this.temp[1].replace(/\t/ig,'    ');
-
     this.id = this.ques[index]._id;
     this.isSaved = (this.sol[index].length>0)?true:false;
     this.type=this.ques[index].type;
@@ -226,9 +222,6 @@ export class QuestionComponent implements OnInit {
     if(!this.isSaved){
       this.optForm.reset();
     }
-    
-    
-   
     if(sol){
       sol=sol.ans;
     /*for(var i=0;i< sol.length;i++){
@@ -251,8 +244,6 @@ export class QuestionComponent implements OnInit {
     }}
     //console.log(this.submitted);
     this.selectedOpt=this.submitted;
-    
-
     if(this.isAdmin()){
       if(this.sol[index].length===0)
         this.viewSol();

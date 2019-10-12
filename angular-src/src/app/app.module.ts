@@ -42,6 +42,8 @@ import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { AddContestComponent } from './add-contest/add-contest.component';
 import { ContestsComponent } from './contests/contests.component';
 import { ContestService } from './services/contest.service';
+import { ContestRankingsComponent } from './contest-rankings/contest-rankings.component';
+
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
@@ -57,7 +59,9 @@ const appRoutes: Routes = [
   { path: 'welcome', component: WelcomepageComponent, canActivate: [AuthGuard] },
   { path: 'editor/:qCode', component: EditorComponent, canActivate: [AuthGuard] },
   { path: 'contests/add', component: AddContestComponent, canActivate: [AuthGuard, AdminAuthGuard] },
-  { path: 'contests', component: ContestsComponent, canActivate: [AuthGuard] }
+  { path: 'contests', component: ContestsComponent, canActivate: [AuthGuard] },
+  { path: 'contests/ranking/:cid', component: ContestRankingsComponent, canActivate: [AuthGuard] },
+
 ];
 
 @NgModule({
@@ -78,7 +82,8 @@ const appRoutes: Routes = [
     EditorComponent,
     WelcomepageComponent,
     AddContestComponent,
-    ContestsComponent
+    ContestsComponent,
+    ContestRankingsComponent
   ],
   imports: [
     BrowserModule,

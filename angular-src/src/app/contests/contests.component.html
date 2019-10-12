@@ -1,126 +1,124 @@
-<h3>Available Contests</h3>
-  <p *ngIf="loading">Loading Contests ...</p>
-    
-      
-    <div class="col-2 card" routerLink="/contests/add" *ngIf="isAdmin()" style="cursor: pointer;">
-      <div class="card-body">
-        <h5 class="card-title">Add New</h5>
+<h3>Available Contests
+<button class="btn btn-sm btn-secondary" routerLink="/contests/add" *ngIf="isAdmin()">Add New</button>
+</h3>
+<p *ngIf="loading">Loading Contests ...</p>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+      aria-selected="true">ONGOING CONTESTS</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+      aria-selected="false">UPCOMING CONTESTS</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+      aria-selected="false">PAST CONTESTS</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+    <ng-container *ngFor="let contest of contests; let i=index">
+      <div class="col-2 card" *ngIf="live[i].enabled">
+        <div class="card-body">
+          <h5 class="card-title">{{contest.name}}</h5>
+          <p class="card-text"> Ends At: {{contest.endTime | date:"dd/MM/yyyy hh:mm a"}} </p>
+          <p>
+            <button class="btn btn-sm btn-outline-warning" (click)="stageInfo(i)" data-toggle="modal"
+              data-target="#infoModel"> Info </button>
+            <button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#rulesModel" (click)="openRules(i)"> Rules </button>
+          </p>
+          <p><button class="btn btn-sm btn-success" (click)="rankings(i)" *ngIf="contest.hasScoreBoard"> Rank List </button>
+          </p>
+          <p><button class="btn btn-sm btn-primary" (click)="addQuestion(i)"> Add Question </button></p>
+          <p><button class="btn btn-sm btn-warning" (click)="editContest(i)"> <i class="fas fa-edit"></i> </button>
+          
+          <button class="btn btn-sm btn-danger" (click)="deleteContest(contest._id)"> <i class="fas fa-trash-alt"></i> </button>
+       </p></div>
       </div>
-    </div>
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">ONGOING CONTESTS</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">UPCOMING CONTESTS</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">PAST CONTESTS</a>
-        </li>
-      </ul>
-      <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <ng-container *ngFor="let contest of contests; let i=index">
-                <div class="col-2 card" *ngIf="live[i].enabled">
-                <div class="card-body">
-                  <h5 class="card-title">{{contest.name}}</h5>
-                  <p class="card-text"> Duration: {{contest.duration / 60}} hours {{ contest.duration % 60 }} minutes </p>
-                  <p>
-                  <button class="btn btn-sm btn-outline-warning" (click)="stageInfo(i)" data-toggle="modal" data-target="#infoModel"> Info </button>
-                  <button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#bughuntModel"> Rules </button>
-                </p><p><button class="btn btn-sm btn-success" (click)="goToContest(i)"> Start The Test </button>
-                </p><p><button class="btn btn-sm btn-warning" (click)="editContest(i)"> Edit Settings </button>
-                </p><p><button class="btn btn-sm btn-primary" (click)="addQuestion(i)"> Add Question </button>
-              </p><button class="btn btn-sm btn-danger" (click)="deleteContest(contest._id)"> Delete Contest </button>
-            </div>
-              </div>
-            </ng-container>
-        </div>
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <ng-container *ngFor="let contest of contests; let i=index">
-                <div class="col-2 card" *ngIf="!live[i].started">
-                <div class="card-body">
-                  <h5 class="card-title">{{contest.name}}</h5>
-                  <p class="card-text"> Duration: {{contest.duration / 60}} hours {{ contest.duration % 60 }} minutes <br>
-                       Enables At: {{contest.startTime | date:"dd/MM/yyyy hh:mm a"}} <br>
-                       Disables At: {{contest.endTime | date:"dd/MM/yyyy hh:mm a"}} </p>
-                  <h5><i>Yet To Start</i></h5>
-                <p><button class="btn btn-sm btn-warning" (click)="editContest(i)"> Edit Settings </button>
-                </p><p><button class="btn btn-sm btn-primary" (click)="addQuestion(i)"> Add Question </button>
-              </p><button class="btn btn-sm btn-danger" (click)="deleteContest(contest._id)"> Delete Contest </button>
-            </div>
-              </div>
-            </ng-container>
-        </div>
-        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-            <ng-container *ngFor="let contest of contests; let i=index">
-                <div class="col-2 card" *ngIf="live[i].ended">
-                <div class="card-body">
-                  <h5 class="card-title">{{contest.name}}</h5>
-                  <p class="card-text"> Duration: {{contest.duration / 60}} hours {{ contest.duration % 60 }} minutes <br>
-                       Enables At: {{contest.startTime | date:"dd/MM/yyyy hh:mm a"}} <br>
-                       Disables At: {{contest.endTime | date:"dd/MM/yyyy hh:mm a"}} </p>
-                  <h5 *ngIf="!live[i].enabled"><i>Ended</i></h5>
-                    <p><button class="btn btn-sm btn-warning" (click)="editContest(i)"> Edit Settings </button>
-                    </p><p><button class="btn btn-sm btn-primary" (click)="addQuestion(i)"> Add Question </button>
-                  </p><button class="btn btn-sm btn-danger" (click)="deleteContest(contest._id)"> Delete Contest </button>
-            </div>
-              </div>
-            </ng-container>
+    </ng-container>
+      <small *ngIf="stats.on == 0">No Ongoing Contests for now... Stay tuned !!!</small>
+  </div>
+  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+    <ng-container *ngFor="let contest of contests; let i=index">
+      <div class="col-2 card" *ngIf="!live[i].started">
+        <div class="card-body">
+          <h5 class="card-title">{{contest.name}}</h5>
+          <p class="card-text"> Starts At: {{contest.startTime | date:"dd/MM/yyyy hh:mm a"}} </p>
+          <h5><i>Yet To Start</i></h5>
+          <button class="btn btn-sm btn-outline-warning" (click)="stageInfo(i)" data-toggle="modal"
+            data-target="#infoModel"> Info </button>
+          <p><button class="btn btn-sm btn-warning" (click)="editContest(i)"> <i class="fas fa-edit"></i> </button>
+          </p>
+          <p><button class="btn btn-sm btn-primary" (click)="addQuestion(i)"> Add Question </button>
+          </p><button class="btn btn-sm btn-danger" (click)="deleteContest(contest._id)"> <i class="fas fa-trash-alt"></i> </button>
         </div>
       </div>
+    </ng-container>
+      <small *ngIf="stats.up == 0">No Upcoming Contests for now... Stay tuned !!!</small>
+  </div>
+  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+    <ng-container *ngFor="let contest of contests; let i=index">
+      <div class="col-2 card" *ngIf="live[i].ended">
+        <div class="card-body">
+          <h5 class="card-title">{{contest.name}}</h5>
+          <!-- <p class="card-text"> Duration: {{contest.duration / 60}} hours {{ contest.duration % 60 }} minutes </p> -->
+          <h5 *ngIf="!live[i].enabled"><i>Ended</i></h5>
+          <button class="btn btn-sm btn-outline-warning" (click)="stageInfo(i)" data-toggle="modal"
+            data-target="#infoModel"> Info </button>
+            <p><button class="btn btn-sm btn-success" (click)="rankings(i)"> Rank List </button>
+            </p>
+            <p><button class="btn btn-sm btn-warning" (click)="editContest(i)"> <i class="fas fa-edit"></i> </button>
+            </p>
+          <p><button class="btn btn-sm btn-primary" (click)="addQuestion(i)"> Add Question </button>
+          </p><button class="btn btn-sm btn-danger" (click)="deleteContest(contest._id)"> <i class="fas fa-trash-alt"></i> </button>
+        </div>
+      </div>
+    </ng-container>
+      <small *ngIf="stats.pa == 0">No Past Contests for now... Stay tuned !!!</small>
+  </div>
+</div>
 
 <!-- info modal -->
-<div class="modal fade" id="infoModel" tabindex="-1" role="dialog" aria-labelledby="infoModel" aria-hidden="true" data-backdrop="static">
+<div class="modal fade" id="infoModel" tabindex="-1" role="dialog" aria-labelledby="infoModel" aria-hidden="true"
+  data-backdrop="static">
   <div class="modal-dialog modal-md" role="document">
-      <div class="modal-content modal-md">
+    <div class="modal-content modal-md">
       <div class="modal-header">
-          <h5 class="modal-title"  id="exampleModalLabel2"><span>{{info.cname}}: Information</span></h5>
+        <h5 class="modal-title" id="exampleModalLabel2"><span>{{info.cname}}: Information</span></h5>
       </div>
       <div class="modal-body">
         Enables At: {{info.startTime | date:"dd/MM/yyyy hh:mm a"}} <br>
-        Disables At: {{info.endTime | date:"dd/MM/yyyy hh:mm a"}}
+        Disables At: {{info.endTime | date:"dd/MM/yyyy hh:mm a"}} <br>
+        Duration: {{info.duration / 60}} hours {{ info.duration % 60 }} minutes <br>
         More: {{info.details}}
       </div>
       <div class="modal-footer">
-          <button class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+        <button class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
       </div>
-      </div>
+    </div>
   </div>
 </div>
 
 <!-- rules modal -->
-  <div class="modal fade" id="bughuntModel" tabindex="-1" role="dialog" aria-labelledby="bughuntModel" aria-hidden="true" data-backdrop="static">
-      <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content modal-lg">
-          <div class="modal-header">
-              <h5 class="modal-title"  id="exampleModalLabel"><span >Rules for Bughunt <strong>(Please go through all of the rules carefully)</strong></span></h5>
-          </div>
-          <div class="modal-body" >
-              <ol>
-                <li>The Contest duration is 45 minutes.</li>
-                <li>Once you start the test, a timer will start running. On completion of time, the contest will end automatically. However, a submit button is provided for manual submission.</li>
-                <li>Each Question has two buttons i.e. <strong>Save</strong> and <strong>Clear</strong>. <strong>Save</strong> button will save your answers. <strong>Clear</strong> button will clear up your selections.</li>
-                <li><i>Only those questions will be judged whose selections are saved. So, for skipping any question, make sure the selections are cleared (Use Clear button).</i></li>
-                <li>Please save your selection before moving to the next question.</li>
-                <li>Marking Scheme for <strong>Single Correct Option Type</strong></li>
-                  <ul class="a">
-                    <li>Every correct answer fetches the full marks as stated in the question.</li>
-                    <li>Every incorrect answer bears negative marks of 1/4th of the full marks as stated in the question.</li>
-                  </ul>
-                <li>Marking Scheme for <strong>Multiple Correct Option Type</strong>
-                  <ul class="a">
-                    <li>There is no negative marking for this type.</li>
-                    <li>Positive marks is calculated using the formula:<br>Obtained Marks = (Number of correct options opted / Total number of options) * Total Marks of the question.</li>
-                    <li>However, if the correct option(s) which are opted accompanies any incorrect option(s), Marks obtained will be 0.</li>
-                  </ul>
-                </li>              
-              </ol>
-          </div>
-          <div class="modal-footer">
-              <button class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-              <button class="btn btn-sm btn-info" (click)="goToContest()" data-dismiss="modal">Start the Test</button>
-          </div>
-          </div>
+<div class="modal fade" id="rulesModel" tabindex="-1" role="dialog" aria-labelledby="rulesModel" aria-hidden="true"
+  data-backdrop="static">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel3"><span>Rules for {{cid}} <strong>(Please go through all of the
+              rules carefully)</strong></span></h5>
       </div>
+      <div class="modal-body">
+        <ol>
+          <li *ngFor="let rule of rules"> {{rule}} </li>
+        </ol>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+        <button class="btn btn-sm btn-info" (click)="goToContest(index)" data-dismiss="modal">Start the Test</button>
+      </div>
+    </div>
   </div>
+</div>

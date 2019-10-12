@@ -25,15 +25,16 @@ router.post('/create',Auth.authenticateUser,(req,res,next)=>{
 
         });
       }
+    console.log(req.body);
     
-    Quiz.findOne({'name':req.body.name},(err,Quiz)=>{
+    Quiz.findOne({'name':req.body.name},(err,foundQuiz)=>{
         if(err){
             return res.status(500).json({
                 status: 0,
                 err:err
             })
         }
-        if(Quiz&&req.body.quizId==null){
+        if(foundQuiz&&req.body.quizId==null){
             return res.status(200).json({
                 status: 0,
                 msg:'Quiz Already Exist'
@@ -44,6 +45,7 @@ router.post('/create',Auth.authenticateUser,(req,res,next)=>{
                 'startTime': new Date(req.body.startTime),
                 'endTime':new Date(req.body.endTime),
                 'duration':req.body.duration,
+                'secretKey':req.body.secretKey,
                 'scoreDisplay':req.body.scoreDisplay,
                 'hasScoreBoard': req.body.hasScoreBoard,
                 'details':req.body.details,
@@ -61,11 +63,11 @@ router.post('/create',Auth.authenticateUser,(req,res,next)=>{
                 });
             })
             .catch(err => {
-                //console.log(err);
                 res.status(500).json({
                     status: 0,
                     error: "Internal Server Error"
                 });
+                console.log(err);
             });
         }
     })

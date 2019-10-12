@@ -11,11 +11,11 @@ export class QuesService {
   constructor(private http: Http){
   }
 
-  getAllQues(){
+  getAllQues(quizId){
       const headers = new Headers({
           'Authorization': 'Bearer ' + localStorage.getItem('token')
       });
-      return this.http.get(environment.apiUrl + 'ques', {headers: headers}).map(res => res.json());
+      return this.http.get(environment.apiUrl + 'ques/'+quizId, {headers: headers}).map(res => res.json());
   }
 
   /*submitFlag(id, flag){

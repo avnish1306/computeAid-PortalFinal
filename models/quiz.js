@@ -21,7 +21,8 @@ const quizSchema = mongoose.Schema({
         required: true
     },
     scoreDisplay: {
-        type: String
+        type:Boolean,
+        default:false
     },
     duration: {
         type: Number,
@@ -29,7 +30,7 @@ const quizSchema = mongoose.Schema({
     },
     hasScoreBoard:{
         type:Boolean,
-        default:true
+        default:false
     },
     details: {
         type:String,

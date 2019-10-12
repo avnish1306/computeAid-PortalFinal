@@ -16,19 +16,18 @@ export class AddQueComponent implements OnInit {
 
   addQueForm: FormGroup;
   sol=[false,false,false,false];
-  type=1;
+  type: number = 2;
   opt=[];
   cid;
 
   ngOnInit() {
     this.cid = this.route.snapshot.paramMap.get('cid');
-    alert(this.cid);
     this.addQueForm = new FormGroup({
       'lang': new FormControl(null, [Validators.required]),
       'desc': new FormControl(null, [Validators.required]),
       'type': new FormControl(null, [Validators.required]),
       'points': new FormControl(null, [Validators.required]),
-      'negMarks': new FormControl(null),
+      'negPoint': new FormControl(null),
       'author': new FormControl(null, [Validators.required]),
       'opt1':new FormControl(null),
       'opt2':new FormControl(null),
@@ -55,10 +54,11 @@ export class AddQueComponent implements OnInit {
     const que = {
       lang: this.addQueForm.value.lang,
       desc: this.addQueForm.value.desc,
-      type: this.addQueForm.value.type,
+      type: Number(this.addQueForm.value.type),
       points: this.addQueForm.value.points,
-      negMarks: this.addQueForm.value.negMarks ? this.addQueForm.value.negMarks : 0,
+      negPoint: this.addQueForm.value.negPoint ? this.addQueForm.value.negPoint : 0,
       author: this.addQueForm.value.author,
+      quizId: this.cid,
       opt:[],
       sol:[]
     }
@@ -70,12 +70,14 @@ export class AddQueComponent implements OnInit {
         que.sol.push(que.opt[i]);
       }
     }
+    console.log(que);
+    
     this.queService.addQue(que).subscribe(
       data => {
         this.addQueForm.reset();
         this.notificationsService.success("Success", data.msg, {timeOut: 5000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
         if(navigate)
-          this.router.navigate(['/ques']);
+          this.router.navigate(['/contests']);
       },
       error => {
         this.notificationsService.error("Oops!!", JSON.parse(error._body).error, {timeOut: 5000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});

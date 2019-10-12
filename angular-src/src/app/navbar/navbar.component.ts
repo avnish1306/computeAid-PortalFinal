@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit {
   contest;
   flagBughunt=false;
   flagCrypto=false;
-  resume = false;
+  resume = true;
   isAttempt = false;
   lang=false;
 
@@ -32,19 +32,19 @@ export class NavbarComponent implements OnInit {
     this.data.currentName.subscribe(message => this.user = message);
     this.contest=this.router.url;
     console.log(this.contest);
-    this.quesService.getAllQues().subscribe(
-      data => {
-        this.isAttempt = data.isAttempt;
-        if(data.startTime != null)
-          this.resume = true;
-        else
-          this.resume = false;
-      },
-      error => {
-        this.notificationService.create("", JSON.parse(error._body).error);
-        this.router.navigate['/welcome'];
-      }
-    );
+    // this.quesService.getAllQues().subscribe(
+    //   data => {
+    //     this.isAttempt = data.isAttempt;
+    //     if(data.startTime != null)
+    //       this.resume = true;
+    //     else
+    //       this.resume = false;
+    //   },
+    //   error => {
+    //     this.notificationService.create("", JSON.parse(error._body).error);
+    //     this.router.navigate['/welcome'];
+    //   }
+    // );
     
   }
   setFlagBughunt(){

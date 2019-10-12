@@ -13,7 +13,7 @@ router.post('/add',Auth.authenticateAll,  (req, res, next) => {
     req.checkBody('desc', 'Description is required').notEmpty();
     req.checkBody('author', 'Author is required').notEmpty();
     req.checkBody('points', 'Points is required').notEmpty();
-    req.checkBody('negPoints', 'Negative Points is required').notEmpty();
+    req.checkBody('negPoint', 'Negative Points is required').notEmpty();
     req.checkBody('sol', 'Solution is required').notEmpty();
     req.checkBody('opt', 'Option is required').notEmpty();
     req.checkBody('type','Question Type is required').notEmpty();
@@ -94,9 +94,10 @@ router.post('/saveAns',Auth.authenticateAll,(req,res,next)=>{
 })
 //Auth.authenticateAll,
 router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
-    let quizId = req.params.queId;
+    let quizId = req.params.quizId;
     User.findOne({name:req.user.name},(err,user)=>{
         if(err){
+            console.log("ERROR >> USER");
            return res.status(500).json({
                 status: 0,
                 error: "Internal server error"
@@ -106,14 +107,23 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
         if(user){
         Quiz.findById(quizId,(err,quiz)=>{
             if(err){
+                console.log("ERROR >> QUIZ");
                 return res.status(500).json({
                     status: 0,
-                    msg:"Fail to to fetch",
+                    msg:"Fail to fetch",
+                    error: "Internal server error"
+                });
+            }
+            else if(!quiz) {
+                console.log("ERROR >> NO QUIZ FOUND");
+                return res.status(500).json({
+                    status: 0,
+                    msg:"No such quiz found",
                     error: "Internal server error"
                 });
             }
             let currDate = new Date();
-            if(currDate>quiz.startTime){
+            if(currDate>quiz.endTime){
                 return res.status(200).json({
                     status: 0,
                     msg:"Quiz has been finished"
@@ -130,12 +140,12 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                     newQuiz.startTime=new Date();
                 }
             }else{
-                newQuiz = {'quesId':queId,'startTime':null,'endTime':null,'score':0,'status':false};
+                newQuiz = {'quesId':quizId,'startTime':null,'endTime':null,'score':0,'status':false};
             }
             filteredQuiz.push(newQuiz);
             user.quizs=filteredQuiz;
             user.save().then(newuser=>{
-                Que.find({'quizId':quizId}, 'desc opt points author type').then(ques => {
+                Que.find({'quizId':quizId}, 'desc opt points author type negPoint').then(ques => {
                     res.status(200).json({
                         status: 1,
                         ques: ques,
@@ -146,14 +156,14 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                     
                 })
                 .catch(err => {
-                    //console.log(err);
+                    console.log("ERROR >> NO QUESTION");
                     res.status(500).json({
                         status: 0,
                         error: "Internal server error"
                     });
                 });
             }).catch(err => {
-                //console.log(err);
+                console.log("ERROR >> CANNOT SAVE USER");
                 res.status(500).json({
                     status: 0,
                     error: "Internal server error"
@@ -165,6 +175,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
         });
         
     }else{
+        console.log("ERROR >> NO USER");
         res.status(500).json({
             status: 0,
             error: "Internal server error"
@@ -190,7 +201,7 @@ router.delete('/:id', Auth.authenticateAdmin, (req, res, next) => {
         });
     });
 });
-router.get('/viewSol/:id',Auth.authenticateAdmin,(req,res,next)=>{
+router.get('/viewSol/:id',Auth.authenticateAll,(req,res,next)=>{
     Que.findById(req.params.id, 'sol').exec()
     .then(result => {
         res.status(200).json({

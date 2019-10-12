@@ -15,16 +15,16 @@ export class WelcomepageComponent implements OnInit {
     private authService: AuthService,private quesService: QuesService,private notificationService: NotificationsService) { }
 
   ngOnInit() {
-    this.quesService.getAllQues().subscribe(
-      data => {
-        if(data.startTime != null)
-          this.router.navigate['/ques'];
-      },
-      error => {
-        this.notificationService.create("", JSON.parse(error._body).error);
-        this.router.navigate['/welcome'];
-      }
-    );
+    // this.quesService.getAllQues().subscribe(
+    //   data => {
+    //     if(data.startTime != null)
+    //       this.router.navigate['/ques'];
+    //   },
+    //   error => {
+    //     this.notificationService.create("", JSON.parse(error._body).error);
+    //     this.router.navigate['/welcome'];
+    //   }
+    // );
   }
 
 }

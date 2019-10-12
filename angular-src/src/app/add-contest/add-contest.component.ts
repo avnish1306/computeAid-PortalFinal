@@ -49,7 +49,8 @@ export class AddContestComponent implements OnInit {
       details: this.addContestForm.value.details,
       rules: this.addContestForm.value.rules,
       scoreDisplay: this.addContestForm.value.scoreDisplay,
-      hasScoreBoard: this.addContestForm.value.hasScoreBoard
+      hasScoreBoard: this.addContestForm.value.hasScoreBoard,
+      quizId: this.data.editing ? "hello" : null
     }
     this.contestService.addContest(contest).subscribe(
       data => {

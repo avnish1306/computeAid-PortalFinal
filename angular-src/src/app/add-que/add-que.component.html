@@ -17,8 +17,8 @@
             </div>
             </div>
             <div class="form-group">
-              <input type="number" class="form-control rounded-0 form-control-lg" placeholder="Negative Marks" formControlName="negMarks">
-              <div *ngIf="!addQueForm.get('negMarks').valid && addQueForm.get('negMarks').touched" class="invalid-feedback">
+              <input type="number" class="form-control rounded-0 form-control-lg" placeholder="Negative Marks" formControlName="negPoint">
+              <div *ngIf="!addQueForm.get('negPoint').valid && addQueForm.get('negPoint').touched" class="invalid-feedback">
                 Negative Marks is required.
             </div>
             </div>
@@ -38,7 +38,7 @@
                     Single correct
                   </label>
                   <label class="col-sm-3">
-                    <input type="radio" ng-model="type" value=2 (click)="type=2" formControlName="type">
+                    <input type="radio" ng-model="type" value=2 [checked]="type===2" (click)="type=2" formControlName="type">
                     Multiple Correct
                   </label>
                 </div>
@@ -49,7 +49,7 @@
                     <input type="text" class="form-control rounded-0 form-control-lg" (input)="bindOpt($event,0)" placeholder="Option 1" formControlName="opt1">
                 </div>
                 <div class="col-sm-2">
-                    <input type="checkbox" name="cb0"  ng-model="sol[0]" [checked]="sol[0]" (click)="bindSol(0)"  class="form-control">
+                    <input type="{{type === 1 ? 'radio' : 'checkbox'}}" name="{{type === 1 ? 'cb0' : 'cb'}}"  ng-model="sol[0]" [checked]="sol[0]" (click)="bindSol(0)"  class="form-control">
                 </div>
               </div>
             </div>
@@ -60,7 +60,7 @@
                       <input type="text" class="form-control rounded-0 form-control-lg" (input)="bindOpt($event,1)" placeholder="Option 2" formControlName="opt1">
                   </div>
                   <div class="col-sm-2">
-                      <input type="checkbox" name="cb1"  ng-model="sol[1]" [checked]="sol[1]" (click)="bindSol(1)" class="form-control">
+                      <input type="{{type === 1 ? 'radio' : 'checkbox'}}" name="{{type === 1 ? 'cb1' : 'cb'}}"  ng-model="sol[1]" [checked]="sol[1]" (click)="bindSol(1)" class="form-control">
                   </div>
               </div>
             </div>
@@ -71,7 +71,7 @@
                       <input type="text" class="form-control rounded-0 form-control-lg" (input)="bindOpt($event,2)" placeholder="Option 3" formControlName="opt1">
                   </div>
                   <div class="col-sm-2">
-                      <input type="checkbox" name="cb2"  ng-model="sol[2]" [checked]="sol[2]" (click)="bindSol(2)" class="form-control" >
+                      <input type="{{type === 1 ? 'radio' : 'checkbox'}}" name="{{type === 1 ? 'cb2' : 'cb'}}"  ng-model="sol[2]" [checked]="sol[2]" (click)="bindSol(2)" class="form-control" >
                   </div>
               </div>
             </div>
@@ -82,7 +82,7 @@
                       <input type="text" class="form-control rounded-0 form-control-lg" (input)="bindOpt($event,3)" placeholder="Option 4" formControlName="opt1">
                   </div>
                   <div class="col-sm-2">
-                      <input type="checkbox" name="cb3"  ng-model="sol[3]" [checked]="sol[3]" (click)="bindSol(3)"class="form-control">
+                      <input type="{{type === 1 ? 'radio' : 'checkbox'}}" name="{{type === 1 ? 'cb3' : 'cb'}}"  ng-model="sol[3]" [checked]="sol[3]" (click)="bindSol(3)"class="form-control">
                   </div>
               </div>
             </div>

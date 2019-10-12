@@ -18,16 +18,23 @@ export class ContestsComponent implements OnInit {
 
     contests;
     live = [];
-    id;
+    id; rules; index: number = -1;
     info = {
       cname: "",
       details: "",
       startTime: "",
-      endTime: ""
+      endTime: "",
+      duration: ""
+    };
+    stats = {
+      up: 0,
+      on: 0,
+      pa: 0
     }
     loading: boolean = true;
 
   ngOnInit() {
+    this.live = [];
     this.contestService.getAllContests().subscribe(
       data => {
         this.contests = data.contests;
@@ -42,6 +49,12 @@ export class ContestsComponent implements OnInit {
             "ended": end,
             "enabled": st && !end
           });
+          if(this.live[i].enabled)
+            this.stats.on++;
+          if(!this.live[i].started)
+            this.stats.up++;
+          if(this.live[i].ended)
+            this.stats.pa++;
         }
         this.loading = false;
       },
@@ -57,7 +70,7 @@ export class ContestsComponent implements OnInit {
     let st = new Date(this.contests[i].startTime).getTime() <= dt;
     let end = new Date(this.contests[i].endTime).getTime() <= dt;
     if(st && !end)
-      this.router.navigate(['/ques/contests/'+this.contests[i].name]);
+      this.router.navigate(['/ques/contests/'+this.contests[i]._id]);
     else {
       alert('This contest has now ended. Talk to the coordinators.');
       this.ngOnInit();
@@ -70,7 +83,10 @@ export class ContestsComponent implements OnInit {
   }
 
   addQuestion(i: number) {
-    this.router.navigate(['/ques/add/'+this.contests[i].name]);
+    this.router.navigate(['/ques/add/'+this.contests[i]._id]);
+  }
+  rankings(i: number) {
+    this.router.navigate(['/contests/ranking/'+this.contests[i]._id]);
   }
 
   stageInfo(i: number) {
@@ -78,8 +94,15 @@ export class ContestsComponent implements OnInit {
     this.info.details = this.contests[i].details;
     this.info.startTime = this.contests[i].startTime;
     this.info.endTime = this.contests[i].endTime;
+    this.info.duration = this.contests[i].duration;
   }
 
+  openRules(i: number) {
+    this.rules = this.contests[i].rules.split('\n');
+    this.id = this.contests[i].name;
+    this.index = i;
+  }
+  
   deleteContest(i: string) {
     if(confirm('Sure to delete contest? This action can\'t be undone'))
     this.contestService.deleteContest(i).subscribe(
