@@ -47,13 +47,6 @@
                 </div>
                 <small>Full duration of the contest.</small>
               </div>
-              <div class="form-group">
-                <input type="password" class="form-control rounded-0 form-control-lg" placeholder="Secret Key" formControlName="secretKey">
-                <div *ngIf="!addContestForm.get('secretKey').valid && addContestForm.get('secretKey').touched" class="invalid-feedback">
-                  Secret Key is required.
-                </div>
-                <small>Participant will be asked for this code. Without this code, no participant can start the contest.</small>
-              </div>
               <div class="form-group form-check">
                 <label class="switch">
                   <input type="checkbox" formControlName="scoreDisplay" id="scoreD">
