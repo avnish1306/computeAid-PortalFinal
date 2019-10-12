@@ -1,9 +1,7 @@
-<div class="card">
-  <div class="card-header"><h4>Add Question [Contest ID: {{cid}}]</h4></div>
-  {{data | json}}
-  <hr>
-  {{quesData | json}}
+<div class="card" *ngIf="!loading">
+  <div class="card-header"><h4>Add Question [Contest Name: {{data.name}}]</h4></div>
   <div class="card-body">
+    {{quesData.content.opt | json}}
     <form [formGroup]="addQueForm">
       <div class="row">
         <div class="col-6">
@@ -18,7 +16,7 @@
               <div *ngIf="!addQueForm.get('points').valid && addQueForm.get('points').touched" class="invalid-feedback">
                 Positive Marks is required.
             </div>
-            <small *ngIf="data.random.isRandom">Randomization is ON for this contest. Negative Marks taken from Contest Settings.</small>
+            <small *ngIf="data.random.isRandom">Randomization is ON for this contest. Positive Marks taken from Contest Settings.</small>
             </div>
             <div class="form-group">
               <input type="number" class="form-control rounded-0 form-control-lg" placeholder="Negative Marks" formControlName="negPoint" [value]="quesData.editing ? quesData.content.negPoint : (data.random.isRandom ? (type == 1 ? data.random.singleChoice.negPoints : data.random.multipleChoice.negPoints) : '')">
@@ -38,11 +36,11 @@
             <div class="form-group">
                 <h6>Type</h6>
                 <div class="form-control rounded-0  form-control-lg" class="row">
-                  <label class="col-sm-3">
+                  <label class="col-sm-3" style="cursor: pointer">
                     <input type="radio" ng-model="type" value=1 [checked]="type===1" (click)="type=1; sol=[false,false,false,false];" formControlName="type">
                     Single correct
                   </label>
-                  <label class="col-sm-3">
+                  <label class="col-sm-3" style="cursor: pointer">
                     <input type="radio" ng-model="type" value=2 [checked]="type===2" (click)="type=2" formControlName="type">
                     Multiple Correct
                   </label>
@@ -51,43 +49,40 @@
             <div class="form-group">
               <div class="row">
                 <div class="col-sm-10">
-                    <input type="text" class="form-control rounded-0 form-control-lg" (input)="bindOpt($event,0)" placeholder="Option 1" formControlName="opt1">
+                    <input type="text" class="form-control rounded-0 form-control-lg" (input)="bindOpt($event,0)" placeholder="Option 1" formControlName="opt1" [value]="quesData.editing ? quesData.content : ''">
                 </div>
                 <div class="col-sm-2">
-                    <input type="{{type === 1 ? 'radio' : 'checkbox'}}" name="{{type === 1 ? 'cb0' : 'cb'}}"  ng-model="sol[0]" [checked]="sol[0]" (click)="bindSol(0)"  class="form-control">
+                    <input type="{{type === 1 ? 'radio' : 'checkbox'}}" name="{{type === 1 ? 'cb' : 'cb0'}}" style="cursor: pointer"  ng-model="sol[0]" [checked]="sol[0]" (click)="bindSol(0)"  class="form-control">
                 </div>
               </div>
             </div>
               <div class="form-group">
-      
               <div class="row">
                   <div class="col-sm-10">
                       <input type="text" class="form-control rounded-0 form-control-lg" (input)="bindOpt($event,1)" placeholder="Option 2" formControlName="opt1">
                   </div>
                   <div class="col-sm-2">
-                      <input type="{{type === 1 ? 'radio' : 'checkbox'}}" name="{{type === 1 ? 'cb1' : 'cb'}}"  ng-model="sol[1]" [checked]="sol[1]" (click)="bindSol(1)" class="form-control">
+                      <input type="{{type === 1 ? 'radio' : 'checkbox'}}" name="{{type === 1 ? 'cb' : 'cb1'}}" style="cursor: pointer"  ng-model="sol[1]" [checked]="sol[1]" (click)="bindSol(1)" class="form-control">
                   </div>
               </div>
             </div>
-              <div class="form-group">
-      
+              <div class="form-group">      
               <div class="row">
                   <div class="col-sm-10">
                       <input type="text" class="form-control rounded-0 form-control-lg" (input)="bindOpt($event,2)" placeholder="Option 3" formControlName="opt1">
                   </div>
                   <div class="col-sm-2">
-                      <input type="{{type === 1 ? 'radio' : 'checkbox'}}" name="{{type === 1 ? 'cb2' : 'cb'}}"  ng-model="sol[2]" [checked]="sol[2]" (click)="bindSol(2)" class="form-control" >
+                      <input type="{{type === 1 ? 'radio' : 'checkbox'}}" name="{{type === 1 ? 'cb' : 'cb2'}}" style="cursor: pointer"  ng-model="sol[2]" [checked]="sol[2]" (click)="bindSol(2)" class="form-control" >
                   </div>
               </div>
             </div>
-              <div class="form-group">
-      
+              <div class="form-group">      
               <div class="row">
                   <div class="col-sm-10">
                       <input type="text" class="form-control rounded-0 form-control-lg" (input)="bindOpt($event,3)" placeholder="Option 4" formControlName="opt1">
                   </div>
                   <div class="col-sm-2">
-                      <input type="{{type === 1 ? 'radio' : 'checkbox'}}" name="{{type === 1 ? 'cb3' : 'cb'}}"  ng-model="sol[3]" [checked]="sol[3]" (click)="bindSol(3)"class="form-control">
+                      <input type="{{type === 1 ? 'radio' : 'checkbox'}}" name="{{type === 1 ? 'cb' : 'cb3'}}" style="cursor: pointer"  ng-model="sol[3]" [checked]="sol[3]" (click)="bindSol(3)"class="form-control">
                   </div>
               </div>
             </div>
@@ -118,12 +113,10 @@
               </label>
               </div>
       </div>
-      
-      
     </form>
   </div>
   <div class="card-footer text-right">
-    <button class="btn btn-primary" (click)="addQue(true)" [disabled]="!addQueForm.valid">Add Que & Go Back</button>
-    <button class="btn btn-primary" (click)="addQue(false)" [disabled]="!addQueForm.valid">Add Que & Add More</button>
+    <button class="btn btn-primary" (click)="addQue(true)" [disabled]="!addQueForm.valid"> {{ quesData.editing ? 'Save' : 'Add' }} Question & Go Back</button>
+    <button class="btn btn-primary" (click)="addQue(false)" [disabled]="!addQueForm.valid" *ngIf="!quesData.editing">Add Question & Add More</button>
   </div>
 </div>

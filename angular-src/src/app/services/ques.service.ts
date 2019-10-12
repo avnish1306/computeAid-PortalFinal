@@ -18,6 +18,13 @@ export class QuesService {
       return this.http.get(environment.apiUrl + 'ques/'+quizId, {headers: headers}).map(res => res.json());
   }
 
+  getQues(id){
+      const headers = new Headers({
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+      });
+      return this.http.get(environment.apiUrl + 'ques/viewQues/'+id, {headers: headers}).map(res => res.json());
+  }
+
   /*submitFlag(id, flag){
       const headers = new Headers({
           'Authorization': 'Bearer ' + localStorage.getItem('token')

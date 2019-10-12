@@ -9,6 +9,7 @@ import { QuesService } from '../services/ques.service';
 import { LocalStorageService } from '../services/localStorage.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { environment } from '../../environments/environment';
+import { ContestService } from '../services/contest.service';
 
 fontawesome.library.add(faPlusCircle, faTrash, faPencilAlt, faEye);
 
@@ -23,6 +24,7 @@ export class QuestionComponent implements OnInit {
   private authService: AuthService,
   private quesService: QuesService,
   private localStorageService: LocalStorageService,
+  private contestService: ContestService,
   private notificationsService: NotificationsService,
   private route: ActivatedRoute) { }
 
@@ -69,6 +71,11 @@ export class QuestionComponent implements OnInit {
     this.localStorageService.startQuiz(this.userid,this.cid);
     this.quizData = JSON.parse(localStorage.getItem('temp3'));
     localStorage.removeItem('temp3');
+    this.userid = JSON.parse(localStorage.getItem('user'))._id;
+    // this.quizData = JSON.parse(localStorage.getItem('temp3'));
+    // localStorage.removeItem('temp3');
+    this.contestService.getContest(this.cid).subscribe(result => {
+      this.quizData = result.data;
     this.quesService.getAllQues(this.cid).subscribe(
       data => {
         this.startTime=new Date(data.startTime);
@@ -122,23 +129,26 @@ export class QuestionComponent implements OnInit {
 
         }
         //console.log(this.submission);
+        this.optForm = new FormGroup({
+          'opt': new FormControl(null, [Validators.required, Validators.required])
+        });
         this.loading = false;
       },
       error => {
         this.notificationsService.create("", JSON.parse(error._body).error);
       }
     );
-    this.optForm = new FormGroup({
-      'opt': new FormControl(null, [Validators.required, Validators.required])
-    });
-    this.addQueForm = new FormGroup({
-      'lang': new FormControl(null, [Validators.required]),
-      'desc': new FormControl(null, [Validators.required, Validators.minLength(10)]),
-      'opt': new FormControl(null, [Validators.required, Validators.required]),
-      'points': new FormControl(null, [Validators.required]),
-      'author': new FormControl(null, [Validators.required]),
+  }, error => {
+    this.notificationsService.create("", JSON.parse(error._body).error);
+  });
+    // this.addQueForm = new FormGroup({
+    //   'lang': new FormControl(null, [Validators.required]),
+    //   'desc': new FormControl(null, [Validators.required, Validators.minLength(10)]),
+    //   'opt': new FormControl(null, [Validators.required, Validators.required]),
+    //   'points': new FormControl(null, [Validators.required]),
+    //   'author': new FormControl(null, [Validators.required]),
 
-    });
+    // });
   }
 
   markQuestion(i: number) {
@@ -417,9 +427,7 @@ export class QuestionComponent implements OnInit {
   }
 
   editQuestion(i: number) {
-    localStorage.setItem('temp4',JSON.stringify(this.ques[i]));
-    localStorage.setItem('temp3',JSON.stringify(this.quizData));
-    this.router.navigate(['/ques/add/'+this.cid]);
+    this.router.navigate(['/ques/add/'+this.cid+'/'+this.ques[i]._id]);
   }
 
   isAdmin(){
