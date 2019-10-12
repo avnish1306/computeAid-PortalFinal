@@ -11,7 +11,6 @@ router.post('/create',Auth.authenticateUser,(req,res,next)=>{
     req.checkBody('name', 'Quiz name is required').notEmpty();
     req.checkBody('startTime', 'Start Time is required').notEmpty();
     req.checkBody('endTime', ' End Time is required').notEmpty();
-    req.checkBody('secretKey', 'Secret is required').notEmpty();
     req.checkBody('duration', 'Quiz Duration is required').notEmpty();
     req.checkBody('random','Random is required').notEmpty();
     const errors = req.validationErrors();

@@ -95,7 +95,7 @@ router.post('/saveAns',Auth.authenticateAll,(req,res,next)=>{
 //Auth.authenticateAll,
 router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
     let quizId = req.params.quizId;
-    if(res.user.access==3){ // if admin
+    if(req.user.access==3){ // if admin
         Que.find({'quizId':quizId}, 'desc opt points author type negPoint')
         .then(ques => {
             Quiz.findById(quizId,(err,quiz)=>{
