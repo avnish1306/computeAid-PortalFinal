@@ -1,6 +1,7 @@
 <div class="card">
   <div class="card-header"><h4>Add Contest</h4></div>
   <div class="card-body">
+    {{addContestForm.value | json}}
     <form [formGroup]="addContestForm">
       <div class="row">
         <div class="col-6">
@@ -54,17 +55,103 @@
                 <small>Participant will be asked for this code. Without this code, no participant can start the contest.</small>
               </div>
               <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" style="width: 1.25em; height: 1.25em; cursor: pointer;" formControlName="scoreDisplay" id="scoreD">
+                <label class="switch">
+                  <input type="checkbox" formControlName="scoreDisplay" id="scoreD">
+                  <span class="slider round"></span>
+                </label>
                 &nbsp;&nbsp;
                 <label class="form-check-label" for="scoreD" style="cursor: pointer;">Show Contest Score to Participant after the Contest Ends</label><br>
                 <small>If checked, the score will be displayed to the participant immediately after the contest ends.</small>              
               </div>
               <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" style="width: 1.25em; height: 1.25em; cursor: pointer;" formControlName="hasScoreBoard" id="scoreB">
-                &nbsp;&nbsp;
+                  <label class="switch">
+                    <input type="checkbox" formControlName="hasScoreBoard" id="scoreB">
+                    <span class="slider round"></span>
+                  </label>
+                  &nbsp;&nbsp;
                 <label class="form-check-label" for="scoreB" style="cursor: pointer;">Show Contest Score Board to Participants during Contest</label><br>
                 <small>If checked, the score board can be viewed by the participants during the contest.</small>              
               </div>
+              <div class="form-group form-check">
+                <label class="switch">
+                    <input type="checkbox" formControlName="randomize" id="random">
+                    <span class="slider round"></span>
+                  </label>
+                &nbsp;&nbsp;
+                <label class="form-check-label" for="random" style="cursor: pointer;">Question Randomization</label><br>
+                <small *ngIf="addContestForm.value.randomize" class="text-danger">This is a one time setting which cannot be changed after a contest is added. Please read about this setting by click "What is it" button.</small>              
+              </div>
+              <ng-container *ngIf="addContestForm.value.randomize">
+                  <button class="btn btn-sm btn-outline-danger" data-toggle="modal" data-target="#randomizeModal"> What is it? </button>
+                <table class="table table-striped table-bordered table-sm" style="text-align: center; vertical-align: middle">
+                  <thead>
+                    <tr>
+                      <th>Attributes</th>
+                      <th>Single Correct Option Type</th>
+                      <th>Multiple Correct Option Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Number of Questions</td>
+                      <td>
+                          <div class="form-group">
+                            <input type="number" class="form-control rounded-0" style="width: 50%; display: inline-block" placeholder="" formControlName="nSCQ">
+                            <div *ngIf="!addContestForm.get('nSCQ').valid && addContestForm.get('nSCQ').touched" class="invalid-feedback">
+                              Field is required. Either provide a value or Switch OFF Randomization.
+                            </div>
+                          </div>
+                        </td>
+                      <td>
+                          <div class="form-group">
+                            <input type="number" class="form-control rounded-0" style="width: 50%; display: inline-block" placeholder="" formControlName="nMCQ">
+                            <div *ngIf="!addContestForm.get('nMCQ').valid && addContestForm.get('nMCQ').touched" class="invalid-feedback">
+                                Field is required. Either provide a value or Switch OFF Randomization.
+                              </div>
+                          </div>
+                        </td>
+                    </tr>
+                    <tr>
+                      <td>Positive Marks</td>
+                      <td>
+                          <div class="form-group">
+                            <input type="number" class="form-control rounded-0" style="width: 50%; display: inline-block" placeholder="" formControlName="posMarksSCQ">
+                            <div *ngIf="!addContestForm.get('posMarksSCQ').valid && addContestForm.get('posMarksSCQ').touched" class="invalid-feedback">
+                                Field is required. Either provide a value or Switch OFF Randomization.
+                              </div>
+                          </div>
+                        </td>
+                      <td>
+                          <div class="form-group">
+                            <input type="number" class="form-control rounded-0" style="width: 50%; display: inline-block" placeholder="" formControlName="posMarksMCQ">
+                            <div *ngIf="!addContestForm.get('posMarksMCQ').valid && addContestForm.get('posMarksMCQ').touched" class="invalid-feedback">
+                                Field is required. Either provide a value or Switch OFF Randomization.
+                              </div>
+                          </div>
+                        </td>
+                    </tr>
+                    <tr>
+                      <td>Negative Marks</td>
+                      <td>
+                          <div class="form-group">
+                            <input type="number" class="form-control rounded-0" style="width: 50%; display: inline-block" placeholder="" formControlName="negMarksSCQ">
+                            <div *ngIf="!addContestForm.get('negMarksSCQ').valid && addContestForm.get('negMarksSCQ').touched" class="invalid-feedback">
+                                Field is required. Either provide a value or Switch OFF Randomization.
+                              </div>
+                          </div>
+                        </td>
+                      <td>
+                          <div class="form-group">
+                            <input type="number" class="form-control rounded-0" style="width: 50%; display: inline-block" placeholder="" formControlName="negMarksMCQ">
+                            <div *ngIf="!addContestForm.get('negMarksMCQ').valid && addContestForm.get('negMarksMCQ').touched" class="invalid-feedback">
+                                Field is required. Either provide a value or Switch OFF Randomization.
+                              </div>
+                          </div>
+                        </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </ng-container>
         </div>
       </div>
     </form>
@@ -72,5 +159,31 @@
   <div class="card-footer text-right">
     <button class="btn btn-primary" (click)="addContest(true)" [disabled]="!addContestForm.valid">Add Contest & Go Back</button>
     <!-- <button class="btn btn-primary" (click)="addContest(false)" [disabled]="!addContestForm.valid">Add contest & Add More</button> -->
+  </div>
+</div>
+
+<div class="modal fade" id="randomizeModal" tabindex="-1" role="dialog" aria-labelledby="randomizeModal" aria-hidden="true"
+  data-backdrop="static">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel3"><span><strong>Randomization</strong></span></h5>
+      </div>
+      <div class="modal-body">
+        <span style="font-weight: bold">What happens if this setting is OFF ?</span>
+        <ul>
+          <li> All the questions for a particular quiz available in database would be visible to participants. </li>
+          <li> Each question can have their own positive marks and negative marks which is to be specified when adding a question. </li>
+        </ul>
+        <span style="font-weight: bold">What happens if this setting is ON ?</span>
+        <ul>
+          <li> Only specified number of questions (which is to be specified now) for a particular quiz from those available in database would be visible to participants. If there are less number of questions in database than the specified number, all questions would be picked.</li>
+          <li> All questions will have same positive marks and negative marks which is to be specified now. </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
 </div>

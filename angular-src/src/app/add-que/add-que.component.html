@@ -15,12 +15,14 @@
               <div *ngIf="!addQueForm.get('points').valid && addQueForm.get('points').touched" class="invalid-feedback">
                 Positive Marks is required.
             </div>
+            <small>Randomization is ON for this contest. Negative Marks taken from Contest Settings.</small>
             </div>
             <div class="form-group">
               <input type="number" class="form-control rounded-0 form-control-lg" placeholder="Negative Marks" formControlName="negPoint">
               <div *ngIf="!addQueForm.get('negPoint').valid && addQueForm.get('negPoint').touched" class="invalid-feedback">
                 Negative Marks is required.
             </div>
+            <small>Randomization is ON for this contest. Negative Marks taken from Contest Settings.</small>
             </div>
             <div class="form-group">
                 <input type="text" class="form-control rounded-0 form-control-lg" placeholder="Author" formControlName="author">

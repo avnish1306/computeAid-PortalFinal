@@ -35,22 +35,41 @@ export class AddContestComponent implements OnInit {
       'details': new FormControl(this.data.editing ? this.data.content.details : ""),
       'rules': new FormControl(this.data.editing ? this.data.content.rules : null, [Validators.required]),
       'scoreDisplay': new FormControl(this.data.editing ? this.data.content.scoreDisplay : false),
-      'hasScoreBoard': new FormControl(this.data.editing ? this.data.content.hasScoreBoard : false)
+      'hasScoreBoard': new FormControl(this.data.editing ? this.data.content.hasScoreBoard : false),
+      'randomize': new FormControl(false),
+      'nSCQ': new FormControl(0, [Validators.required]),
+      'nMCQ': new FormControl(0, [Validators.required]),
+      'posMarksSCQ': new FormControl(0, [Validators.required]),
+      'negMarksSCQ': new FormControl(0, [Validators.required]),
+      'posMarksMCQ': new FormControl(0, [Validators.required]),
+      'negMarksMCQ': new FormControl(0, [Validators.required])
     });
   }
 
   addContest(navigate: boolean){
+    const formData = this.addContestForm.value;
     const contest = {
-      name: this.addContestForm.value.contestName,
-      startTime: this.addContestForm.value.startTime,
-      duration: this.addContestForm.value.duration,
-      endTime: this.addContestForm.value.endTime,
-      secretKey: this.addContestForm.value.secretKey,
-      details: this.addContestForm.value.details,
-      rules: this.addContestForm.value.rules,
-      scoreDisplay: this.addContestForm.value.scoreDisplay,
-      hasScoreBoard: this.addContestForm.value.hasScoreBoard,
-      quizId: this.data.editing ? "hello" : null
+      name: formData.contestName,
+      startTime: formData.startTime,
+      duration: formData.duration,
+      endTime: formData.endTime,
+      secretKey: formData.secretKey,
+      details: formData.details,
+      rules: formData.rules,
+      scoreDisplay: formData.scoreDisplay,
+      hasScoreBoard: formData.hasScoreBoard,
+      quizId: this.data.editing ? "hello" : null,
+      random: formData.randomize,
+      singleChoice: {
+        count: formData.nSCQ,
+        points: formData.posMarksSCQ,
+        negPoints: formData.negMarksSCQ
+      },
+      multipleChoice: {
+        count: formData.nMCQ,
+        points: formData.posMarksMCQ,
+        negPoints: formData.negMarksMCQ
+      }
     }
     this.contestService.addContest(contest).subscribe(
       data => {

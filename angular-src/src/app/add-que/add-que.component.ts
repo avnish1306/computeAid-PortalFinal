@@ -19,9 +19,12 @@ export class AddQueComponent implements OnInit {
   type: number = 2;
   opt=[];
   cid;
+  data;
 
   ngOnInit() {
     this.cid = this.route.snapshot.paramMap.get('cid');
+    this.data = JSON.parse(localStorage.getItem('temp3'));
+    localStorage.removeItem('temp3');
     this.addQueForm = new FormGroup({
       'lang': new FormControl(null, [Validators.required]),
       'desc': new FormControl(null, [Validators.required]),
