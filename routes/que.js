@@ -115,7 +115,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                         error: "Internal server error"
                     });
                 }else{
-                    res.status(200).json({
+                    return res.status(200).json({
                         status: 1,
                         ques: ques,
                         quiz: quiz,
@@ -128,7 +128,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
         })
         .catch(err => {
             console.log("ERROR >> NO QUESTION");
-            res.status(500).json({
+            return res.status(500).json({
                 status: 0,
                 error: "Internal server error"
             });
@@ -176,7 +176,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                 return x.queId!=quizId;
             });
             if(newQuiz){
-                res.status(200).json({
+                return res.status(200).json({
                     status: 1,
                     ques: user.quizs.ques,
                     quiz: newQuiz,
@@ -205,7 +205,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                     filteredQuiz.push(newQuiz);
                     user.quizs=filteredQuiz;
                     user.save().then(newuser=>{
-                        res.status(200).json({
+                        return res.status(200).json({
                             status: 1,
                             ques: ques,
                             quiz: newQuiz,
@@ -214,7 +214,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                         });
                     }).catch(err => {
                         console.log("ERROR >> CANNOT SAVE USER");
-                        res.status(500).json({
+                        return res.status(500).json({
                             status: 0,
                             error: "Internal server error"
                         });
@@ -223,7 +223,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                 })
                 .catch(err => {
                     console.log("ERROR >> NO QUESTION");
-                    res.status(500).json({
+                    return res.status(500).json({
                         status: 0,
                         error: "Internal server error"
                     });
@@ -233,7 +233,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
         
     }else{
         console.log("ERROR >> NO USER");
-        res.status(500).json({
+        return res.status(500).json({
             status: 0,
             error: "Internal server error"
         });

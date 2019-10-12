@@ -188,17 +188,19 @@ export class QuestionComponent implements OnInit {
     },1000)
   }
 
-  bindSol(i){
+  bindSol(i,que){
     this.selectedOpt[i]=!this.selectedOpt[i];
+    this.saveSol(que)
   }
 
-  bindSolR(i){
+  bindSolR(i,que){
     this.selectedOpt[i]=!this.selectedOpt[i];
     for(var j=0;j<4;j++){
       if(i!=j&&this.selectedOpt[j]==true){
         this.selectedOpt[j]=false;
       }
     }
+    this.saveSol(que);
   }
 
   displayQue(index){

@@ -62,10 +62,10 @@ Welcome
                     <div class="card-footer form-group" id="problem-flag" *ngIf="selected ">
                         <label class="col-sm-12" *ngFor="let optC of opt; let i=index" style="cursor: pointer">
                             <input *ngIf="type===1" type="radio" style="width: 1.25em; height: 1.25em" name="opt"
-                                value={{optC}} ng-model="opt" [checked]="submitted[i]" (click)="bindSolR(i)"
+                                value={{optC}} ng-model="opt" [checked]="submitted[i]" (click)="bindSolR(i,ques[index])"
                                 formControlName="opt" style="margin-right: 20px">
                             <input *ngIf="type===2" type="checkbox" style="width: 1.25em; height: 1.25em" name="opt"
-                                value={{optC}} ng-model="opt" [checked]="submitted[i]" (click)="bindSol(i)"
+                                value={{optC}} ng-model="opt" [checked]="submitted[i]" (click)="bindSol(i,ques[index])"
                                 formControlName="opt" style="margin-right: 20px">{{optC}}
                             <br>
                         </label>
