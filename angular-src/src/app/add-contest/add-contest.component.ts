@@ -82,6 +82,19 @@ export class AddContestComponent implements OnInit {
         negPoints: formData.negMarksMCQ
       }
     }
+    if(this.data.editing)
+    this.contestService.editContest(contest).subscribe(
+      data => {
+        this.addContestForm.reset();
+        this.notificationsService.success("Success", data.msg, {timeOut: 5000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
+        if(navigate)
+          this.router.navigate(['/contests']);
+      },
+      error => {
+        this.notificationsService.error("Oops!!", JSON.parse(error._body).error, {timeOut: 5000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
+      }
+    );
+    else
     this.contestService.addContest(contest).subscribe(
       data => {
         this.addContestForm.reset();

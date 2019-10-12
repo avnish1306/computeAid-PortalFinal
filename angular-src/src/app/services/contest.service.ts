@@ -13,7 +13,14 @@ export class ContestService {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
     });
     return this.http.post(environment.apiUrl+'quiz/create', contest, {headers: headers}).map(res => res.json());
-}
+  }
+
+  editContest(contest){
+    const headers = new Headers({
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+    });
+    return this.http.post(environment.apiUrl+'quiz/edit', contest, {headers: headers}).map(res => res.json());
+  }
 
   getAllContests(){
     const headers = new Headers({

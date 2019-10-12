@@ -25,7 +25,6 @@ router.post('/create',Auth.authenticateUser,(req,res,next)=>{
 
         });
       }
-    console.log(req.body);
     
     Quiz.findOne({'name':req.body.name},(err,foundQuiz)=>{
         if(err){
@@ -34,7 +33,7 @@ router.post('/create',Auth.authenticateUser,(req,res,next)=>{
                 err:err
             })
         }
-        if(foundQuiz&&req.body.quizId==null){
+        if(foundQuiz){
             return res.status(200).json({
                 status: 0,
                 msg:'Quiz Already Exist'
@@ -75,7 +74,64 @@ router.post('/create',Auth.authenticateUser,(req,res,next)=>{
                     status: 0,
                     error: "Internal Server Error"
                 });
-                console.log(err);
+            });
+        }
+    })
+});
+
+router.post('/edit',Auth.authenticateUser,(req,res,next)=>{
+    
+    req.checkBody('name', 'Quiz name is required').notEmpty();
+    req.checkBody('startTime', 'Start Time is required').notEmpty();
+    req.checkBody('endTime', ' End Time is required').notEmpty();
+    req.checkBody('duration', 'Quiz Duration is required').notEmpty();
+    const errors = req.validationErrors();
+    if(errors){
+        var messages = [];
+        errors.forEach(function(error){
+          messages.push(error);
+        });
+        return res.status(200).json({
+            status: 0,
+            msg: messages,
+
+        });
+      }
+    
+    Quiz.findById({'_id':req.body.quizId},(err,foundQuiz)=>{
+        if(err){
+            return res.status(500).json({
+                status: 0,
+                err:err
+            })
+        }
+        if(foundQuiz == null){
+            return res.status(200).json({
+                status: 0,
+                msg:'Quiz Does Not Exist'
+            })
+        }else{
+            foundQuiz.name = req.body.name;
+            foundQuiz.startTime = new Date(req.body.startTime);
+            foundQuiz.endTime = new Date(req.body.endTime);
+            foundQuiz.duration = req.body.duration;
+            foundQuiz.scoreDisplay = req.body.scoreDisplay;
+            foundQuiz.hasScoreBoard = req.body.hasScoreBoard;
+            foundQuiz.details = req.body.details;
+            foundQuiz.rules = req.body.rules;
+            foundQuiz.save()
+            .then(result => {
+                res.status(201).json({
+                    status: 1,
+                    msg: "Quiz saved :)",
+                    data:result
+                });
+            })
+            .catch(err => {
+                res.status(500).json({
+                    status: 0,
+                    error: "Internal Server Error"
+                });
             });
         }
     })

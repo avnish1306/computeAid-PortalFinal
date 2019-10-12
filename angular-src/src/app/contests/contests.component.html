@@ -1,5 +1,5 @@
 <h3>Available Contests
-<button class="btn btn-sm btn-secondary" routerLink="/contests/add/new" *ngIf="isAdmin()">Add New</button>
+<button class="btn btn-sm btn-secondary" routerLink="/contests/add/new" *ngIf="isAdmin()"> <i class="fa fa-plus-circle"></i> Add New</button>
 </h3>
 <p *ngIf="loading">Loading Contests ...</p>
 
@@ -29,7 +29,7 @@
               data-target="#infoModel"> Info </button>
             <button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#rulesModel" (click)="openRules(i)"> Start Now </button>
           </p>
-          <p><button class="btn btn-sm btn-success" (click)="rankings(i)" *ngIf="contest.hasScoreBoard"> Rank List </button>
+          <p><button class="btn btn-sm btn-success" (click)="rankings(i)" *ngIf="contest.hasScoreBoard || isAdmin()"> Rank List </button>
           </p>
           <p><button class="btn btn-sm btn-primary" (click)="addQuestion(i)"> Add Question </button></p>
           <p><button class="btn btn-sm btn-warning" (click)="editContest(i)"> <i class="fas fa-edit"></i> </button>
@@ -64,16 +64,16 @@
         <div class="card-body">
           <h5 class="card-title">{{contest.name}}</h5>
           <!-- <p class="card-text"> Duration: {{contest.duration / 60}} hours {{ contest.duration % 60 }} minutes </p> -->
-          <h5 *ngIf="!live[i].enabled"><i>Ended</i></h5>
+          <h5 *ngIf="!live[i].enabled"><i>Ended</i></h5><p>
           <button class="btn btn-sm btn-outline-warning" (click)="stageInfo(i)" data-toggle="modal"
-            data-target="#infoModel"> Info </button>
+            data-target="#infoModel"> Info </button></p>
             <p><button class="btn btn-sm btn-success" (click)="rankings(i)"> Rank List </button>
             </p>
-            <p><button class="btn btn-sm btn-warning" (click)="editContest(i)"> <i class="fas fa-edit"></i> </button>
-            </p>
           <p><button class="btn btn-sm btn-primary" (click)="addQuestion(i)"> Add Question </button>
-          </p><button class="btn btn-sm btn-danger" (click)="deleteContest(contest._id)"> <i class="fas fa-trash-alt"></i> </button>
-        </div>
+          </p>
+            <p><button class="btn btn-sm btn-warning" (click)="editContest(i)"> <i class="fas fa-edit"></i> </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteContest(contest._id)"> <i class="fas fa-trash-alt"></i> </button>
+        </p></div>
       </div>
     </ng-container>
       <small *ngIf="stats.pa == 0">No Past Contests for now... Stay tuned !!!</small>

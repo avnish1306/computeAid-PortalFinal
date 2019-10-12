@@ -68,6 +68,7 @@ export class AddQueComponent implements OnInit {
   }
 
   bindSol(k: number) {
+    // if(this.type == 2) 
     this.sol[k] = !this.sol[k];
     if (this.type == 1)
       for (let i = 0; i < 4; i++) {

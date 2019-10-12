@@ -69,11 +69,6 @@ export class QuestionComponent implements OnInit {
     this.cid = this.route.snapshot.paramMap.get('cid');
     this.userid = JSON.parse(localStorage.getItem('user')).id;
     this.localStorageService.startQuiz(this.userid,this.cid);
-    this.quizData = JSON.parse(localStorage.getItem('temp3'));
-    localStorage.removeItem('temp3');
-    this.userid = JSON.parse(localStorage.getItem('user'))._id;
-    // this.quizData = JSON.parse(localStorage.getItem('temp3'));
-    // localStorage.removeItem('temp3');
     this.contestService.getContest(this.cid).subscribe(result => {
       this.quizData = result.data;
     this.quesService.getAllQues(this.cid).subscribe(
@@ -81,7 +76,7 @@ export class QuestionComponent implements OnInit {
         this.startTime=new Date(data.startTime);
         this.currentTime=new Date();
         var diff=Math.round((this.currentTime-this.startTime)/1000);
-        this.duration=environment.bughuntDuration*60;
+        this.duration=this.quizData.duration*60;
         this.timeLeft=this.duration-diff;
         
 
