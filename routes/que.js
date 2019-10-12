@@ -242,6 +242,24 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
     
 });
 
+router.get('/viewQues/:id', Auth.authenticateUser, (req, res, next) => {
+    Que.findById({_id: req.params.id})
+    .then(result => {
+        res.status(200).json({
+            status: 1,
+            msg: "Ques Found",
+            data: result
+        });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            status: 0,
+            error: "Internal Server Error"
+        });
+    });
+});
+
 router.delete('/:id', Auth.authenticateAdmin, (req, res, next) => {
     Que.remove({_id: req.params.id}).exec()
     .then(result => {
@@ -258,6 +276,7 @@ router.delete('/:id', Auth.authenticateAdmin, (req, res, next) => {
         });
     });
 });
+
 router.get('/viewSol/:id',Auth.authenticateAll,(req,res,next)=>{
     Que.findById(req.params.id, 'sol').exec()
     .then(result => {
@@ -274,7 +293,8 @@ router.get('/viewSol/:id',Auth.authenticateAll,(req,res,next)=>{
             error: "Internal Server Error"
         });
     });
-})
+});
+
 router.get("/submitSol",Auth.authenticateAll,(req,res,next)=>{
     User.findOne({'name':req.user.name},(err,user)=>{
         if(err){
@@ -448,8 +468,5 @@ function findQuestionById(id,ques){
     }
     return null;
 }
-
-
-
 
 module.exports = router;
