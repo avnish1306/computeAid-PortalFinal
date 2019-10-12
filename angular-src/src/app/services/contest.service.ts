@@ -13,7 +13,14 @@ export class ContestService {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
     });
     return this.http.post(environment.apiUrl+'quiz/create', contest, {headers: headers}).map(res => res.json());
-}
+  }
+
+  editContest(contest){
+    const headers = new Headers({
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+    });
+    return this.http.post(environment.apiUrl+'quiz/edit', contest, {headers: headers}).map(res => res.json());
+  }
 
   getAllContests(){
     const headers = new Headers({
@@ -40,6 +47,20 @@ export class ContestService {
           'Authorization': 'Bearer ' + localStorage.getItem('token')
       });
       return this.http.get(environment.apiUrl+'quiz/'+id, {headers: headers}).map(res => res.json());
+  }
+
+  isRegistered(id){
+      const headers = new Headers({
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+      });
+      return this.http.get(environment.apiUrl+'quiz/confirm/'+id, {headers: headers}).map(res => res.json());
+  }
+
+  register(id){
+      const headers = new Headers({
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+      });
+      return this.http.get(environment.apiUrl+'quiz/register/'+id, {headers: headers}).map(res => res.json());
   }
 
 }

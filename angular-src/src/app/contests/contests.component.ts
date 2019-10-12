@@ -33,14 +33,14 @@ export class ContestsComponent implements OnInit {
     }
     loading: boolean = true;
     agree: boolean = false;
+    registering: boolean = false;
 
   ngOnInit() {
     this.live = [];
     this.contestService.getAllContests().subscribe(
       data => {
         this.contests = data.contests;
-        // this.solved = new Array(this.contests.length).fill(false);
-        // this.flags = new Array(this.contests.length).fill("");
+        this.fetchRegister(0);
         for(let i=0;i<this.contests.length;i++){
           var dt = new Date().getTime();
           let st = new Date(this.contests[i].startTime).getTime() <= dt;
@@ -62,6 +62,35 @@ export class ContestsComponent implements OnInit {
       error => {
         this.notificationsService.create("", JSON.parse(error._body).error);
         this.loading = false;
+      }
+    );
+  }
+
+  fetchRegister(i: number) {
+    this.contestService.isRegistered(this.contests[i]._id).subscribe(
+      data => {
+        this.contests[i].registered = data.isRegistered;
+        this.contests[i].attempted = data.access;
+        if(i < this.contests.length)
+          this.fetchRegister(i+1);
+        else
+          return;
+      },error => {
+        this.notificationsService.create("", JSON.parse(error._body).error);
+      }
+    );
+  }
+
+  register(i: number) {
+    this.registering = true;
+    this.contestService.register(this.contests[i]._id).subscribe(
+      data => {
+        if(data.status == 1)
+          this.notificationsService.success("Done", "Registered Successfully !!!"); 
+        else
+          this.notificationsService.error("Oops", "Registration Failure !!!");        
+      },error => {
+        this.notificationsService.error("", JSON.parse(error._body).error);
       }
     );
   }
