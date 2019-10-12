@@ -98,6 +98,24 @@ router.get('/',Auth.authenticateAll, (req, res) => {
     })
 });
 
+router.get('/:id', Auth.authenticateUser, (req, res, next) => {
+    Quiz.findById({_id: req.params.id})
+    .then(result => {
+        res.status(200).json({
+            status: 1,
+            msg: "Quiz Found",
+            data: result
+        });
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            status: 0,
+            error: "Internal Server Error"
+        });
+    });
+});
+
 router.delete('/:id', Auth.authenticateUser, (req, res, next) => {
     Quiz.remove({_id: req.params.id}).exec()
     .then(result => {

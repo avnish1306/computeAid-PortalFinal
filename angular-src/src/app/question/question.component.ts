@@ -58,11 +58,14 @@ export class QuestionComponent implements OnInit {
   timeFlag=0; cid;
   loading: boolean = true;
   userid;
+  quizData;
 
   
   ngOnInit() {
     this.cid = this.route.snapshot.paramMap.get('cid');
     this.userid = JSON.parse(localStorage.getItem('user'))._id;
+    this.quizData = JSON.parse(localStorage.getItem('temp3'));
+    localStorage.removeItem('temp3');
     this.quesService.getAllQues(this.cid).subscribe(
       data => {
         this.startTime=new Date(data.startTime);
@@ -410,6 +413,12 @@ export class QuestionComponent implements OnInit {
         this.notificationsService.error("Oops!!", JSON.parse(error._body).error, {timeOut: 5000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
       }
     );
+  }
+
+  editQuestion(i: number) {
+    localStorage.setItem('temp4',JSON.stringify(this.ques[i]));
+    localStorage.setItem('temp3',JSON.stringify(this.quizData));
+    this.router.navigate(['/ques/add/'+this.cid]);
   }
 
   isAdmin(){

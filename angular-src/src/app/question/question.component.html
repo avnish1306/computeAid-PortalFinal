@@ -83,7 +83,7 @@ Welcome
           </div> -->
                 <div class="card-footer" *ngIf="selected">
                     <div class="float-right">
-                        <button *ngIf="isAdmin()" class="btn btn-warning"><i class="fa fa-pencil-alt"></i> Edit</button>
+                        <button *ngIf="isAdmin()" class="btn btn-warning" (click)="editQuestion(index)"><i class="fa fa-pencil-alt"></i> Edit</button>
                         <button *ngIf="isAdmin()" class="btn btn-danger" (click)="deleteQue()"><i
                                 class="fa fa-trash"></i> Delete</button>
                         <button type="button" class="btn btn-warning" (click)="markQuestion(index)">

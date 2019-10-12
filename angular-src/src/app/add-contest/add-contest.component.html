@@ -1,7 +1,7 @@
-<div class="card">
+<div class="card" *ngIf="!loading">
   <div class="card-header"><h4>Add Contest</h4></div>
   <div class="card-body">
-    {{addContestForm.value | json}}
+    {{data.content | json}}
     <form [formGroup]="addContestForm">
       <div class="row">
         <div class="col-6">
@@ -26,7 +26,6 @@
         </div>
         <div class="col-6">
             <div class="form-group">
-              {{startTime}}
                 <input type="datetime-local" class="form-control rounded-0 form-control-lg" placeholder="Start Time" formControlName="startTime">
                 <div *ngIf="!addContestForm.get('startTime').valid && addContestForm.get('startTime').touched" class="invalid-feedback">
                   Start Time is required.
@@ -73,6 +72,7 @@
                 &nbsp;&nbsp;
                 <label class="form-check-label" for="random" style="cursor: pointer;">Question Randomization</label><br>
                 <small *ngIf="addContestForm.value.randomize" class="text-danger">This is a one time setting which cannot be changed after a contest is added. Please read about this setting by click "What is it" button.</small>              
+                <small *ngIf="data.editing" class="text-danger">Cannot change this setting now. Contest is already created.</small>              
               </div>
               <ng-container *ngIf="addContestForm.value.randomize">
                   <button class="btn btn-sm btn-outline-danger" data-toggle="modal" data-target="#randomizeModal"> What is it? </button>
@@ -150,7 +150,7 @@
     </form>
   </div>
   <div class="card-footer text-right">
-    <button class="btn btn-primary" (click)="addContest(true)" [disabled]="!addContestForm.valid">Add Contest & Go Back</button>
+    <button class="btn btn-primary" (click)="addContest(true)" [disabled]="!addContestForm.valid"> {{ data.editing ? 'Save' : 'Add' }} Contest & Go Back</button>
     <!-- <button class="btn btn-primary" (click)="addContest(false)" [disabled]="!addContestForm.valid">Add contest & Add More</button> -->
   </div>
 </div>

@@ -20,22 +20,32 @@ export class AddQueComponent implements OnInit {
   opt=[];
   cid;
   data;
+  quesData = {
+    editing: false,
+    content: null
+  };
 
   ngOnInit() {
     this.cid = this.route.snapshot.paramMap.get('cid');
     this.data = JSON.parse(localStorage.getItem('temp3'));
     localStorage.removeItem('temp3');
+    if(localStorage.getItem('temp4')) {
+      this.quesData.content = JSON.parse(localStorage.getItem('temp4'));
+      this.quesData.editing = true;
+      localStorage.removeItem('temp4');
+      this.type = this.quesData.content.type;
+    }
     this.addQueForm = new FormGroup({
-      'lang': new FormControl(null, [Validators.required]),
-      'desc': new FormControl(null, [Validators.required]),
-      'type': new FormControl(null, [Validators.required]),
-      'points': new FormControl(null, [Validators.required]),
-      'negPoint': new FormControl(null),
-      'author': new FormControl(null, [Validators.required]),
-      'opt1':new FormControl(null),
-      'opt2':new FormControl(null),
-      'opt3':new FormControl(null),
-      'opt4':new FormControl(null)
+      'lang': new FormControl(this.quesData.editing ? this.quesData.content.lang : null, [Validators.required]),
+      'desc': new FormControl(this.quesData.editing ? this.quesData.content.desc : null, [Validators.required]),
+      'type': new FormControl(this.quesData.editing ? this.quesData.content.type : null, [Validators.required]),
+      'points': new FormControl({value: this.quesData.editing ? this.quesData.content.points : null, disabled: this.data.random.isRandom}, [Validators.required]),
+      'negPoint': new FormControl({value: this.quesData.editing ? this.quesData.content.negPoint : null, disabled: this.data.random.isRandom}, [Validators.required]),
+      'author': new FormControl(this.quesData.editing ? this.quesData.content.author : null, [Validators.required]),
+      'opt1':new FormControl(this.quesData.editing ? this.quesData.content.opt[0] : null),
+      'opt2':new FormControl(this.quesData.editing ? this.quesData.content.opt[1] : null),
+      'opt3':new FormControl(this.quesData.editing ? this.quesData.content.opt[2] : null),
+      'opt4':new FormControl(this.quesData.editing ? this.quesData.content.opt[3] : null)
     });
   }
 

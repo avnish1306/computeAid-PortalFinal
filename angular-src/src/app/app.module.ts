@@ -58,7 +58,7 @@ const appRoutes: Routes = [
   { path: 'flaws/add', component: AddFlawComponent, canActivate: [AuthGuard, AdminAuthGuard] },
   { path: 'welcome', component: WelcomepageComponent, canActivate: [AuthGuard] },
   { path: 'editor/:qCode', component: EditorComponent, canActivate: [AuthGuard] },
-  { path: 'contests/add', component: AddContestComponent, canActivate: [AuthGuard, AdminAuthGuard] },
+  { path: 'contests/add/:cid', component: AddContestComponent, canActivate: [AuthGuard, AdminAuthGuard] },
   { path: 'contests', component: ContestsComponent, canActivate: [AuthGuard] },
   { path: 'contests/ranking/:cid', component: ContestRankingsComponent, canActivate: [AuthGuard] },
 

@@ -1,5 +1,8 @@
 <div class="card">
   <div class="card-header"><h4>Add Question [Contest ID: {{cid}}]</h4></div>
+  {{data | json}}
+  <hr>
+  {{quesData | json}}
   <div class="card-body">
     <form [formGroup]="addQueForm">
       <div class="row">
@@ -11,18 +14,18 @@
             </div>
             </div>
             <div class="form-group">
-              <input type="number" class="form-control rounded-0 form-control-lg" placeholder="Positive Marks" formControlName="points">
+              <input type="number" class="form-control rounded-0 form-control-lg" placeholder="Positive Marks" formControlName="points" [value]="quesData.editing ? quesData.content.points : (data.random.isRandom ? (type == 1 ? data.random.singleChoice.points : data.random.multipleChoice.points) : '')">
               <div *ngIf="!addQueForm.get('points').valid && addQueForm.get('points').touched" class="invalid-feedback">
                 Positive Marks is required.
             </div>
-            <small>Randomization is ON for this contest. Negative Marks taken from Contest Settings.</small>
+            <small *ngIf="data.random.isRandom">Randomization is ON for this contest. Negative Marks taken from Contest Settings.</small>
             </div>
             <div class="form-group">
-              <input type="number" class="form-control rounded-0 form-control-lg" placeholder="Negative Marks" formControlName="negPoint">
+              <input type="number" class="form-control rounded-0 form-control-lg" placeholder="Negative Marks" formControlName="negPoint" [value]="quesData.editing ? quesData.content.negPoint : (data.random.isRandom ? (type == 1 ? data.random.singleChoice.negPoints : data.random.multipleChoice.negPoints) : '')">
               <div *ngIf="!addQueForm.get('negPoint').valid && addQueForm.get('negPoint').touched" class="invalid-feedback">
                 Negative Marks is required.
             </div>
-            <small>Randomization is ON for this contest. Negative Marks taken from Contest Settings.</small>
+            <small *ngIf="data.random.isRandom">Randomization is ON for this contest. Negative Marks taken from Contest Settings.</small>
             </div>
             <div class="form-group">
                 <input type="text" class="form-control rounded-0 form-control-lg" placeholder="Author" formControlName="author">
