@@ -22,7 +22,7 @@ export class AppComponent implements OnInit{
       'left': 0,
       'right': 0,
       'bottom': 0,
-      'background-color':'black'
+      'background-color':'white'
     };
 
 	  this.myParams = {
@@ -35,13 +35,13 @@ export class AppComponent implements OnInit{
           }
         },
         color: {
-          value: "#ffffff"
+          value: "000000"
         },
         shape: {
           type: "circle",
           stroke: {
             width: 0,
-            color: "#000000"
+            color: "#ffffff"
           },
           polygon: {
             nb_sides: 5
