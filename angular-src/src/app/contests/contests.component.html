@@ -47,6 +47,7 @@
                       <a class="Cbtn Cbtn-primary" data-toggle="modal" data-target="#rulesModel" (click)="openRules(i)" *ngIf="contest.registered && !contest.attempted && !contest.started"> START NOW </a>
                       <a class="Cbtn Cbtn-danger" [class.alerter]="contest.started" routerLink="/ques/contests/{{contest._id}}" *ngIf="contest.started"> GET INTO IT </a>                      
                       <a class="Cbtn Cbtn-primary" (click)="register(i)" *ngIf="!contest.registered"> REGISTER </a>
+                      <p *ngIf="!contest.started && contest.attempted">Already Attempted</p>
                       <a class="Cbtn Cbtn-success" (click)="rankings(i)" *ngIf="(contest.hasScoreBoard && contest.registered) || isAdmin()"> Rank List </a>
                       <a class="Cbtn Cbtn-warning" (click)="stageInfo(i)" data-toggle="modal" data-target="#infoModel">Info</a>
                    </div>
