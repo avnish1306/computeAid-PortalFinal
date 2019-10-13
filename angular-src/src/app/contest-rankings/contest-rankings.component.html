@@ -2,16 +2,14 @@
 <div class="spinner-border text-success" role="status" style="margin: 0 auto" *ngIf="loading">
     <span class="sr-only">Loading...</span>
 </div>
-{{ users | json }}
 <table class="table table-bordered table-striped" *ngIf="!loading">
   <thead class="thead-dark">
     <tr>
       <th>#</th>
-      <th>User ID</th>
       <th>User Name</th>
       <th>Email</th>
       <th>Score</th>
-      <th>Status</th>
+      <th>Time Taken</th>
     </tr>
   </thead>
   <tbody>
@@ -19,22 +17,20 @@
       <ng-container *ngFor="let user of users; let i=index">
       <tr *ngIf="user.status">
         <td> {{i+1}} </td>
-        <td> {{user.userId}} </td>
         <td> {{user.username}} </td>
         <td> {{user.email}} </td>
         <td> {{user.score}} </td>
-        <td> {{user.status}} </td>
+        <td> {{timeArray[i].hh+':'+timeArray[i].mm+":"+timeArray[i].ss}} </td>
       </tr>
       </ng-container>
       <tr><td colspan="6">Appearing or Yet to Appear</td></tr>
       <ng-container *ngFor="let user of users; let i=index">
       <tr *ngIf="!user.status">
         <td> {{i+1}} </td>
-        <td> {{user.userId}} </td>
         <td> {{user.username}} </td>
         <td> {{user.email}} </td>
         <td> {{user.score}} </td>
-        <td> {{user.status}} </td>
+        <td> Not Appeared </td>
       </tr>
       </ng-container>
   </tbody>

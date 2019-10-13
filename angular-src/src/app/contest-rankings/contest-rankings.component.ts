@@ -17,19 +17,49 @@ export class ContestRankingsComponent implements OnInit {
 
   users;
   cid;
+  cname;
   loading: boolean = true;
+  timeArray = [];
+
   ngOnInit() {
     this.cid = this.route.snapshot.paramMap.get('cid');
-    this.contestService.getRanks(this.cid).subscribe(
-      res => {
-        if(res.status)
-          this.users = res.data;
-        else
-          this.notificationsService.error("Oops","Cannot Fetch Ranks Now !!!");
-          this.loading = false;
+    this.contestService.getContest(this.cid).subscribe(
+      result => {
+        this.cname = result.data.name;
+        this.contestService.getRanks(this.cid).subscribe(
+          res => {
+            if (res.status) {
+              this.users = res.data;
+              for (let i = 0; i < this.users.length; i++) {
+                let time = {
+                  hh: '',
+                  mm: '',
+                  ss: ''
+                }
+                if (this.users[i].status) {
+                  let temp = this.users[i].duration;
+                  time.ss = temp % 60 < 10 ? '0' + temp % 60 : temp % 60 + '';
+                  temp = temp - (temp % 60);
+                  time.mm = (temp % 3600) / 60 < 10 ? '0' + (temp % 3600) / 60 : '' + (temp % 3600) / 60;
+                  temp = temp - (temp % 3600);
+                  time.hh = temp / 3600 < 10 ? '0' + temp / 3600 : '' + temp / 3600;
+                  this.timeArray.push(time);
+                }
+                else
+                  this.timeArray.push(null);
+              }
+            }
+            else
+              this.notificationsService.error("Oops", "Cannot Fetch Ranks Now !!!");
+            this.loading = false;
+          },
+          err => {
+            this.notificationsService.error("Oops", JSON.parse(err._body).error);
+          }
+        );
       },
       err => {
-        this.notificationsService.error("Oops",JSON.parse(err._body).error);
+        this.notificationsService.error("Oops", "Internal Server Error !!!");
       }
     );
   }
