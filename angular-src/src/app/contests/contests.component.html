@@ -2,6 +2,9 @@
 <button class="btn btn-sm btn-secondary" routerLink="/contests/add/new" *ngIf="isAdmin()"> <i class="fa fa-plus-circle"></i> Add New</button>
 </h3>
 <p *ngIf="loading">Loading Contests ...</p>
+<div class="spinner-border text-success" role="status" style="margin: 0 auto" *ngIf="loading">
+    <span class="sr-only">Loading...</span>
+</div>
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
