@@ -144,10 +144,8 @@ router.get('/register/:id',Auth.authenticateAll,(req,res)=>{
                 error: "Internal server error"
             });
         }else{
-            let users = quiz.users.filter(x=>{
-                return x!=req.user.id;
-            });
-            quiz.users = users;
+            if(quiz.users.indexOf(req.user.id) == -1)
+                quiz.users.push(req.user.id);
             quiz.save().then(newQuiz=>{
                 return res.status(200).json({
                     status:1,
@@ -172,6 +170,8 @@ router.get('/confirm/:id',Auth.authenticateAll,(req,res)=>{
                 error: "Internal server error"
             });
         }else{
+            console.log(req.user.id);
+            
             var userId = quiz.users.find(x=>{
                 return x==req.user.id;
             });

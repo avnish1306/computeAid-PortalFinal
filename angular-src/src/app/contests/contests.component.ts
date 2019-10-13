@@ -40,24 +40,8 @@ export class ContestsComponent implements OnInit {
     this.contestService.getAllContests().subscribe(
       data => {
         this.contests = data.contests;
-        this.fetchRegister(0);
-        for(let i=0;i<this.contests.length;i++){
-          var dt = new Date().getTime();
-          let st = new Date(this.contests[i].startTime).getTime() <= dt;
-          let end = new Date(this.contests[i].endTime).getTime() <= dt;
-          this.live.push({
-            "started": st,
-            "ended": end,
-            "enabled": st && !end
-          });
-          if(this.live[i].enabled)
-            this.stats.on++;
-          if(!this.live[i].started)
-            this.stats.up++;
-          if(this.live[i].ended)
-            this.stats.pa++;
-        }
-        this.loading = false;
+        if(this.contests.length > 0)
+          this.fetchRegister(0);
       },
       error => {
         this.notificationsService.create("", JSON.parse(error._body).error);
@@ -71,10 +55,27 @@ export class ContestsComponent implements OnInit {
       data => {
         this.contests[i].registered = data.isRegistered;
         this.contests[i].attempted = data.access;
-        if(i < this.contests.length)
+        if(i < this.contests.length-1)
           this.fetchRegister(i+1);
-        else
-          return;
+        else {
+          for(let i=0;i<this.contests.length;i++) {
+            var dt = new Date().getTime();
+            let st = new Date(this.contests[i].startTime).getTime() <= dt;
+            let end = new Date(this.contests[i].endTime).getTime() <= dt;
+            this.live.push({
+              "started": st,
+              "ended": end,
+              "enabled": st && !end
+            });
+            if(this.live[i].enabled)
+              this.stats.on++;
+            if(!this.live[i].started)
+              this.stats.up++;
+            if(this.live[i].ended)
+              this.stats.pa++;
+          }
+          this.loading = false;
+        }
       },error => {
         this.notificationsService.create("", JSON.parse(error._body).error);
       }
