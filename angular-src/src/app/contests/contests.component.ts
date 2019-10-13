@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { ContestService } from '../services/contest.service';
 import { NotificationsService } from 'angular2-notifications';
+import { LocalStorageService } from '../services/localStorage.service';
+import { from } from 'rxjs/observable/from';
 
 @Component({
   selector: 'app-contests',
@@ -14,11 +16,13 @@ export class ContestsComponent implements OnInit {
   constructor(private router: Router,
     private authService: AuthService,
     private contestService: ContestService,
-    private notificationsService: NotificationsService) { }
+    private notificationsService: NotificationsService,
+    private localStorageService : LocalStorageService) { }
 
     contests;
     live = [];
     id; rules; index: number = -1;
+    userid;
     info = {
       cname: "",
       details: "",
@@ -37,6 +41,7 @@ export class ContestsComponent implements OnInit {
 
   ngOnInit() {
     this.live = [];
+    this.userid = JSON.parse(localStorage.getItem('user')).id;
     this.contestService.getAllContests().subscribe(
       data => {
         this.contests = data.contests;
@@ -55,7 +60,7 @@ export class ContestsComponent implements OnInit {
       data => {
         this.contests[i].registered = data.isRegistered;
         this.contests[i].attempted = data.access;
-        this.contests[i].started = data.started;
+        this.contests[i].started = this.localStorageService.isStarted(this.userid,this.contests[i]._id);// data.started;
         if(i < this.contests.length-1)
           this.fetchRegister(i+1);
         else {

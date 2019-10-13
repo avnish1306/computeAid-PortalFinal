@@ -364,8 +364,9 @@ router.post("/submitSol",Auth.authenticateAll,(req,res,next)=>{
             })
         }
         if(result){
-            let diff=Math.round((result.endTime-currTime)/1000);
-            if(diff>-2){
+            let diff=Math.round((currTime-result.endTime)/1000);
+            //console.log(result.endTime," ",currTime," ",diff);
+            if(diff>2){
                 return res.status(200).json({
                     status:0,
                     msg:"Sorry Time Up"
@@ -389,7 +390,7 @@ router.post("/submitSol",Auth.authenticateAll,(req,res,next)=>{
                 if(fquiz){
                     if(fquiz.status==false){
 
-                        Que.find({'_id':req.body.quizId},(err,ques)=>{
+                        Que.find({'quizId':req.body.quizId},(err,ques)=>{
                             if(err){
                                 res.status(500).json({
                                     status:0,
@@ -399,18 +400,20 @@ router.post("/submitSol",Auth.authenticateAll,(req,res,next)=>{
                             }
                             const userSub=req.body.sol;
                             var score=0;
-                            //console.log(userSub,"     xxxxxxxxxxxxx   ",ques);
+                            console.log(userSub,"     xxxxxxxxxxxxx   ",ques);
                             for(var i=0;i<userSub.length;i++){
+                                console.log("usersub",userSub);
+
                                 if(userSub[i].ans.length>0){
                                     var que=findQuestionById(userSub[i].queId,ques);
-                                    //console.log("que ",que)
+                                    console.log("que ",que)
                                     if(que==null)
                                         continue;
                                     if(que.type==1){
                                         if(userSub[i].ans[0]==que.sol[0]){
                                             score=score+que.points;
                                         }else{
-                                            score=score-(que.points*que.negPoint);
+                                            score=score-que.negPoint;
                                         }
                                     }else{
                                         var correctAns=0,wrongAns=0;
@@ -424,7 +427,7 @@ router.post("/submitSol",Auth.authenticateAll,(req,res,next)=>{
                                         if(wrongAns==0){
                                             score=score+((que.points)/(que.sol.length))*correctAns;
                                         }else{
-                                            score=score-((que.points)*(que.negPoint));
+                                            score=score-(que.negPoint);
                                         }
                                     }
                                     userSub[i].status=2;

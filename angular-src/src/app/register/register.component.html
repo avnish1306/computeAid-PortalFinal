@@ -5,7 +5,7 @@
       <form [formGroup]="registerForm" (ngSubmit)="register()">
         <div class="card-body">
           <div class="form-group">
-            <input type="text" placeholder="Team Name" class="form-control rounded-0  form-control-lg" formControlName="name">
+            <input type="text" placeholder="User Name (Must be unique)" class="form-control rounded-0  form-control-lg" formControlName="name">
             <div *ngIf="!registerForm.get('name').valid && registerForm.get('name').touched" class="invalid-feedback">
               Team name should be minimun 3 characters long.
             </div>
@@ -48,11 +48,11 @@
           <div class="form-group">
               <h6>BugHunt Language</h6>
               <div class="form-control rounded-0  form-control-lg" class="row">
-              <label class="col-sm-3">
+              <label class="col-sm-2">
                   <input type="radio" ng-model="lang" value="C"  formControlName="lang">
                   C
                 </label>
-                <label class="col-sm-3">
+                <label class="col-sm-2">
                   <input type="radio" ng-model="lang" value="CPP" formControlName="lang">
                   C++   
                 </label>
@@ -64,6 +64,10 @@
                   <input type="radio" ng-model="lang" value="PYTHON"  formControlName="lang">
                   PYTHON
                 </label>
+                <label class="col-sm-2">
+                    <input type="radio" ng-model="lang" value="NONE"  formControlName="lang">
+                    NONE
+                  </label>
                 </div>
             <!--input type="text" placeholder="BugHunt Language" class="form-control rounded-0  form-control-lg" formControlName="college">
             <div *ngIf="!registerForm.get('college').valid && registerForm.get('college').touched" class="invalid-feedback">

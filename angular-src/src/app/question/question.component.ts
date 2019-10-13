@@ -64,6 +64,7 @@ export class QuestionComponent implements OnInit {
   userid;
   quizData;
   syncInterval;
+  quizEndTime;
 
   
   ngOnInit() {
@@ -94,9 +95,14 @@ export class QuestionComponent implements OnInit {
         this.quizData = data.quiz;
         this.startTime=new Date(data.startTime);
         this.currentTime=new Date(data.currTime);
+        this.quizEndTime = new Date(this.quizData.endTime)
         var diff=Math.round((this.currentTime-this.startTime)/1000);
         this.duration=data.quiz.duration*60;
+        let actDiff = Math.round((this.quizEndTime- this.currentTime)/1000);
         this.timeLeft=this.duration-diff;
+        if(actDiff<this.timeLeft){
+          this.timeLeft = actDiff;
+        }
         
         
 
@@ -153,7 +159,7 @@ export class QuestionComponent implements OnInit {
         this.notificationsService.create("", JSON.parse(error._body).error);
       }
     );
-    this.syncInterval = setInterval(this.syncDate,10000);
+    this.syncInterval = setInterval(this.syncDate,20000);
     // this.addQueForm = new FormGroup({
     //   'lang': new FormControl(null, [Validators.required]),
     //   'desc': new FormControl(null, [Validators.required, Validators.minLength(10)]),
@@ -170,7 +176,16 @@ export class QuestionComponent implements OnInit {
   syncDate = ()=>{
     this.quesService.getCurrDate().subscribe(
       data =>{
-        this.currentTime = data.currTime;
+        this.currentTime = new Date(data.currTime);
+        var diff=Math.round((this.currentTime-this.startTime)/1000);
+        this.duration=this.quizData.duration*60;
+        
+        this.quizEndTime = new Date(this.quizData.endTime)
+        let actDiff = Math.round((this.quizEndTime- this.currentTime)/1000);
+        this.timeLeft=this.duration-diff;
+        if(actDiff<this.timeLeft){
+          this.timeLeft = actDiff;
+        }
       },error=>{
         this.notificationsService.create("Sync Issue");
       }
@@ -316,7 +331,7 @@ export class QuestionComponent implements OnInit {
         if(result.status==1){
           this.notificationsService.success("", result.msg, {timeOut: 2000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
           if(que.type==1)
-            this.sol[this.index] = this.optForm.value.opt;
+            this.sol[this.index] = val;
           else{
             this.sol[this.index]=[];
             for(var j=0;j<sol.length;j++){

@@ -52,11 +52,11 @@ export class RegisterComponent implements OnInit {
     }
     this.authService.registerUser(user).subscribe(
       data => {
-        this.notificationsService.success("Congratulations!!", data.msg, {timeOut: 5000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
+        this.notificationsService.success("Congratulations!!", data.msg, {timeOut: 2000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
         this.router.navigate(['/login']);
       },
       error => {
-        this.notificationsService.warn("Oops!!", JSON.parse(error._body).error, {timeOut: 5000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
+        this.notificationsService.warn("Oops!!", JSON.parse(error._body).error, {timeOut: 2000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
       }
     );
   }

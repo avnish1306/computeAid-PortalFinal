@@ -40,11 +40,21 @@ export class LocalStorageService {
     if(localStorage.hasOwnProperty(userId)){
         let data = JSON.parse(localStorage.getItem(userId));
         if(data.hasOwnProperty(quizId)){
-            delete data.quizId;
+            delete data[quizId];
             localStorage.setItem( userId,JSON.stringify(data));
         }
 
         
+    }
+  }
+  isStarted(userId,quizId){
+    if(localStorage.hasOwnProperty(userId)){
+        let data = JSON.parse(localStorage.getItem(userId));
+        if(data.hasOwnProperty(quizId)){
+            return true;
+        }else{
+            return false;
+        }
     }
   }
   saveAns(userId,quizId,queId,sol){
