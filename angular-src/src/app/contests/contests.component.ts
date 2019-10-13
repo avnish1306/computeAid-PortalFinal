@@ -87,8 +87,10 @@ export class ContestsComponent implements OnInit {
     this.registering = true;
     this.contestService.register(this.contests[i]._id).subscribe(
       data => {
-        if(data.status == 1)
+        if(data.status == 1) {
           this.notificationsService.success("Done", "Registered Successfully !!!"); 
+          this.ngOnInit();
+        }
         else
           this.notificationsService.error("Oops", "Registration Failure !!!");        
       },error => {
