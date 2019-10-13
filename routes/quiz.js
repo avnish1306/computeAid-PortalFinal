@@ -183,15 +183,11 @@ router.get('/confirm/:id',Auth.authenticateAll,(req,res)=>{
                             error: "Internal server error"
                         });
                     }else{
-                        let fquiz = user.quizs.find(x=>{
-                            return x.quizId==req.params.id;
-                        });
-                        let access = false, isRegistered = false, started = false, status = 1;
-                        if(fquiz) {
-                            isRegistered = true;
-                            access = fquiz.status;
-                            started = fquiz.startTime != null;
-                        }
+                        let fquiz = user.quizs.find(x => {
+                            return x.quizId == req.params.id;
+                        });                                             
+                        let access = fquiz == undefined ? false : fquiz.status, isRegistered = quiz.users.indexOf(req.user.id) != -1;
+                        let started = fquiz == undefined ? false : fquiz.startTime != null, status = 1; 
                         return res.status(200).json({
                             status, access, isRegistered, started
                         });

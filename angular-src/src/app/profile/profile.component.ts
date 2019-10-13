@@ -17,8 +17,10 @@ export class ProfileComponent implements OnInit {
   userData;
   quizzes = [];
   loading: boolean = true;
+  centralDate: Date;
 
   ngOnInit() {
+    this.centralDate = new Date();
     this.authService.getUser(JSON.parse(localStorage.getItem('user')).id).subscribe(
       res => {
         this.userData = res.user;
@@ -37,7 +39,8 @@ export class ProfileComponent implements OnInit {
     this.contestService.getContest(this.userData.quizs[i].quizId).subscribe(
       quiz => {
         this.quizzes.push(quiz.data);
-        // this.quizzes[i].status );
+        let st = new Date(this.quizzes[i].startTime), end = new Date(this.quizzes[i].endTime);
+        this.quizzes[i].status = st > this.centralDate ? 'UPCOMING' : (st <= this.centralDate && end > this.centralDate ? 'ONGOING' : 'PAST');
         if(i < this.userData.quizs.length-1)
           this.fetchContests(i+1);
         else
@@ -46,7 +49,11 @@ export class ProfileComponent implements OnInit {
       err => {
         this.notificationsService.error("Oops !!!", JSON.parse(err._body).error);
       }
-    )
+    );
+  }  
+
+  isAdmin(){
+    return this.authService.isAdmin();
   }
 
 }
