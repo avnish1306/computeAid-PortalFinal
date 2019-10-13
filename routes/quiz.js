@@ -136,6 +136,56 @@ router.post('/edit',Auth.authenticateUser,(req,res,next)=>{
         }
     })
 });
+
+router.get('/getRankList/:quizId',Auth.authenticateAll,(req,res)=>{
+    let quizId = req.params.quizId;
+    Quiz.findOne({'_id':quizId},(err,quiz)=>{
+        if(err){
+            return res.status(500).json({
+                status:0,
+                error:"Internal Server Error"
+            })
+        }
+        if(quiz){
+            User.find()
+            .where('_id')
+            .in(quiz.users)
+            .exec(function (err, users) {
+                if(err){
+                    return res.status(500).json({
+                        status: 0,
+                        error: "Internal Server Error"
+                    });
+                }
+                let result=[];
+                users.forEach(x=>{
+                    let fquiz = x.quizs.find(x=>{
+                        return x.quizId==quizId;
+                    });
+                    result.push({
+                        'userId':x._id,
+                        'username':x.name,
+                        'email':x.email,
+                        'score':fquiz.score,
+                        'status':fquiz.score
+                    });
+                });
+                result.sort((a,b) => (a.score > b.score) ? 1 : ((b.last_nom > a.last_nom) ? -1 : 0)); 
+                return res.status(200).json({
+                    'status':1,
+                    'data':result
+                })
+
+            });
+        }else{
+            return res.status(200).json({
+                status:0,
+                msg:"Quiz Not Found"
+            })
+        }
+    })
+})
+
 router.get('/register/:id',Auth.authenticateAll,(req,res)=>{
     Quiz.findOne({'_id':req.params.id},(err,quiz)=>{
         if(err){
