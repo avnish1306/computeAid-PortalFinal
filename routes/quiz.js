@@ -167,7 +167,7 @@ router.get('/getRankList/:quizId',Auth.authenticateAll,(req,res)=>{
                         'username':x.name,
                         'email':x.email,
                         'score':fquiz.score,
-                        'status':fquiz.score
+                        'status':fquiz.status
                     });
                 });
                 result.sort((a,b) => (a.score > b.score) ? 1 : ((b.last_nom > a.last_nom) ? -1 : 0)); 

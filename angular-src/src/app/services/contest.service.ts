@@ -63,4 +63,11 @@ export class ContestService {
       return this.http.get(environment.apiUrl+'quiz/register/'+id, {headers: headers}).map(res => res.json());
   }
 
+  getRanks(id){
+      const headers = new Headers({
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+      });
+      return this.http.get(environment.apiUrl+'quiz/getRankList/'+id, {headers: headers}).map(res => res.json());
+  }
+
 }
