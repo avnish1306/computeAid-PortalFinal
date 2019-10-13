@@ -19,7 +19,6 @@ export class ContestsComponent implements OnInit {
     private notificationsService: NotificationsService,
     private localStorageService: LocalStorageService) { }
 
-<<<<<<< HEAD
     contests;
     live = [];
     id; rules; index: number = -1;
@@ -39,27 +38,6 @@ export class ContestsComponent implements OnInit {
     loading: boolean = true;
     agree: boolean = false;
     registering: boolean = false;
-=======
-  contests;
-  live = [];
-  id; rules; index: number = -1;
-  userid;
-  info = {
-    cname: "",
-    details: "",
-    startTime: "",
-    endTime: "",
-    duration: ""
-  };
-  stats = {
-    up: 0,
-    on: 0,
-    pa: 0
-  }
-  loading: boolean = true;
-  agree: boolean = false;
-  registering: boolean = false;
->>>>>>> f6337b286e8868cc129379ec07c1c88df9973517
 
   ngOnInit() {
     this.live = [];
