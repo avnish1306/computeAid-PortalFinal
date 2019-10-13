@@ -3,3 +3,26 @@
     display: inline-block;
     box-shadow: 10px 10px 5px #aaaaaa;
 }
+
+.alerter {
+    background-color: lightblue;
+    -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+    animation-name: example;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+  }
+  
+  /* Safari 4.0 - 8.0 */
+  @-webkit-keyframes example {
+    0% {background: lightblue;}
+    50% {background:white}
+    100% {background:lightblue}
+  }
+  
+  /* Standard syntax */
+  @keyframes example {
+    0% {background: lightblue;}
+    50% {background:white}
+    100% {background:lightblue}
+  }

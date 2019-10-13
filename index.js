@@ -10,9 +10,9 @@ dotenv.config();
 const app = express();
 console.log(process.env.SECRET);
 const port = process.env.PORT || 3000;
-
+const url = 'mongodb+srv://debanjan_01:deb12345@firstcluster-yy6sf.mongodb.net/computeaid?retryWrites=true&w=majority';
 // Connecting to the DB
-mongoose.connect('mongodb://avnish1306:Mummy12345@ds121163.mlab.com:21163/passport',{ useNewUrlParser: true });
+mongoose.connect(url,{ useNewUrlParser: true });
 //mongoose.connect({ useNewUrlParser: true },'mongodb://localhost/edge');
 
 mongoose.connection.on('open', () => {

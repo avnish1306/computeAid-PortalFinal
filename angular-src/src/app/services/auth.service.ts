@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
+import { Http, Headers } from "@angular/http";
 import { Router } from "@angular/router";
 import { tokenNotExpired } from "angular2-jwt";
 import 'rxjs/add/operator/map';
@@ -11,6 +11,13 @@ export class AuthService{
 
     constructor(private http: Http,
     private router: Router){
+    }
+
+    getUser(id) {
+        const headers = new Headers({
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        });
+        return this.http.get(environment.apiUrl + 'user/profile/'+id, {headers: headers}).map(res => res.json());
     }
 
     loginUser(data){

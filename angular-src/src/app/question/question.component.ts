@@ -224,7 +224,7 @@ export class QuestionComponent implements OnInit {
           if(hr==0&&min<5)
           this.timeFlag=2;
         }
-        if(!this.isAdmin()&&hr==0&&min==0&&scnd==1)
+        if(/*!this.isAdmin()&&*/hr==0&&min==0&&scnd==1)
             this.submitSol();
       } else {
         clearInterval(this.interval);

@@ -55,6 +55,7 @@ export class ContestsComponent implements OnInit {
       data => {
         this.contests[i].registered = data.isRegistered;
         this.contests[i].attempted = data.access;
+        this.contests[i].started = data.started;
         if(i < this.contests.length-1)
           this.fetchRegister(i+1);
         else {
@@ -67,11 +68,11 @@ export class ContestsComponent implements OnInit {
               "ended": end,
               "enabled": st && !end
             });
-            if(this.live[i].enabled)
+            if(st && !end)
               this.stats.on++;
-            if(!this.live[i].started)
+            if(!st)
               this.stats.up++;
-            if(this.live[i].ended)
+            if(end)
               this.stats.pa++;
           }
           this.loading = false;

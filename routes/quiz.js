@@ -186,26 +186,23 @@ router.get('/confirm/:id',Auth.authenticateAll,(req,res)=>{
                         let fquiz = user.quizs.find(x=>{
                             return x.quizId==req.params.id;
                         });
-                        if(fquiz&&fquiz.status==true){
-                            return res.status(200).json({
-                                status:0,
-                                access:true,
-                                isRegistered:true
-                            })
-                        }else{
-                            return res.status(200).json({
-                                status:1,
-                                access:false,
-                                isRegistered:true
-                            })
+                        let access = false, isRegistered = false, started = false, status = 1;
+                        if(fquiz) {
+                            isRegistered = true;
+                            access = fquiz.status;
+                            started = fquiz.startTime != null;
                         }
+                        return res.status(200).json({
+                            status, access, isRegistered, started
+                        });
                     }
                 })
             }else{
                 return res.status(200).json({
                     status:0,
                     access:false,
-                    isRegistered:false
+                    isRegistered:false,
+                    started: false
                 })
             }
         }

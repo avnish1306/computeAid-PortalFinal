@@ -1,1 +1,47 @@
 <h2>Profile:</h2>
+<div class="spinner-border text-success" role="status" style="margin: 0 auto" *ngIf="loading">
+    <span class="sr-only">Loading...</span>
+</div>
+<div class="row" *ngIf="!loading">
+    <div class="col-4">
+        <table class="table table-bordered table-sm table-striped">
+            <tbody>
+                <tr>
+                    <td>Name:</td>
+                    <td> {{userData.name}} </td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td> {{userData.email}} </td>
+                </tr>
+                <tr>
+                    <td>Contact:</td>
+                    <td> {{userData.contact}} </td>
+                </tr>
+                <tr>
+                    <td>College:</td>
+                    <td> {{userData.college}} </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-8">
+        Contests You Have Registered:
+        <div class="card" *ngFor="let quiz of userData.quizs; let i=index">
+            <div class="card-header">
+                <h5 class="card-title">{{quizzes[i].name}}</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text" [innerText]="quizzes[i].details"></p>
+                <p class="card-text">Contest Status: <span style="font-weight: bold"> {{quizzes[i].startTime ? (quizzes[i].endTime ? 'PAST' : 'ONGOING') : 'UPCOMING'}} </span></p>
+                <p class="card-text">Your Status: <span style="font-weight: bold"> {{quiz.startTime ? (quizzes[i].endTime ? 'Appeared' : 'Appearing') : 'Yet to Appear'}} </span></p>
+                <p class="card-text">Contest Score: <span style="font-weight: bold"> {{quiz.status ? quiz.score : 'Not Available'}} </span></p>
+            </div>
+            <div class="card-footer">
+                <button *ngIf="quizzes.hasScoreBoard" class="btn btn-sm btn-outline-success"
+                    routerLink="/contests/ranking/{{quizzes[i]._id}}">Rank List</button>
+                <small *ngIf="!quizzes.hasScoreBoard">Rank List Disabled</small>
+            </div>
+        </div>
+    </div>
+</div>
