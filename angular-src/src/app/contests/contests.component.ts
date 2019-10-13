@@ -28,7 +28,7 @@ export class ContestsComponent implements OnInit {
       details: "",
       startTime: "",
       endTime: "",
-      duration: ""
+      duration:{'hours':0,'minutes':0}
     };
     stats = {
       up: 0,
@@ -133,7 +133,8 @@ export class ContestsComponent implements OnInit {
     this.info.details = this.contests[i].details;
     this.info.startTime = this.contests[i].startTime;
     this.info.endTime = this.contests[i].endTime;
-    this.info.duration = this.contests[i].duration;
+    this.info.duration.hours =(this.contests[i].duration)/60;
+    this.info.duration.minutes=(this.contests[i].duration)%60;
   }
 
   openRules(i: number) {

@@ -162,15 +162,20 @@ router.get('/getRankList/:quizId',Auth.authenticateAll,(req,res)=>{
                     let fquiz = x.quizs.find(x=>{
                         return x.quizId==quizId;
                     });
+                    let startTime = new Date(fquiz.startTime);
+                    let endTime = new Date(fquiz.endTime);
+                    let duration= Math.round((endTime-startTime)/1000);
+                    duration= duration*60;
                     result.push({
                         'userId':x._id,
                         'username':x.name,
                         'email':x.email,
                         'score':fquiz.score,
-                        'status':fquiz.score
+                        'status':fquiz.status,
+                        'duration':duration
                     });
                 });
-                result.sort((a,b) => (a.score > b.score) ? 1 : ((b.last_nom > a.last_nom) ? -1 : 0)); 
+                result.sort((a,b) => (a.score < b.score) ? 1 : ((b.duration < a.duration) ? 0 : -1)); 
                 return res.status(200).json({
                     'status':1,
                     'data':result

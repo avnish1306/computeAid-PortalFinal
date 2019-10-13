@@ -151,7 +151,7 @@
       <div class="modal-body">
         Enables At: {{info.startTime | date:"dd/MM/yyyy hh:mm a"}} <br>
         Disables At: {{info.endTime | date:"dd/MM/yyyy hh:mm a"}} <br>
-        Duration: {{info.duration / 60}} hours {{ info.duration % 60 }} minutes <br>
+        Duration: {{info.duration.hours}} hours {{ info.duration.minutes }} minutes <br>
         More: {{info.details}}
       </div>
       <div class="modal-footer">
@@ -167,7 +167,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content modal-lg">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel3"><span>Rules for {{cid}} <strong>(Please go through all of the
+        <h5 class="modal-title" id="exampleModalLabel3"><span>Rules for {{id}} <strong>(Please go through all of the
               rules carefully)</strong></span></h5>
       </div>
       <div class="modal-body">
