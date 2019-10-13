@@ -19,7 +19,9 @@ export class ContestRankingsComponent implements OnInit {
   cid;
   cname;
   loading: boolean = true;
-  timeArray = [];
+  aTimeArray = [];
+  appearedUsers = [];
+  notAppearedUsers = [];
 
   ngOnInit() {
     this.cid = this.route.snapshot.paramMap.get('cid');
@@ -43,10 +45,11 @@ export class ContestRankingsComponent implements OnInit {
                   time.mm = (temp % 3600) / 60 < 10 ? '0' + (temp % 3600) / 60 : '' + (temp % 3600) / 60;
                   temp = temp - (temp % 3600);
                   time.hh = temp / 3600 < 10 ? '0' + temp / 3600 : '' + temp / 3600;
-                  this.timeArray.push(time);
+                  this.aTimeArray.push(time);
+                  this.appearedUsers.push(this.users[i]);
                 }
-                else
-                  this.timeArray.push(null);
+                else 
+                  this.notAppearedUsers.push(this.users[i]);
               }
             }
             else

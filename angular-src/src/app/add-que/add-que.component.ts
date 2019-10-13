@@ -76,7 +76,7 @@ export class AddQueComponent implements OnInit {
           continue;
         this.sol[i] = false;
       }
-    console.log(this.sol);
+    // console.log(this.sol);
   }
 
   bindOpt(e: any, i: number) {

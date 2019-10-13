@@ -14,24 +14,20 @@
   </thead>
   <tbody>
       <tr><td colspan="6">Already appeared</td></tr>
-      <ng-container *ngFor="let user of users; let i=index">
-      <tr *ngIf="user.status">
+      <tr *ngFor="let user of appearedUsers; let i=index">
         <td> {{i+1}} </td>
         <td> {{user.username}} </td>
         <td> {{user.email}} </td>
         <td> {{user.score}} </td>
-        <td> {{timeArray[i].hh+':'+timeArray[i].mm+":"+timeArray[i].ss}} </td>
+        <td> {{aTimeArray[i].hh+':'+aTimeArray[i].mm+":"+aTimeArray[i].ss}} </td>
       </tr>
-      </ng-container>
       <tr><td colspan="6">Appearing or Yet to Appear</td></tr>
-      <ng-container *ngFor="let user of users; let i=index">
-      <tr *ngIf="!user.status">
+      <tr *ngFor="let user of notAppearedUsers; let i=index">
         <td> {{i+1}} </td>
         <td> {{user.username}} </td>
         <td> {{user.email}} </td>
         <td> {{user.score}} </td>
         <td> Not Appeared </td>
       </tr>
-      </ng-container>
   </tbody>
 </table>
