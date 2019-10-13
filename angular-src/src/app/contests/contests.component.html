@@ -5,7 +5,6 @@
 <div class="spinner-border text-success" role="status" style="margin: 0 auto" *ngIf="loading">
     <span class="sr-only">Loading...</span>
 </div>
-
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
@@ -20,14 +19,14 @@
       aria-selected="false">PAST CONTESTS</a>
   </li>
 </ul>
-<div class="tab-content" id="myTabContent">
+<div class="tab-content" id="myTabContent" *ngIf="!loading">
 
 <!-- ONGOING Contests -->
 
   <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
     <ng-container *ngFor="let contest of contests; let i=index">        
       <div class="col-xl-4" style="display: inline-block; width: 58vh" *ngIf="live[i].enabled">
-          <div class="tile" [class.alerter]="contest.started">
+          <div class="tile">
               <div class="wrapper">
                   <div class="header">{{contest.name}}</div>
                   <div class="banner-img">
@@ -46,7 +45,7 @@
                   </div>
                   <div class="footer" style="text-align: center">
                       <a class="Cbtn Cbtn-primary" data-toggle="modal" data-target="#rulesModel" (click)="openRules(i)" *ngIf="contest.registered && !contest.attempted && !contest.started"> START NOW </a>
-                      <a class="Cbtn Cbtn-primary" routerLink="/ques/contests/{{contest._id}}" *ngIf="contest.started"> GET INTO IT </a>                      
+                      <a class="Cbtn Cbtn-danger" [class.alerter]="contest.started" routerLink="/ques/contests/{{contest._id}}" *ngIf="contest.started"> GET INTO IT </a>                      
                       <a class="Cbtn Cbtn-primary" (click)="register(i)" *ngIf="!contest.registered"> REGISTER </a>
                       <a class="Cbtn Cbtn-success" (click)="rankings(i)" *ngIf="(contest.hasScoreBoard && contest.registered) || isAdmin()"> Rank List </a>
                       <a class="Cbtn Cbtn-warning" (click)="stageInfo(i)" data-toggle="modal" data-target="#infoModel">Info</a>

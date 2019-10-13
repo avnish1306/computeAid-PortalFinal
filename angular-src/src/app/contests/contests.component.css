@@ -143,28 +143,28 @@ div.footer a.Cbtn-danger:hover {
 }
 
 .alerter {
-	background-color: lightblue;
+	background-color: red;
 	-webkit-animation-name: example;
 	/* Safari 4.0 - 8.0 */
-	-webkit-animation-duration: 4s;
+	-webkit-animation-duration: 2s;
 	/* Safari 4.0 - 8.0 */
 	animation-name: example;
-	animation-duration: 4s;
+	animation-duration: 2s;
 	animation-iteration-count: infinite;
 }
 
 /* Safari 4.0 - 8.0 */
 
 @-webkit-keyframes example {
-	0% { background: lightblue	}
-	50% { background: white }
-	100% { background: lightblue }
+	0% { background: red	}
+	50% { background: blue }
+	100% { background: red }
 }
 
 /* Standard syntax */
 
 @keyframes example {
-	0% { background: lightblue }
-	50% { background: white }
-	100% { background: lightblue }
+	0% { background: red }
+	50% { background: blue }
+	100% { background: red }
 }
