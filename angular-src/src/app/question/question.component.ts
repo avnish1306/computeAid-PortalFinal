@@ -440,13 +440,18 @@ export class QuestionComponent implements OnInit {
       this.submitSol();
   }
   submitSol(){
-    this.quesService.submitSol().subscribe(
+    this.quesService.submitSol(this.userid,this.cid).subscribe(
       data => {
+        if(data.status==1){
         clearInterval(this.interval);
         clearInterval(this.syncInterval);
         this.notificationsService.success("Success", data.msg, {timeOut: 5000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
         this.ngOnInit();
+        this.localStorageService.endQuiz(this.userid,this.cid);
         this.router.navigate(['/welcome']);
+        }else{
+          this.notificationsService.error("Failed to submit", data.msg, {timeOut: 5000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});
+        }
       },
       error => {
         this.notificationsService.error("Oops!!", JSON.parse(error._body).error, {timeOut: 5000, showProgressBar: true, pauseOnHover: true, clickToClose: true, animate: 'fromRight'});

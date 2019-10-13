@@ -168,8 +168,9 @@ const userSchema = mongoose.Schema({
             type:Number,
             default:1
         },
-        lang:{
-            type:String
+        quizId:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Quiz'
         }
     }],
     flawSubmission:[{
