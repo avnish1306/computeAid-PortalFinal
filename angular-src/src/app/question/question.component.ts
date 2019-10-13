@@ -86,10 +86,6 @@ export class QuestionComponent implements OnInit {
     )
     this.userid = JSON.parse(localStorage.getItem('user')).id;
     this.localStorageService.startQuiz(this.userid,this.cid);
-    this.quizData = JSON.parse(localStorage.getItem('temp3'));
-    localStorage.removeItem('temp3');
-    // this.quizData = JSON.parse(localStorage.getItem('temp3'));
-    // localStorage.removeItem('temp3');
     this.quesService.getAllQues(this.cid).subscribe(
       data => {
         this.quizData = data.quiz;

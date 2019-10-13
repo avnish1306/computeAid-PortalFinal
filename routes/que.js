@@ -22,6 +22,8 @@ router.post('/add',Auth.authenticateAll,  (req, res, next) => {
 
     const errors = req.validationErrors();
 
+    console.log(req.body);
+    
     if(!errors){
         const que = new Que({
             lang: req.body.lang,

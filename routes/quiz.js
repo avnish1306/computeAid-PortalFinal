@@ -171,8 +171,12 @@ router.get('/getRankList/:quizId',Auth.authenticateAll,(req,res)=>{
                         'username':x.name,
                         'email':x.email,
                         'score':fquiz.score,
+<<<<<<< HEAD
                         'status':fquiz.status,
                         'duration':duration
+=======
+                        'status':fquiz.status
+>>>>>>> f6337b286e8868cc129379ec07c1c88df9973517
                     });
                 });
                 result.sort((a,b) => (a.score < b.score) ? 1 : ((b.duration < a.duration) ? 0 : -1)); 
