@@ -4,7 +4,6 @@
     box-shadow: 10px 10px 5px #aaaaaa;
 }
 
-<<<<<<< HEAD
 .alerter {
     background-color: lightblue;
     -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
@@ -27,7 +26,6 @@
     50% {background:white}
     100% {background:lightblue}
   }
-=======
 
 .tile{
 	width: 100%;
@@ -143,4 +141,3 @@ div.footer a.Cbtn-danger{
 div.footer a.Cbtn-danger:hover{
 	background-color: #fd7676;
 }
->>>>>>> 138bd99313f60e59f3e46b35bcf52ed0f2e2ebea
