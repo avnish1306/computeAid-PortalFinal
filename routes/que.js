@@ -22,7 +22,7 @@ router.post('/add',Auth.authenticateAll,  (req, res, next) => {
 
     const errors = req.validationErrors();
 
-    console.log(req.body);
+    //console.log(req.body);
     
     if(!errors){
         const que = new Que({
@@ -150,7 +150,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
         .then(ques => {
             Quiz.findById(quizId,(err,quiz)=>{
                 if(err){
-                    console.log("ERROR >> QUIZ");
+                    //console.log("ERROR >> QUIZ");
                     return res.status(500).json({
                         status: 0,
                         msg:"Fail to fetch",
@@ -178,7 +178,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
             
         })
         .catch(err => {
-            console.log("ERROR >> NO QUESTION");
+            //console.log("ERROR >> NO QUESTION");
             return res.status(500).json({
                 status: 0,
                 error: "Internal server error"
@@ -188,7 +188,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
     
     User.findOne({name:req.user.name},(err,user)=>{
         if(err){
-            console.log("ERROR >> USER");
+            //console.log("ERROR >> USER");
            return res.status(500).json({
                 status: 0,
                 error: "Internal server error"
@@ -198,7 +198,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
         if(user){
         Quiz.findById(quizId,(err,quiz)=>{
             if(err){
-                console.log("ERROR >> QUIZ");
+                //console.log("ERROR >> QUIZ");
                 return res.status(500).json({
                     status: 0,
                     msg:"Fail to fetch",
@@ -206,7 +206,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                 });
             }
             else if(!quiz) {
-                console.log("ERROR >> NO QUIZ FOUND");
+                //console.log("ERROR >> NO QUIZ FOUND");
                 return res.status(500).json({
                     status: 0,
                     msg:"No such quiz found",
@@ -269,7 +269,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                             currTime:new Date()
                         });
                     }).catch(err => {
-                        console.log("ERROR >> CANNOT SAVE USER");
+                        //console.log("ERROR >> CANNOT SAVE USER");
                         res.status(500).json({
                             status: 0,
                             error: "Internal server error"
@@ -278,7 +278,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
                     
                 })
                 .catch(err => {
-                    console.log("ERROR >> NO QUESTION");
+                    //console.log("ERROR >> NO QUESTION");
                     res.status(500).json({
                         status: 0,
                         error: "Internal server error"
@@ -288,7 +288,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
         });
         
     }else{
-        console.log("ERROR >> NO USER");
+        //console.log("ERROR >> NO USER");
         return res.status(500).json({
             status: 0,
             error: "Internal server error"
@@ -310,7 +310,7 @@ router.get('/viewQues/:id', Auth.authenticateUser, (req, res, next) => {
         });
     })
     .catch(err => {
-        console.log(err);
+        //console.log(err);
         res.status(500).json({
             status: 0,
             error: "Internal Server Error"
@@ -400,13 +400,13 @@ router.post("/submitSol",Auth.authenticateAll,(req,res,next)=>{
                             }
                             const userSub=req.body.sol;
                             var score=0;
-                            console.log(userSub,"     xxxxxxxxxxxxx   ",ques);
+                            //console.log(userSub,"     xxxxxxxxxxxxx   ",ques);
                             for(var i=0;i<userSub.length;i++){
-                                console.log("usersub",userSub);
+                                //console.log("usersub",userSub);
 
                                 if(userSub[i].ans.length>0){
                                     var que=findQuestionById(userSub[i].queId,ques);
-                                    console.log("que ",que)
+                                    //console.log("que ",que)
                                     if(que==null)
                                         continue;
                                     if(que.type==1){

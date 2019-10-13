@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 console.log(process.env.SECRET);
 const port = process.env.PORT;
-const url = process.env.URL
+const url = process.env.URL;
 // Connecting to the DB
 mongoose.connect(url,{ useNewUrlParser: true });
 

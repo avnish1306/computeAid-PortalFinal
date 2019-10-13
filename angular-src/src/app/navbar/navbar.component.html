@@ -22,9 +22,7 @@
           </li>
         </ng-template>
         <ng-template [ngIf]="isLoggedIn()">
-          <li class="nav-item">
-              <a class="nav-link" routerLink="/aboutUs" routerLinkActive="active"><i class="fa fa-help"></i> About Us</a>
-          </li>
+          
           <!-- <li class="nav-item">
             <a class="nav-link" routerLink="/chals" routerLinkActive="active"><i class="fas fa-list-ol"></i> CryptoQuest</a>
           </li>
@@ -53,6 +51,9 @@
               <a class="dropdown-item" routerLink="/profile" routerLinkActive="active"><i class="fas fa-user"></i> Profile</a>
               <a class="dropdown-item" href="#" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" routerLink="/aboutUs" routerLinkActive="active"><i class="fa fa-help"></i> About Us</a>
           </li>
         </ng-template>
       </ul>
