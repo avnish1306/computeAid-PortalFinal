@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from "@angular/http";
 import 'rxjs/add/operator/map'
+import { LocalStorageService } from './localStorage.service';
 
 import { environment } from '../../environments/environment';
 
@@ -8,7 +9,8 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class QuesService {
 
-  constructor(private http: Http){
+  constructor(private http: Http,
+            private localStorageService: LocalStorageService){
   }
 
   getAllQues(quizId){
@@ -73,11 +75,12 @@ export class QuesService {
       return this.http.delete(environment.apiUrl+'ques/'+id, {headers: headers}).map(res => res.json());
   }
 
-  submitSol(){
+  submitSol(userId,quizId){
+    let sol = this.localStorageService.getSubmissions(userId,quizId);
     const headers = new Headers({
         'Authorization': 'Bearer ' + localStorage.getItem('token')
     });
-    return this.http.get(environment.apiUrl+'ques/submitSol', {headers: headers}).map(res => res.json());
+    return this.http.post(environment.apiUrl+'ques/submitSol',{'quizId':quizId,'sol':sol}, {headers: headers}).map(res => res.json());
   }
 
   getRanklist(){

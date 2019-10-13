@@ -307,90 +307,124 @@ router.get('/viewSol/:id',Auth.authenticateAll,(req,res,next)=>{
     });
 });
 
-router.get("/submitSol",Auth.authenticateAll,(req,res,next)=>{
-    User.findOne({'name':req.user.name},(err,user)=>{
+router.post("/submitSol",Auth.authenticateAll,(req,res,next)=>{
+    let currTime=  new Date();
+    Quiz.findOne({'_id':req.body.quizId},(err,result)=>{
         if(err){
-            res.status(500).json({
+            return res.status(500).json({
                 status:0,
                 error:err,
                 msg:"Not Submitted"
             })
         }
-        var flag=false;
-        //if(user.contests.bughunt.status)
-        if(!user.contests.bughunt.status){
-            Que.find({'lang':req.user.lang},(err,ques)=>{
+        if(quiz){
+            let diff=Math.round((quiz.endTime-currTime)/1000);
+            if(diff>-2){
+                return res.status(200).json({
+                    status:0,
+                    msg:"Sorry Time Up"
+                });
+            }else{
+            User.findOne({'name':req.user.name},(err,user)=>{
                 if(err){
-                    res.status(500).json({
+                    return res.status(500).json({
                         status:0,
                         error:err,
                         msg:"Not Submitted"
                     })
                 }
-                const userSub=user.submission.filter(sub=>{
-                    return sub.lang=req.user.lang;
-                });
-                var score=0;
-                //console.log(userSub,"     xxxxxxxxxxxxx   ",ques);
-                for(var i=0;i<userSub.length;i++){
-                    if(userSub[i].ans.length>0){
-                        var que=findQuestionById(userSub[i].queId,ques);
-                        //console.log("que ",que)
-                        if(que==null)
-                            continue;
-                        if(que.type==1){
-                            if(userSub[i].ans[0]==que.sol[0]){
-                                score=score+que.points;
-                            }else{
-                                score=score-(que.points*0.25);
+                var flag=false;
+                let fquiz = user.quizs.find(x=>{
+                    return x.quizId==req.body.quizId;
+                })
+                let filteredQuiz = user.quizs.filter(x=>{
+                    return x.quizId!=req.body.quizId;
+                })
+                if(fquiz){
+                    if(fquiz.status==false){
+
+                        Que.find({'_id':req.body.quizId},(err,ques)=>{
+                            if(err){
+                                res.status(500).json({
+                                    status:0,
+                                    error:err,
+                                    msg:"Not Submitted"
+                                })
                             }
-                        }else{
-                            var correctAns=0,wrongAns=0;
-                            for(var j=0;j<userSub[i].ans.length;j++){
-                                if(findAns(userSub[i].ans[j],que.sol)){
-                                    correctAns+=1;
-                                }else{
-                                    wrongAns+=1;
+                            const userSub=req.body.sol;
+                            var score=0;
+                            //console.log(userSub,"     xxxxxxxxxxxxx   ",ques);
+                            for(var i=0;i<userSub.length;i++){
+                                if(userSub[i].ans.length>0){
+                                    var que=findQuestionById(userSub[i].queId,ques);
+                                    //console.log("que ",que)
+                                    if(que==null)
+                                        continue;
+                                    if(que.type==1){
+                                        if(userSub[i].ans[0]==que.sol[0]){
+                                            score=score+que.points;
+                                        }else{
+                                            score=score-(que.points*que.negPoint);
+                                        }
+                                    }else{
+                                        var correctAns=0,wrongAns=0;
+                                        for(var j=0;j<userSub[i].ans.length;j++){
+                                            if(findAns(userSub[i].ans[j],que.sol)){
+                                                correctAns+=1;
+                                            }else{
+                                                wrongAns+=1;
+                                            }
+                                        }
+                                        if(wrongAns==0){
+                                            score=score+((que.points)/(que.sol.length))*correctAns;
+                                        }else{
+                                            score=score-((que.points)*(que.negPoint));
+                                        }
+                                    }
+                                    userSub[i].status=2;
                                 }
                             }
-                            if(wrongAns==0){
-                                score=score+((que.points)/(que.sol.length))*correctAns;
-                            }else{
-                                score=score-(que.points)*0.25;
-                            }
-                        }
+                            let currTime=  new Date();
+                            user.submission.concat(userSub);
+                            fquiz.status=true;
+                            fquiz.endTime=currTime;
+                            fquiz.score=score;
+                            filteredQuiz.push(fquiz);
+                            user.quizs = filteredQuiz;
+                            user.save().then(newUser=>{
+                                res.status(201).json({
+                                    status:1,
+                                    msg:"Submitted"
+                                })
+                            }).catch(err=>{
+                                res.status(201).json({
+                                    status:0,
+                                    msg:"Not Submitted",
+                                    error:err
+                                })
+                            });
+                            
+                        })
+
+                    }else{
+                        return res.status(200).json({
+                            status:0,
+                            msg:"Not Submitted, Already taken the contest"
+                        })
                     }
-                }
-                
-                if(req.user.lang=="webd"){
-                    user.contests.webd.score=score;
-                    user.contests.webd.status=true;
-                    user.contests.webd.endTime=new Date();
+
                 }else{
-                    user.contests.bughunt.score=score;
-                    user.contests.bughunt.status=true;
-                    user.contests.bughunt.endTime=new Date();
-                }
-                
-                user.save().then(newUser=>{
-                    res.status(201).json({
-                        status:1,
-                        msg:"Submitted"
-                    })
-                }).catch(err=>{
-                    res.status(201).json({
+                    return res.status(200).json({
                         status:0,
-                        msg:"Not Submitted",
-                        error:err
+                        msg:"Not Submitted, User not registered for this contest"
                     })
-                });
-                
+                }
             })
+        }
         }else{
-            res.status(201).json({
+            return res.status(200).json({
                 status:0,
-                msg:"Not Submitted",
-                error:err
+                msg:"Quiz not exist"
             })
         }
     })
