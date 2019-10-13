@@ -317,8 +317,8 @@ router.post("/submitSol",Auth.authenticateAll,(req,res,next)=>{
                 msg:"Not Submitted"
             })
         }
-        if(quiz){
-            let diff=Math.round((quiz.endTime-currTime)/1000);
+        if(result){
+            let diff=Math.round((result.endTime-currTime)/1000);
             if(diff>-2){
                 return res.status(200).json({
                     status:0,
