@@ -308,7 +308,7 @@ router.get('/',Auth.authenticateAll, (req, res) => {
 });
 
 router.get('/:id', Auth.authenticateUser, (req, res, next) => {
-    Quiz.findById({_id: req.params.id})
+    Quiz.findOne({'_id': req.params.id})
     .then(result => {
         res.status(200).json({
             status: 1,
