@@ -115,7 +115,7 @@ router.get('/renew',(req,res)=>{
 //Auth.authenticateAll,
 router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
     let quizId = req.params.quizId;
-    if(req.user.access==1){ // if admin
+    if(req.user.access==121){ // if admin
         Que.find({'quizId':quizId}, 'desc opt points author type negPoint')
         .then(ques => {
             Quiz.findById(quizId,(err,quiz)=>{

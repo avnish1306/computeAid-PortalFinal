@@ -45,12 +45,12 @@ module.exports = {
     authenticateAdmin: function(req, res, next){
         console.log(" admin in ");
         try {
-            console.log(req.headers);
+            //console.log(req.headers);
             const token = req.headers.authorization.split(' ')[1];
-            console.log("token                 ",token);
+            //console.log("token                 ",token);
             const decoded = jwt.verify(token, process.env.SECRET);
-            console.log(" decoded              ",decoded);
-            if(decoded.access === 1){
+           // console.log(" decoded              ",decoded);
+            if(decoded.access === 121){
                 //console.log(" access in ",req.user);
                 req.user = decoded;
                 //console.log(" req.user",req.user);

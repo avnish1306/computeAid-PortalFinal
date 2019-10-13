@@ -53,9 +53,9 @@ export class AddQueComponent implements OnInit {
   initialize() {
 
     this.addQueForm = new FormGroup({
-      'lang': new FormControl(this.quesData.editing ? this.quesData.content.lang : null, [Validators.required]),
+      'lang': new FormControl(this.quesData.editing ? this.quesData.content.lang : null,null),
       'desc': new FormControl(this.quesData.editing ? this.quesData.content.desc : null, [Validators.required]),
-      'type': new FormControl(this.quesData.editing ? this.quesData.content.type : null, [Validators.required]),
+      'type': new FormControl(this.quesData.editing ? this.quesData.content.type : null, null),
       'points': new FormControl({ value: this.quesData.editing ? this.quesData.content.points : null, disabled: this.data.random.isRandom }, [Validators.required]),
       'negPoint': new FormControl({ value: this.quesData.editing ? this.quesData.content.negPoint : null, disabled: this.data.random.isRandom }, [Validators.required]),
       'author': new FormControl(this.quesData.editing ? this.quesData.content.author : null, [Validators.required]),
@@ -85,7 +85,7 @@ export class AddQueComponent implements OnInit {
 
   addQue(navigate: boolean) {
     const que = {
-      lang: this.addQueForm.value.lang,
+      lang: this.addQueForm.value.lang||'NONE',
       desc: this.addQueForm.value.desc,
       type: Number(this.addQueForm.value.type),
       points: this.quesData.editing ? this.quesData.content.points : (this.data.random.isRandom ? (this.type == 1 ? this.data.random.singleChoice.points : this.data.random.multipleChoice.points) : this.addQueForm.value.points),

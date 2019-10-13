@@ -42,7 +42,7 @@ export class AuthService{
     }
 
     isAdmin(){
-        return (JSON.parse(localStorage.getItem("user")).access === 1)||false;
+        return (JSON.parse(localStorage.getItem("user")).access === 121)||false;
     }
 
     isLoggedIn(){

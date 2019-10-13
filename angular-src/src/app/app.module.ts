@@ -42,6 +42,7 @@ import { AddContestComponent } from './add-contest/add-contest.component';
 import { ContestsComponent } from './contests/contests.component';
 import { ContestService } from './services/contest.service';
 import { ContestRankingsComponent } from './contest-rankings/contest-rankings.component';
+import { AboutUsComponent } from './about-us/about-us.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -59,6 +60,7 @@ const appRoutes: Routes = [
   { path: 'editor/:qCode', component: EditorComponent, canActivate: [AuthGuard] },
   { path: 'contests/add/:cid', component: AddContestComponent, canActivate: [AuthGuard, AdminAuthGuard] },
   { path: 'contests', component: ContestsComponent, canActivate: [AuthGuard] },
+  { path: 'aboutUs', component: AboutUsComponent },
   { path: 'contests/ranking/:cid', component: ContestRankingsComponent, canActivate: [AuthGuard] },
 
 ];
@@ -82,7 +84,8 @@ const appRoutes: Routes = [
     WelcomepageComponent,
     AddContestComponent,
     ContestsComponent,
-    ContestRankingsComponent
+    ContestRankingsComponent,
+    AboutUsComponent
   ],
   imports: [
     BrowserModule,

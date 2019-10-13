@@ -31,7 +31,7 @@ export class AppComponent implements OnInit{
           value: 100,
           density: {
             enable: true,
-            value_area: 100
+            value_area: 400
           }
         },
         color: {
