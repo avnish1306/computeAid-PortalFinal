@@ -36,7 +36,7 @@
                 <div *ngIf="!addContestForm.get('endTime').valid && addContestForm.get('endTime').touched" class="invalid-feedback">
                   End Time is required.
                 </div>
-                <small>Participant can start the test before this time. Participant will get full duration.</small>
+                <small>Participant can start the test before this time. Participant will get remaining duration.</small>
               </div>
               <div class="form-group">
                 <input type="number" class="form-control rounded-0 form-control-lg" placeholder="Duration (Minutes)" formControlName="duration">
