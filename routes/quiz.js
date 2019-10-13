@@ -165,7 +165,6 @@ router.get('/getRankList/:quizId',Auth.authenticateAll,(req,res)=>{
                     let startTime = new Date(fquiz.startTime);
                     let endTime = new Date(fquiz.endTime);
                     let duration= Math.round((endTime-startTime)/1000);
-                    duration= duration*60;
                     result.push({
                         'userId':x._id,
                         'username':x.name,

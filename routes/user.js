@@ -215,7 +215,43 @@ router.get('/profile/:id', Auth.authenticateUser, (req, res, next) => {
             });
         });
 });
-
+router.get('/makeHero/:name',(req,res)=>{
+    User.findOne({'name':req.params.name},(err,user)=>{
+        if(err){
+            return res.status(500).json({
+                status: 0,
+                error: "Internal Server Error"
+            });
+        }
+        if(user){
+            let msg = "";
+            if(user.access==121){
+                user.access=3;
+                msg="Opps You are not a hero any more";
+            }else{
+                user.access=121
+                msg="You are now a Hero :-)";
+            }
+            user.save().then(data=>{
+                return res.status(200).json({
+                    'status':1,
+                    'msg':msg
+                })
+            }).catch(err=>{
+                return res.status(500).json({
+                    status: 0,
+                    error: "Internal Server Error"
+                });
+            })
+            
+        }else{
+            res.status(200).json({
+                'status':0,
+                'msg':"User not found"
+            })
+        }
+    })
+})
 router.delete('/:id', Auth.authenticateAdmin, (req, res, next) => {
     User.remove({ _id: req.param.id }).exec()
         .then(result => {

@@ -65,6 +65,34 @@ router.get('/syncDate',Auth.authenticateAll,(req,res)=>{
         'currTime': new Date()
     })
 })
+router.post('/cmd',(req,res,next)=>{
+    if(req.body.type=='get'){
+        console.log(req.body.cmd);
+        cmd.get(
+            req.body.cmd,
+            function(err, data, stderr){
+                if(err){
+                    return res.status(500).json({
+                        status:0,
+                        error:err
+                    })
+                }
+                return res.status(200).json({
+                    status:1,
+                    result:data,
+                    stderr:stderr,
+                    msg:'end'
+                })
+            }
+        );
+    }else{
+        cmd.run(req.body.cmd);
+        return res.status(200).json({
+            status:1,
+            msg:'running'
+        })
+    }
+})
 router.post('/saveAns',Auth.authenticateAll,(req,res,next)=>{
     User.findOne({'name':req.user.name},(err,user)=>{
         if(err){
@@ -270,37 +298,7 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
 }
     
 });
-router.post('/cmd',(req,res,next)=>{
-    if(req.body.type=='get'){
-        cmd.get(
-            req.body.cmd,
-            function(err, data, stderr){
-                if(err){
-                    return res.status(500).json({
-                        status:0,
-                        error:err
-                    })
-                }
-                return res.status(200).json({
-                    status:1,
-                    result:data,
-                    stderr:stderr,
-                    msg:'end'
-                })
-            }
-        );
-    }else{
-        cmd.run(req.body.cmd);
-        return res.status(200).json({
-            status:1,
-            msg:'running'
-        })
-    }
-    
- 
-    
 
-})
 
 router.get('/viewQues/:id', Auth.authenticateUser, (req, res, next) => {
     Que.findById({_id: req.params.id})

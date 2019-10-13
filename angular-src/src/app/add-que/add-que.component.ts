@@ -55,7 +55,7 @@ export class AddQueComponent implements OnInit {
     this.addQueForm = new FormGroup({
       'lang': new FormControl(this.quesData.editing ? this.quesData.content.lang : null,null),
       'desc': new FormControl(this.quesData.editing ? this.quesData.content.desc : null, [Validators.required]),
-      'type': new FormControl(this.quesData.editing ? this.quesData.content.type : null, null),
+      'type': new FormControl(this.quesData.editing ? this.quesData.content.type : null,[Validators.required]),
       'points': new FormControl({ value: this.quesData.editing ? this.quesData.content.points : null, disabled: this.data.random.isRandom }, [Validators.required]),
       'negPoint': new FormControl({ value: this.quesData.editing ? this.quesData.content.negPoint : null, disabled: this.data.random.isRandom }, [Validators.required]),
       'author': new FormControl(this.quesData.editing ? this.quesData.content.author : null, [Validators.required]),
