@@ -4,7 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { ContestService } from '../services/contest.service';
 import { NotificationsService } from 'angular2-notifications';
 import { LocalStorageService } from '../services/localStorage.service';
-import { from } from 'rxjs/observable/from';
+import { QuesService } from '../services/ques.service';
 
 @Component({
   selector: 'app-contests',
@@ -16,10 +16,11 @@ export class ContestsComponent implements OnInit {
   constructor(private router: Router,
     private authService: AuthService,
     private contestService: ContestService,
+    private quesService: QuesService,
     private notificationsService: NotificationsService,
     private localStorageService: LocalStorageService) { }
 
-    contests;
+    contests; interval; currDate;
     live = [];
     id; rules; index: number = -1;
     userid;
@@ -38,10 +39,16 @@ export class ContestsComponent implements OnInit {
     loading: boolean = true;
     agree: boolean = false;
     registering: boolean = false;
+    starting: boolean = false;
+    success: boolean = false;
 
   ngOnInit() {
     this.live = [];
     this.userid = JSON.parse(localStorage.getItem('user')).id;
+    this.syncServerDate(true);
+  }
+
+  fetchContests() {
     this.contestService.getAllContests().subscribe(
       data => {
         this.contests = data.contests;
@@ -65,9 +72,8 @@ export class ContestsComponent implements OnInit {
           this.fetchRegister(i + 1);
         else {
           for (let i = 0; i < this.contests.length; i++) {
-            var dt = new Date().getTime();
-            let st = new Date(this.contests[i].startTime).getTime() <= dt;
-            let end = new Date(this.contests[i].endTime).getTime() <= dt;
+            let st = new Date(this.contests[i].startTime).getTime() <= this.currDate;
+            let end = new Date(this.contests[i].endTime).getTime() <= this.currDate;
             this.live.push({
               "started": st,
               "ended": end,
@@ -84,6 +90,7 @@ export class ContestsComponent implements OnInit {
         }
       }, error => {
         this.notificationsService.create("", JSON.parse(error._body).error);
+        this.loading = false;
       }
     );
   }
@@ -105,15 +112,38 @@ export class ContestsComponent implements OnInit {
     );
   }
 
+  syncServerDate(callFetch: boolean, i: number = -1) {
+    if(this.starting == true)
+      return;
+    if(i != -1)
+      this.starting = true;
+    this.quesService.getCurrDate().subscribe(
+      res => {
+        if(res.status == 1)
+          this.currDate = new Date(res.currTime).getTime();
+        else
+          this.currDate = new Date().getTime();
+        if(callFetch)
+          this.fetchContests();
+        else
+          this.goToContest(i);
+      },
+      err => {
+          this.currDate = new Date().getTime();
+      }
+    );
+  }
+
   goToContest(i: number) {
-    var dt = new Date().getTime();
-    let st = new Date(this.contests[i].startTime).getTime() <= dt;
-    let end = new Date(this.contests[i].endTime).getTime() <= dt;
-    if (st && !end)
+    let st = new Date(this.contests[i].startTime).getTime() <= this.currDate;
+    let end = new Date(this.contests[i].endTime).getTime() <= this.currDate;
+    if (st && !end) {
+      this.success = true;
       this.router.navigate(['/ques/contests/' + this.contests[i]._id]);
+    }
     else {
       alert('This contest has now ended. Talk to the coordinators.');
-      this.ngOnInit();
+      this.starting = false;
     }
   }
 

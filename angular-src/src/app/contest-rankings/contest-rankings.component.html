@@ -1,4 +1,5 @@
-<h2>Rank List for Contest: {{cname}}</h2>
+<h2 *ngIf="!loading">Rank List for Contest: {{cname}}</h2>
+<h2 *ngIf="loading">Fetching ranks... Please wait...</h2>
 <div class="spinner-border text-success" role="status" style="margin: 0 auto" *ngIf="loading">
     <span class="sr-only">Loading...</span>
 </div>

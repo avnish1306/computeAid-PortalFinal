@@ -181,7 +181,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-        <button class="btn btn-sm btn-info" (click)="goToContest(index)" data-dismiss="modal" [disabled]="!agree">Take me to the Contest</button>
+        <button class="btn btn-sm btn-info" (click)="syncServerDate(false,index)" data-dismiss="modal" [disabled]="!agree"> {{starting ? 'Starting Contest...' : 'Take me to the Contest'}} </button>
       </div>
     </div>
   </div>
