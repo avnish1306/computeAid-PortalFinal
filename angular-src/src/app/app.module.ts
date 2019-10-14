@@ -45,6 +45,7 @@ import { ContestRankingsComponent } from './contest-rankings/contest-rankings.co
 import { AboutUsComponent } from './about-us/about-us.component';
 
 const appRoutes: Routes = [
+  { path: '', redirectTo: 'welcome', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'chals', component: ChalsComponent, canActivate: [AuthGuard] },
@@ -56,7 +57,7 @@ const appRoutes: Routes = [
   { path: 'chals/add', component: AddChalComponent, canActivate: [AuthGuard, AdminAuthGuard] },
   { path: 'ques/add/:cid/:qid', component: AddQueComponent, canActivate: [AuthGuard, AdminAuthGuard] },
   { path: 'flaws/add', component: AddFlawComponent, canActivate: [AuthGuard, AdminAuthGuard] },
-  { path: 'welcome', component: WelcomepageComponent, canActivate: [AuthGuard] },
+  { path: 'welcome', component: WelcomepageComponent },
   { path: 'editor/:qCode', component: EditorComponent, canActivate: [AuthGuard] },
   { path: 'contests/add/:cid', component: AddContestComponent, canActivate: [AuthGuard, AdminAuthGuard] },
   { path: 'contests', component: ContestsComponent, canActivate: [AuthGuard] },
