@@ -19,7 +19,7 @@
     "express-validator": "^5.0.3",
     "file-system": "^2.2.2",
     "fs": "0.0.1-security",
-    "jsonwebtoken": "^8.2.0",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^5.0.9",
     "morgan": "^1.9.0",
     "node-cmd": "^3.0.0"
